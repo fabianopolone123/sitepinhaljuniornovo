@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PIX Mensalidades — Clube Pinhal Junior</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/finance.css' %}" />
+  </head>
+  <body class="finance-page">
+    <main class="finance-card">
+      <p class="tag">Financeiro</p>
+      <h1>PIX Mensalidades {{ charge.month|default:"00" }}/{{ charge.year|default:"0000" }}</h1>
+      <p class="hero-text">Responsável: {{ charge.responsible.user.get_full_name }}</p>
+      {% if messages %}
+      <div class="form-feedback-wrapper">
+        {% for message in messages %}
+        <div class="form-feedback form-feedback--{{ message.tags }}" role="alert">
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% if error_message %}
+      <div class="form-feedback form-feedback--error">
+        {{ error_message }}
+      </div>
+      {% endif %}
+      {% if charge.status == charge.PAID %}
+      <div class="form-feedback form-feedback--success">
+        Pagamento confirmado em {{ charge.approved_at|date:"d/m/Y H:i" }}.
+      </div>
+      {% else %}
+      <div class="form-feedback form-feedback--error">
+        PIX pendente de confirmação. Aguarde a validação automática.
+      </div>
+      {% endif %}
+      <div class="finance-qr">
+        {% if charge.qr_code_base64 %}
+        <img src="data:image/png;base64,{{ charge.qr_code_base64 }}" alt="QR Code PIX" />
+        {% endif %}
+        <p class="muted">Valor total: R$ {{ total|floatformat:2 }}</p>
+      </div>
+      <div class="pix-copy">
+        <label for="pix-code">Código PIX</label>
+        <textarea id="pix-code" readonly>{{ charge.copy_text|default:"" }}</textarea>
+        <button
+          class="ghost-btn"
+          type="button"
+          data-copy-btn
+          data-copy-target="pix-code"
+        >
+          Copiar código PIX
+        </button>
+      </div>
+      <div class="pending-list">
+        <h3>Mensalidades incluídas</h3>
+        <ul>
+          {% for fee in pending_fees %}
+          <li>
+            {{ fee.adventurer.first_name }} {{ fee.adventurer.last_name }} —
+            R$ {{ fee.amount|floatformat:2 }}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="finance-actions">
+        <a class="ghost-btn" href="{% url 'dashboard' %}">Voltar ao painel</a>
+      </div>
+    </main>
+    <script src="{% static 'js/pix.js' %}" defer></script>
+  </body>
+</html>
