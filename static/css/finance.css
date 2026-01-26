@@ -92,6 +92,16 @@ body.finance-page {
   padding: 0.6rem 1.6rem;
 }
 
+.webhook-log {
+  white-space: pre-wrap;
+  overflow-x: auto;
+  font-size: 0.7rem;
+  background: rgba(15, 61, 103, 0.06);
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  margin-top: 0.4rem;
+}
+
 @media (max-width: 480px) {
   body.finance-page {
     padding: 1rem;

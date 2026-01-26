@@ -122,6 +122,9 @@ class PixCharge(models.Model):
     class Meta:
         unique_together = ("responsible", "year", "month")
 
+    last_notification = models.TextField(blank=True, null=True)
+    last_notification_at = models.DateTimeField(blank=True, null=True)
+
     def __str__(self):
         return f"PIX {self.responsible} {self.month}/{self.year} ({self.get_status_display()})"
 

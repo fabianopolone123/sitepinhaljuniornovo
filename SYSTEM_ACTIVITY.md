@@ -329,4 +329,10 @@ tira o quadrado do funcoi
 - **Actions**: `settings.py` agora lê `DJANGO_SECRET_KEY`, `DJANGO_DEBUG`, `DJANGO_ALLOWED_HOSTS` e `DJANGO_CSRF_TRUSTED_ORIGINS` via variáveis de ambiente, incluindo os dois domínios e o localhost como padrão aprovado; isso permite habilitar hosts e confiar no HTTPS sem editar o código a cada deploy.
 - **Technical**: `pinhaljunior/settings.py` (usa `os.environ` para segredo, debug, hosts e CSRF); `python manage.py test`.
 - **Notes**: Nenhuma.
+
+## 2026-01-26T01:32:10Z — Exibe webhook recebido
+- **Request**: Quero ver na tela de PIX se o webhook chegou e qual payload foi recebido.
+- **Actions**: Adicionei os campos `last_notification`/`last_notification_at` ao modelo `PixCharge` e os exponho no template `finance_pix.html`, e o webhook (`mp_webhook`) agora grava o JSON recebido para que o frontend mostre o horário e o payload completo; o CSS cuida do `pre` para leitura fácil.
+- **Technical**: `core/models.py` (novos campos), `core/migrations/0007_pixcharge_last_notification_and_more.py`, `core/views.py` (webhook grava `payload` info), `templates/core/finance_pix.html` (`pre` com payload), `static/css/finance.css` (`.webhook-log`); `python manage.py test`.
+- **Notes**: Nenhuma.
  - **Migration**: `python manage.py migrate` (aplicou `core.0006_pixcharge`)

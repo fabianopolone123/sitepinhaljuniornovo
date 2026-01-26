@@ -638,8 +638,18 @@ def mp_webhook(request):
 
     charge.raw_response = payment_data
     charge.mp_payment_id = str(payment_data.get("id") or payment_id)
+    charge.last_notification = json.dumps(payload)
+    charge.last_notification_at = timezone.now()
     charge.updated_at = timezone.now()
-    charge.save(update_fields=("mp_payment_id", "raw_response", "updated_at"))
+    charge.save(
+        update_fields=(
+            "mp_payment_id",
+            "raw_response",
+            "updated_at",
+            "last_notification",
+            "last_notification_at",
+        )
+    )
 
     if is_aprovado(payment_data):
         charge.mark_paid()
