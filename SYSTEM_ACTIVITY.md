@@ -336,3 +336,11 @@ tira o quadrado do funcoi
 - **Technical**: `core/models.py` (novos campos), `core/migrations/0007_pixcharge_last_notification_and_more.py`, `core/views.py` (webhook grava `payload` info), `templates/core/finance_pix.html` (`pre` com payload), `static/css/finance.css` (`.webhook-log`); `python manage.py test`.
 - **Notes**: Nenhuma.
  - **Migration**: `python manage.py migrate` (aplicou `core.0006_pixcharge`)
+\n
+## 2026-01-27T01:45:00+00:00Z — Corrige webhook e docs de deploy
+- **Request**: no financeiro o PIX gera mas não marca pago; webhook configurado em https://pinhaljunior.com.br/mp/webhook/.
+- **Actions**: o webhook agora aceita payloads via query string e POST para garantir que o Mercado Pago antigo (feed 2.0) atualize PixCharge/MonthlyFee; também registrei o ambiente do VPS em VPS_ENVIRONMENT.md e o fluxo oficial de deploy em DEPLOY_FLOW.md.
+- **Technical**: core/views.py (tratamento flexível de payload, payment_id de query params), VPS_ENVIRONMENT.md, DEPLOY_FLOW.md; também reiniciei o Gunicorn para aplicar a mudança.
+- **Notes**: confirme manualmente que a requisição POST do Mercado Pago chega ao webhook e retorna 200/{ status: paid}.
+\n## 2026-01-27T02:15:00+00:00Z — Randomiza valor do PIX\n- **Request**: para testar no Mercado Pago, gere um valor diferente a cada clique em pagar (1 a 3 reais).\n- **Actions**: inance_pix agora calcula um valor randomizado entre R,00 e R,00 antes de criar o PIX e atualiza o PixCharge; o QR exibido e o copy_text seguem o novo valor enquanto as mensalidades listadas mantêm R,00.\n- **Technical**: core/views.py (inance_pix usa andom.randint(100, 300) para definir o valor cobrado e recalcula o PixCharge pendente).\n- **Notes**: remova essa lógica quando voltar a cobrar o valor fixo.\n
+\n## 2026-01-27T02:25:00+00:00Z — Documenta script de deploy\n- **Request**: adiciona no guia de deploy que existe ./deploy_pinhaljunior.sh no VPS e precisa executá-lo após o git pull.\n- **Actions**: incluí a seção  SCRIPT DE DEPLOY PERSONALIZADO em DEPLOY_FLOW.md, descrevendo o comando ./deploy_pinhaljunior.sh que foi criado no VPS, e registrei a alteração no log.\n- **Technical**: DEPLOY_FLOW.md.\n- **Notes**: mantenha o script atualizado sempre que o fluxo de deploy mudar.\n

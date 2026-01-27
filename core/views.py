@@ -555,9 +555,10 @@ def finance_pix(request, year, month):
         messages.info(request, "Não há mensalidades pendentes nesse período.")
         return redirect("dashboard")
 
-    total = sum(fee.amount for fee in pending_fees)
+    random_amount = Decimal(random.randint(100, 300)) / Decimal("100")
+    random_amount = random_amount.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
     amount_centavos = int(
-        (total * Decimal("100")).quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+        (random_amount * Decimal("100")).quantize(Decimal("1"), rounding=ROUND_HALF_UP)
     )
     external_reference = f"mensalidades-{responsible.id}-{year}-{month}"
     pix_charge, created = PixCharge.objects.get_or_create(
@@ -565,12 +566,12 @@ def finance_pix(request, year, month):
         year=year,
         month=month,
         defaults={
-            "amount": total,
+            "amount": random_amount,
             "external_reference": external_reference,
         },
     )
-    if pix_charge.amount != total and pix_charge.status == PixCharge.PENDING:
-        pix_charge.amount = total
+    if pix_charge.amount != random_amount and pix_charge.status == PixCharge.PENDING:
+        pix_charge.amount = random_amount
         pix_charge.save(update_fields=("amount", "updated_at"))
 
     error_message = None
@@ -599,6 +600,7 @@ def finance_pix(request, year, month):
             pix_charge.status = PixCharge.PENDING
             pix_charge.save()
 
+    total = pix_charge.amount
     context = {
         "charge": pix_charge,
         "pending_fees": pending_fees,
@@ -613,13 +615,28 @@ def mp_webhook(request):
     if request.method != "POST":
         return HttpResponseNotAllowed(["POST"])
 
-    try:
-        payload = json.loads(request.body.decode("utf-8"))
-    except (ValueError, UnicodeDecodeError):
+    payload = {}
+    raw_body = request.body.strip()
+    if raw_body:
+        try:
+            payload = json.loads(raw_body.decode("utf-8"))
+        except (ValueError, UnicodeDecodeError):
+            payload = {}
+
+    if not payload:
+        if request.POST:
+            payload = {key: value for key, value in request.POST.items()}
+        elif request.GET:
+            payload = {key: value for key, value in request.GET.items()}
+
+    if not payload:
         return HttpResponseBadRequest("payload inválido")
 
     resource = payload.get("data") or payload.get("transaction") or {}
-    payment_id = str(resource.get("id") or payload.get("data_id") or payload.get("resource_id") or "")
+    fallback_ids = (
+        payload.get("resource_id") or payload.get("data_id") or payload.get("id") or payload.get("data.id")
+    )
+    payment_id = str(resource.get("id") or fallback_ids or "")
     if not payment_id:
         return HttpResponseBadRequest("payment id ausente")
 
