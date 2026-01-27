@@ -195,3 +195,5 @@ O deploy_pinhaljunior.sh tem suporte blindado:
 # faz health-check local (curl http://127.0.0.1:8000)
 `
 
+
+O script está instalado em /usr/local/bin/deploy_pinhaljunior.sh e deve ser invocado após o git pull para continuar com as etapas blindadas.

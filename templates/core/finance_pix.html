@@ -27,12 +27,12 @@
         {{ error_message }}
         </div>
       {% endif %}
-      {% if is_staff and charge.last_notification %}
-      <div class="form-feedback form-feedback--success">
-        Última tentativa do webhook em {{ charge.last_notification_at|date:"d/m/Y H:i:s" }}:
-        <pre class="webhook-log">{{ charge.last_notification }}</pre>
-      </div>
-      {% endif %}
+        {% if charge.last_notification %}
+        <div class="form-feedback form-feedback--success">
+          Última tentativa do webhook em {{ charge.last_notification_at|date:"d/m/Y H:i:s" }}:
+          <pre class="webhook-log">{{ charge.last_notification }}</pre>
+        </div>
+        {% endif %}
       {% if charge.status == charge.PAID %}
       <div class="form-feedback form-feedback--success">
         Pagamento confirmado em {{ charge.approved_at|date:"d/m/Y H:i" }}.
