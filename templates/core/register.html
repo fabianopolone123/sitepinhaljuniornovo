@@ -1,0 +1,655 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cadastro Clube de Aventureiros Pinhal Junior</title>
+    <link rel="stylesheet" href="{% static 'css/register.css' %}" />
+  </head>
+  <body class="registration-page">
+    <main class="registration-wrapper">
+      <header class="hero">
+        <div>
+          <p class="tag">Cadastro digital</p>
+          <h1>Clube de Aventureiros Pinhal Junior</h1>
+          <p class="hero-text">
+            Preencha os dados do responsável e dos aventureiros.
+          </p>
+        </div>
+        <img
+          src="{% static 'images/logo-removebg-preview.png' %}"
+          alt="Logo Clube de Aventureiros"
+        />
+      </header>
+
+      <form
+        id="registration-form"
+        class="registration-form"
+        method="post"
+        enctype="multipart/form-data"
+        novalidate
+      >
+        {% csrf_token %}
+        <div class="form-feedback-wrapper">
+          {% if success_message %}
+          <div class="form-feedback form-feedback--success">{{ success_message }}</div>
+          {% endif %}
+          {% if field_errors.general %}
+          <div class="form-feedback form-feedback--error">{{ field_errors.general }}</div>
+          {% endif %}
+        </div>
+
+        {% with field_errors as errors %}
+        {% with form_values as values %}
+        <section class="panel panel-responsavel">
+          <h2>Responsável</h2>
+          <div class="field-group" data-field-name="Nome de usuário">
+            <label>
+              Nome de usuário
+              <input
+                type="text"
+                name="responsavel_username"
+                placeholder="Nome de usuário"
+                required
+                value="{{ values.responsavel_username|default:'' }}"
+              />
+            </label>
+            <small class="error-message" aria-live="polite">
+              {{ errors.responsavel_username|default:'' }}
+            </small>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group" data-field-name="Senha">
+              <label>
+                Senha (4 dígitos)
+                <input
+                  type="password"
+                  name="responsavel_password1"
+                  placeholder="Senha"
+                  required
+                />
+              </label>
+              <small class="error-message" aria-live="polite">
+                {{ errors.responsavel_password1|default:'' }}
+              </small>
+            </div>
+            <div class="field-group" data-field-name="Confirmação de senha">
+              <label>
+                Repita a senha
+                <input
+                  type="password"
+                  name="responsavel_password2"
+                  placeholder="Repita a senha"
+                  required
+                />
+              </label>
+              <small class="error-message" aria-live="polite">
+                {{ errors.responsavel_password2|default:'' }}
+              </small>
+            </div>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group" data-field-name="Nome do responsável">
+              <label>
+                Nome
+                <input
+                  id="responsavel_nome"
+                  type="text"
+                  name="responsavel_nome"
+                  placeholder="Nome"
+                  required
+                  value="{{ values.responsavel_nome|default:'' }}"
+                />
+              </label>
+              <small class="error-message" aria-live="polite">
+                {{ errors.responsavel_nome|default:'' }}
+              </small>
+            </div>
+            <div class="field-group" data-field-name="Sobrenome do responsável">
+              <label>
+                Sobrenome
+                <input
+                  id="responsavel_sobrenome"
+                  type="text"
+                  name="responsavel_sobrenome"
+                  placeholder="Sobrenome"
+                  required
+                  value="{{ values.responsavel_sobrenome|default:'' }}"
+                />
+              </label>
+              <small class="error-message" aria-live="polite">
+                {{ errors.responsavel_sobrenome|default:'' }}
+              </small>
+            </div>
+          </div>
+
+          <div class="field-group" data-field-name="Sexo do responsável">
+            <label>
+              Sexo
+              <select name="responsavel_sexo" required data-error-message="Informe o sexo do responsável.">
+                <option value="">Selecione</option>
+                {% for value, label in sex_choices %}
+                <option value="{{ value }}" {% if values.responsavel_sexo == value %}selected{% endif %}>
+                  {{ label }}
+                </option>
+                {% endfor %}
+              </select>
+            </label>
+            <small class="error-message" aria-live="polite">
+              {{ errors.responsavel_sexo|default:'' }}
+            </small>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group" data-field-name="CPF do responsável">
+              <label>
+                CPF
+                <input
+                  type="text"
+                  name="responsavel_cpf"
+                  placeholder="000.000.000-00"
+                  inputmode="numeric"
+                  required
+                  value="{{ values.responsavel_cpf|default:'' }}"
+                />
+              </label>
+              <small class="error-message" aria-live="polite">
+                {{ errors.responsavel_cpf|default:'' }}
+              </small>
+            </div>
+            <div class="field-group" data-field-name="Telefone do responsável">
+              <label>
+                Telefone
+                <input
+                  id="responsavel_telefone"
+                  type="tel"
+                  name="responsavel_telefone"
+                  placeholder="(00) 0000-0000"
+                  required
+                  value="{{ values.responsavel_telefone|default:'' }}"
+                />
+              </label>
+              <small class="error-message" aria-live="polite">
+                {{ errors.responsavel_telefone|default:'' }}
+              </small>
+            </div>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group" data-field-name="WhatsApp do responsável">
+              <label>
+                WhatsApp
+                <input
+                  id="responsavel_whatsapp"
+                  type="tel"
+                  name="responsavel_whatsapp"
+                  placeholder="(00) 00000-0000"
+                  required
+                  value="{{ values.responsavel_whatsapp|default:'' }}"
+                />
+              </label>
+              <small class="error-message" aria-live="polite">
+                {{ errors.responsavel_whatsapp|default:'' }}
+              </small>
+            </div>
+            <div class="field-group" data-field-name="Endereço do responsável">
+              <label>
+                Endereço
+                <input
+                  type="text"
+                  name="responsavel_endereco"
+                  placeholder="Rua, número, bairro"
+                  required
+                  value="{{ values.responsavel_endereco|default:'' }}"
+                />
+              </label>
+              <small class="error-message" aria-live="polite">
+                {{ errors.responsavel_endereco|default:'' }}
+              </small>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel panel-aventureiros">
+          <div class="panel-heading">
+            <div>
+              <p class="tag">Aventureiros</p>
+              <h2>Quem vai participar</h2>
+            </div>
+            <button type="button" id="add-adventurer" class="ghost-btn">
+              + Adicionar outro aventureiro
+            </button>
+          </div>
+
+          {% if errors.adventurer %}
+          <div class="form-feedback form-feedback--error">
+            {{ errors.adventurer }}
+          </div>
+          {% elif errors.adventurer_photo %}
+          <div class="form-feedback form-feedback--error">
+            {{ errors.adventurer_photo }}
+          </div>
+          {% elif errors.adventurer_date %}
+          <div class="form-feedback form-feedback--error">
+            {{ errors.adventurer_date }}
+          </div>
+          {% endif %}
+
+          <div id="adventurer-list">
+            {% for adventurer in adventurers_data %}
+            <article class="adventurer-card" data-index="{{ forloop.counter }}">
+              <div class="adventurer-header">
+                <h3 class="adventurer-title">Aventureiro #{{ forloop.counter }}</h3>
+                <p class="tag light">Campos obrigatórios</p>
+              </div>
+              <div class="grid two-columns">
+                <div class="field-group" data-field-name="Nome do aventureiro">
+                  <label>
+                    Nome
+                    <input
+                      type="text"
+                      name="aventureiro_nome[]"
+                      placeholder="Nome"
+                      required
+                      value="{{ adventurer.nome|default:'' }}"
+                    />
+                  </label>
+                  <small class="error-message" aria-live="polite"></small>
+                </div>
+              <div class="field-group" data-field-name="Sobrenome do aventureiro">
+                <label>
+                  Sobrenome
+                    <input
+                      type="text"
+                      name="aventureiro_sobrenome[]"
+                      placeholder="Sobrenome"
+                      required
+                      value="{{ adventurer.sobrenome|default:'' }}"
+                    />
+                  </label>
+                  <small class="error-message" aria-live="polite"></small>
+              </div>
+            </div>
+
+              <div class="field-group" data-field-name="Sexo do aventureiro">
+                <label>
+                  Sexo
+                  <select name="aventureiro_sexo[]" required data-error-message="Informe o sexo do aventureiro.">
+                    <option value="">Selecione</option>
+                    {% for value, label in sex_choices %}
+                    <option value="{{ value }}" {% if adventurer.sexo == value %}selected{% endif %}>
+                      {{ label }}
+                    </option>
+                    {% endfor %}
+                  </select>
+                </label>
+                <small class="error-message" aria-live="polite"></small>
+              </div>
+
+              <div class="grid two-columns">
+                <div class="field-group" data-field-name="Certidão de nascimento ou CPF">
+                  <label>
+                    Certidão / CPF
+                    <input
+                      type="text"
+                      name="aventureiro_documento[]"
+                      placeholder="Certidão ou CPF"
+                      required
+                      value="{{ adventurer.documento|default:'' }}"
+                    />
+                  </label>
+                  <small class="error-message" aria-live="polite"></small>
+                </div>
+                <div class="field-group" data-field-name="Data de nascimento">
+                  <label>
+                    Data de nascimento
+                    <div class="date-selects">
+                      <select name="aventureiro_dia[]" required data-error-message="Informe o dia.">
+                        <option value="">Dia</option>
+                        {% for day in days %}
+                        <option
+                          value="{{ day }}"
+                          {% if adventurer.dia == day %}selected{% endif %}
+                        >
+                          {{ day }}
+                        </option>
+                        {% endfor %}
+                      </select>
+                      <select name="aventureiro_mes[]" required data-error-message="Informe o mês.">
+                        <option value="">Mês</option>
+                        {% for num, name in months %}
+                        <option
+                          value="{{ num }}"
+                          {% if adventurer.mes == num %}selected{% endif %}
+                        >
+                          {{ name }}
+                        </option>
+                        {% endfor %}
+                      </select>
+                      <select name="aventureiro_ano[]" required data-error-message="Informe o ano.">
+                        <option value="">Ano</option>
+                        {% for year in years %}
+                        <option
+                          value="{{ year }}"
+                          {% if adventurer.ano == year %}selected{% endif %}
+                        >
+                          {{ year }}
+                        </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </label>
+                  <small class="error-message" aria-live="polite"></small>
+                </div>
+              </div>
+              <div class="field-group" data-field-name="Sexo do aventureiro">
+                <label>
+                  Sexo
+                  <select name="aventureiro_sexo[]" required data-error-message="Informe o sexo do aventureiro.">
+                    <option value="">Selecione</option>
+                    {% for value, label in sex_choices %}
+                    <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                  </select>
+                </label>
+                <small class="error-message" aria-live="polite"></small>
+              </div>
+
+              <div class="grid two-columns">
+                <div class="field-group" data-field-name="Alergias">
+                  <label>
+                    Alergias
+                    <textarea
+                      name="aventureiro_alergias[]"
+                      placeholder="Informe alergias ou 'nenhuma'"
+                      required
+                    >{{ adventurer.alergias|default:'' }}</textarea>
+                  </label>
+                  <small class="error-message" aria-live="polite"></small>
+                </div>
+                <div class="field-group" data-field-name="Medicamentos">
+                  <label>
+                    Medicamentos contínuos
+                    <textarea
+                      name="aventureiro_medicacao[]"
+                      placeholder="Informe medicamentos contínuos ou 'nenhum'"
+                      required
+                    >{{ adventurer.medicacao|default:'' }}</textarea>
+                  </label>
+                  <small class="error-message" aria-live="polite"></small>
+                </div>
+              </div>
+
+              <div class="field-group" data-field-name="Observação">
+                <label>
+                  Observações
+                  <textarea
+                    name="aventureiro_observacao[]"
+                    placeholder="Use este espaço para observações adicionais"
+                    required
+                  >{{ adventurer.observacao|default:'' }}</textarea>
+                </label>
+                <small class="error-message" aria-live="polite"></small>
+              </div>
+
+              <div class="grid two-columns">
+                <div class="field-group file-group" data-field-name="Foto do aventureiro">
+                  <label>
+                    Foto do aventureiro
+                    <input
+                      type="file"
+                      name="aventureiro_foto[]"
+                      accept="image/*"
+                      capture="environment"
+                      required
+                      data-error-message="Anexe a foto do aventureiro."
+                    />
+                  </label>
+                  <small class="field-hint">Use a câmera ou envie um arquivo.</small>
+                  <div class="file-preview" aria-live="polite">
+                    <span class="preview-placeholder">Pré-visualização 3x4</span>
+                  </div>
+                  <small class="error-message" aria-live="polite"></small>
+                </div>
+                <div class="section-subgroup">
+                  <h4>Contato de emergência</h4>
+                  <div class="grid two-columns">
+                    <div class="field-group" data-field-name="Nome do contato de emergência">
+                      <label>
+                        Nome
+                        <input
+                          type="text"
+                          name="emergencia_nome[]"
+                          placeholder="Nome do contato"
+                          required
+                          value="{{ adventurer.contato_nome|default:'' }}"
+                        />
+                      </label>
+                      <small class="error-message" aria-live="polite"></small>
+                    </div>
+                    <div class="field-group" data-field-name="Telefone do contato de emergência">
+                      <label>
+                        Telefone
+                        <input
+                          type="tel"
+                          name="emergencia_telefone[]"
+                          placeholder="(00) 0000-0000"
+                          required
+                          value="{{ adventurer.contato_telefone|default:'' }}"
+                        />
+                      </label>
+                      <small class="error-message" aria-live="polite"></small>
+                    </div>
+                  </div>
+                  <div class="field-group" data-field-name="WhatsApp do contato de emergência">
+                    <label>
+                      WhatsApp
+                      <input
+                        type="tel"
+                        name="emergencia_whatsapp[]"
+                        placeholder="(00) 00000-0000"
+                        required
+                        value="{{ adventurer.contato_whatsapp|default:'' }}"
+                      />
+                    </label>
+                    <small class="error-message" aria-live="polite"></small>
+                  </div>
+                </div>
+              </div>
+            </article>
+            {% endfor %}
+          </div>
+
+          <template id="adventurer-template">
+            <article class="adventurer-card">
+              <div class="adventurer-header">
+                <h3 class="adventurer-title"></h3>
+                <p class="tag light">Campos obrigatórios</p>
+              </div>
+              <div class="grid two-columns">
+                <div class="field-group" data-field-name="Nome do aventureiro">
+                  <label>
+                    Nome
+                    <input
+                      type="text"
+                      name="aventureiro_nome[]"
+                      placeholder="Nome"
+                      required
+                      data-error-message="Informe o nome."
+                    />
+                  </label>
+                  <small class="error-message" aria-live="polite"></small>
+                </div>
+                <div class="field-group" data-field-name="Sobrenome do aventureiro">
+                  <label>
+                    Sobrenome
+                    <input
+                      type="text"
+                      name="aventureiro_sobrenome[]"
+                      placeholder="Sobrenome"
+                      required
+                      data-error-message="Informe o sobrenome."
+                    />
+                  </label>
+                  <small class="error-message" aria-live="polite"></small>
+                </div>
+              </div>
+              <div class="grid two-columns">
+                <div class="field-group" data-field-name="Certidão de nascimento ou CPF">
+                  <label>
+                    Certidão / CPF
+                    <input
+                      type="text"
+                      name="aventureiro_documento[]"
+                      placeholder="Certidão ou CPF"
+                      required
+                      data-error-message="Informe o documento."
+                    />
+                  </label>
+                  <small class="error-message" aria-live="polite"></small>
+                </div>
+                <div class="field-group" data-field-name="Data de nascimento">
+                  <label>
+                    Data de nascimento
+                    <div class="date-selects">
+                      <select name="aventureiro_dia[]" required data-error-message="Informe o dia.">
+                        <option value="">Dia</option>
+                        {% for day in days %}
+                        <option value="{{ day }}">{{ day }}</option>
+                        {% endfor %}
+                      </select>
+                      <select name="aventureiro_mes[]" required data-error-message="Informe o mês.">
+                        <option value="">Mês</option>
+                        {% for num, name in months %}
+                        <option value="{{ num }}">{{ name }}</option>
+                        {% endfor %}
+                      </select>
+                      <select name="aventureiro_ano[]" required data-error-message="Informe o ano.">
+                        <option value="">Ano</option>
+                        {% for year in years %}
+                        <option value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </label>
+                  <small class="error-message" aria-live="polite"></small>
+                </div>
+              </div>
+              <div class="grid two-columns">
+                <div class="field-group" data-field-name="Alergias">
+                  <label>
+                    Alergias
+                    <textarea
+                      name="aventureiro_alergias[]"
+                      placeholder="Informe alergias ou 'nenhuma'"
+                      required
+                      data-error-message="Informe se há alergias."
+                    ></textarea>
+                  </label>
+                  <small class="error-message" aria-live="polite"></small>
+                </div>
+                <div class="field-group" data-field-name="Medicamentos">
+                  <label>
+                    Medicamentos contínuos
+                    <textarea
+                      name="aventureiro_medicacao[]"
+                      placeholder="Informe medicamentos contínuos ou 'nenhum'"
+                      required
+                      data-error-message="Informe medicamentos ou escreva 'nenhum'."
+                    ></textarea>
+                  </label>
+                  <small class="error-message" aria-live="polite"></small>
+                </div>
+              </div>
+              <div class="field-group" data-field-name="Observação">
+                <label>
+                  Observações
+                  <textarea
+                    name="aventureiro_observacao[]"
+                    placeholder="Use este espaço para observações adicionais"
+                    required
+                    data-error-message="Informe alguma observação ou escreva 'nenhuma'."
+                  ></textarea>
+                </label>
+                <small class="error-message" aria-live="polite"></small>
+              </div>
+              <div class="grid two-columns">
+                <div class="field-group file-group" data-field-name="Foto do aventureiro">
+                  <label>
+                    Foto do aventureiro
+                    <input
+                      type="file"
+                      name="aventureiro_foto[]"
+                      accept="image/*"
+                      capture="environment"
+                      required
+                      data-error-message="Anexe a foto do aventureiro."
+                    />
+                  </label>
+                  <small class="field-hint">Use a câmera ou envie um arquivo.</small>
+                  <div class="file-preview" aria-live="polite">
+                    <span class="preview-placeholder">Pré-visualização 3x4</span>
+                  </div>
+                  <small class="error-message" aria-live="polite"></small>
+                </div>
+                <div class="section-subgroup">
+                  <h4>Contato de emergência</h4>
+                  <div class="grid two-columns">
+                    <div class="field-group" data-field-name="Nome do contato de emergência">
+                      <label>
+                        Nome
+                        <input
+                          type="text"
+                          name="emergencia_nome[]"
+                          placeholder="Nome do contato"
+                          required
+                          data-error-message="Informe o nome do contato."
+                        />
+                      </label>
+                      <small class="error-message" aria-live="polite"></small>
+                    </div>
+                    <div class="field-group" data-field-name="Telefone do contato de emergência">
+                      <label>
+                        Telefone
+                        <input
+                          type="tel"
+                          name="emergencia_telefone[]"
+                          placeholder="(00) 0000-0000"
+                          required
+                          data-error-message="Informe o telefone do contato."
+                        />
+                      </label>
+                      <small class="error-message" aria-live="polite"></small>
+                    </div>
+                  </div>
+                  <div class="field-group" data-field-name="WhatsApp do contato de emergência">
+                    <label>
+                      WhatsApp
+                      <input
+                        type="tel"
+                        name="emergencia_whatsapp[]"
+                        placeholder="(00) 00000-0000"
+                        required
+                        data-error-message="Informe o WhatsApp do contato."
+                      />
+                    </label>
+                    <small class="error-message" aria-live="polite"></small>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </template>
+        </section>
+
+        <div id="form-feedback" class="form-feedback" role="alert" aria-live="polite"></div>
+        <button type="submit" class="primary-btn">Enviar cadastro</button>
+        {% endwith %}
+        {% endwith %}
+      </form>
+    </main>
+    <script src="{% static 'js/register.js' %}" defer></script>
+  </body>
+</html>
