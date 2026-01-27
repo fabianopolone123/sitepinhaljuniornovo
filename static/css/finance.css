@@ -108,6 +108,74 @@ body.finance-page {
   display: flex;
   align-items: center;
   justify-content: center;
+  background: rgba(15, 61, 103, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 200;
+}
+
+.payment-modal-overlay.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.payment-modal {
+  background: linear-gradient(180deg, #ffffff, #f6f9ff 90%);
+  border-radius: 28px;
+  padding: 2.5rem;
+  max-width: 360px;
+  width: min(360px, 90vw);
+  box-shadow: 0 35px 80px rgba(28, 65, 130, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.payment-modal__close {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.5rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 20px rgba(28, 65, 130, 0.25);
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #1e2c54;
+  line-height: 1;
+}
+
+.payment-modal__tag {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1e2c54;
+  margin: 0;
+}
+
+.payment-modal__message {
+  margin: 0;
+  font-size: 1rem;
+  color: #27406f;
+}
+
+.payment-modal__hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(15, 61, 103, 0.72);
+}
+
+.payment-modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: rgba(0, 0, 0, 0.5);
   opacity: 0;
   pointer-events: none;

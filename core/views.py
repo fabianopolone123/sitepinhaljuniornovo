@@ -606,6 +606,7 @@ def finance_pix(request, year, month):
         "pending_fees": pending_fees,
         "total": total,
         "error_message": error_message,
+        "is_staff": request.user.is_staff,
     }
     return render(request, "core/finance_pix.html", context)
 
