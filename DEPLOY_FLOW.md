@@ -182,4 +182,16 @@ No VPS (após o git pull e os passos de migração/collectstatic):
 cd /var/www/sitepinhaljuniornovo
 ./deploy_pinhaljunior.sh
 
-Esse script já define o ambiente, instala dependências, aplica migrations e reinicia o Gunicorn de forma segura.
+O deploy_pinhaljunior.sh tem suporte blindado:
+
+`ash
+# trava execução concorrente com lockfile (/tmp/deploy_pinhaljunior.lock)
+# valida comandos (git, python3, systemctl, curl) e exige usuário root
+# atualiza o código via fetch + reset --hard + clean
+# registra backup do SQLite em backups/
+# garante virtualenv e instala dependências
+# executa python manage.py check, migrate --noinput e collectstatic --noinput
+# reinicia o serviço pinhaljunior via systemctl restart e mostra o status
+# faz health-check local (curl http://127.0.0.1:8000)
+`
+

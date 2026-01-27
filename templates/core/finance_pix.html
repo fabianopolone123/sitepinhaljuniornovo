@@ -37,10 +37,6 @@
       <div class="form-feedback form-feedback--success">
         Pagamento confirmado em {{ charge.approved_at|date:"d/m/Y H:i" }}.
       </div>
-      {% else %}
-      <div class="form-feedback form-feedback--error">
-        PIX pendente de confirmação. Aguarde a validação automática.
-      </div>
       {% endif %}
       <div class="finance-qr">
         {% if charge.qr_code_base64 %}
@@ -74,7 +70,32 @@
       <div class="finance-actions">
         <a class="ghost-btn" href="{% url 'dashboard' %}">Voltar ao painel</a>
       </div>
+      <div
+        class="payment-modal-overlay"
+        data-payment-modal
+        data-visible="{% if charge.status == charge.PAID %}true{% else %}false{% endif %}"
+        data-return-url="{% url 'dashboard' %}"
+      >
+        <div class="payment-modal">
+          <button
+            class="payment-modal__close"
+            type="button"
+            aria-label="Fechar"
+            data-payment-modal-close
+          >
+            ×
+          </button>
+          <p class="payment-modal__tag">Pagamento aprovado</p>
+          <p class="payment-modal__message">
+            Recebemos o PIX de R$ {{ total|floatformat:2 }}. Obrigado!
+          </p>
+          <p class="payment-modal__hint">
+            Clique fora ou em “Fechar” para voltar ao painel.
+          </p>
+        </div>
+      </div>
     </main>
     <script src="{% static 'js/pix.js' %}" defer></script>
+    <script src="{% static 'js/finance.js' %}" defer></script>
   </body>
 </html>
