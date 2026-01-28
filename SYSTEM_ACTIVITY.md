@@ -399,3 +399,8 @@ tira o quadrado do funcoi
 - **Actions**: Transformei handlePhotoPreview em declaração de função para que seja “hoisted” e possa ser chamada antes da definição; o resto do fluxo continua intacto.
 - **Technical**: static/js/register-director.js (função handlePhotoPreview).
 - **Notes**: teste manual simples no navegador confirmando que o preview 3x4 abre sem erros.
+## 2026-01-28T02:44:26Z — Garante IDs para replicar os campos da diretoria
+- **Request**: os campos número, bairro, CEP, celular e RG dentro do Compromisso para Voluntários não estavam sendo atualizados com o que já foi digitado nas etapas anteriores porque a sincronização não encontrava os inputs alvo.
+- **Actions**: adicionei IDs (#director_house_number, #director_neighborhood, #director_postal_code, #director_cellphone) nos inputs correspondentes do template 	emplates/core/register_director.html, garantindo que o script de sincronização consiga preencher automaticamente os dados oriundos da seção inicial/termo.
+- **Technical**: 	emplates/core/register_director.html (atributos id nos campos do Compromisso para Voluntários para permitir a cópia via static/js/register-director.js).
+- **Notes**: revalide manualmente que, após digitar os dados iniciais, o passo 3 mostra os mesmos valores completos.
