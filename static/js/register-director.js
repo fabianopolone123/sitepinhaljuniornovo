@@ -64,10 +64,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const targets = targetSelectors
       .map((selector) => document.querySelector(selector))
       .filter(Boolean);
+    const markManual = (event) => {
+      if (!event.isTrusted) return;
+      event.currentTarget.dataset.manual = "true";
+    };
     targets.forEach((target) => {
-      target.addEventListener("input", () => {
-        target.dataset.manual = "true";
-      });
+      target.addEventListener("input", markManual);
     });
     source.addEventListener("input", () => copyValueToTargets(source, targets));
     copyValueToTargets(source, targets);
