@@ -36,7 +36,7 @@
       </div>
       {% endif %}
 
-      <form class="director-form" method="post" novalidate>
+      <form class="director-form" method="post" novalidate enctype="multipart/form-data">
         {% csrf_token %}
 
         <section class="director-step is-active" data-step="1">
@@ -184,20 +184,38 @@
               <small class="error-message">{{ field_errors.responsavel_endereco|default:'' }}</small>
             </div>
           </div>
+          <div class="field-group file-group">
+            <label>
+              Foto 3x4 do voluntário
+              <input
+                type="file"
+                name="director_photo"
+                accept="image/*"
+                capture="environment"
+                required
+              />
+            </label>
+            <small class="field-hint">Use a câmera ou envie o arquivo.</small>
+            <div class="file-preview director-photo-preview" aria-live="polite">
+              <span class="preview-placeholder">Pré-visualização 3x4</span>
+            </div>
+            <small class="error-message">{{ field_errors.director_photo|default:'' }}</small>
+          </div>
         </section>
 
         <section class="director-step" data-step="2">
           <h3>2. Termo de Autorização de Uso de Imagem</h3>
-          <p>
-            Eu, abaixo assinado, autorizo o uso gratuito da minha imagem para campanhas promocionais e institucionais
-            do Clube de Aventureiros Pinhal Junior em todo o território nacional e em mídias como outdoors, folders,
-            revistas, Facebook, vídeos, televisão e rádio.
+          <p class="term-declaration">
+            Eu, <span id="term-name-display">{{ form_values.director_full_name|default:'[nome completo]' }}</span>,
+            autorizo o uso gratuito de minha imagem em campanhas promocionais e institucionais do Clube de Aventureiros
+            Pinhal Junior, abrangendo outdoors, folders, revistas, Facebook, vídeos, televisão e rádio em todo o território nacional.
           </p>
           <div class="term-columns">
             <div class="field-group">
               <label>
                 Nacionalidade
                 <input
+                  id="term_nationality"
                   type="text"
                   name="term_nationality"
                   value="{{ form_values.term_nationality|default:'' }}"
@@ -210,41 +228,29 @@
               <label>
                 Estado civil
                 <input
+                  id="term_marital_status"
                   type="text"
                   name="term_marital_status"
                   value="{{ form_values.term_marital_status|default:'' }}"
                   required
-                  data-sync-target="#director_marital_status"
                 />
               </label>
               <small class="error-message">{{ field_errors.term_marital_status|default:'' }}</small>
             </div>
           </div>
 
-          <div class="grid two-columns">
-            <div class="field-group">
-              <label>
-                RG
-                <input
-                  type="text"
-                  name="term_rg_number"
-                  value="{{ form_values.term_rg_number|default:'' }}"
-                  required
-                />
-              </label>
-              <small class="error-message">{{ field_errors.term_rg_number|default:'' }}</small>
-            </div>
-            <div class="field-group">
-              <label>
-                Órgão emissor
-                <input
-                  type="text"
-                  name="term_rg_issuer"
-                  value="{{ form_values.term_rg_issuer|default:'' }}"
-                />
-              </label>
-              <small class="error-message">{{ field_errors.term_rg_issuer|default:'' }}</small>
-            </div>
+          <div class="field-group">
+            <label>
+              RG
+              <input
+                id="term_rg_number"
+                type="text"
+                name="term_rg_number"
+                value="{{ form_values.term_rg_number|default:'' }}"
+                required
+              />
+            </label>
+            <small class="error-message">{{ field_errors.term_rg_number|default:'' }}</small>
           </div>
 
           <div class="grid two-columns">
@@ -252,6 +258,7 @@
               <label>
                 Av / Rua
                 <input
+                  id="term_residence"
                   type="text"
                   name="term_residence"
                   value="{{ form_values.term_residence|default:'' }}"
@@ -264,6 +271,7 @@
               <label>
                 Município
                 <input
+                  id="term_municipality"
                   type="text"
                   name="term_municipality"
                   value="{{ form_values.term_municipality|default:'' }}"
@@ -278,6 +286,7 @@
             <label>
               CPF
               <input
+                id="term_cpf"
                 type="text"
                 name="term_cpf"
                 value="{{ form_values.term_cpf|default:'' }}"
@@ -336,6 +345,7 @@
                 <input
                   type="text"
                   name="director_district"
+                  id="director_district"
                   value="{{ form_values.director_district|default:'' }}"
                   required
                 />
@@ -348,6 +358,7 @@
                 <input
                   type="text"
                   name="director_street_address"
+                  id="director_street_address"
                   value="{{ form_values.director_street_address|default:'' }}"
                   required
                 />
@@ -400,6 +411,7 @@
               <label>
                 Cidade
                 <input
+                  id="director_city"
                   type="text"
                   name="director_city"
                   value="{{ form_values.director_city|default:'' }}"
@@ -415,6 +427,7 @@
               <label>
                 Estado
                 <input
+                  id="director_state"
                   type="text"
                   name="director_state"
                   value="{{ form_values.director_state|default:'' }}"

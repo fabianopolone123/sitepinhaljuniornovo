@@ -103,6 +103,15 @@ body {
   color: #4c587b;
 }
 
+.term-declaration {
+  font-weight: 600;
+  color: #21304d;
+  background: rgba(122, 191, 255, 0.08);
+  border-radius: 12px;
+  padding: 0.9rem;
+  border: 1px solid rgba(122, 191, 255, 0.4);
+}
+
 .field-group {
   display: flex;
   flex-direction: column;
@@ -131,6 +140,33 @@ body {
 .field-group textarea {
   min-height: 90px;
   resize: vertical;
+}
+
+.field-group.file-group .file-preview {
+  margin-top: 0.35rem;
+}
+
+.director-photo-preview {
+  width: 90px;
+  height: 120px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 61, 103, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f9ff;
+}
+
+.director-photo-preview img {
+  width: 90px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.field-hint {
+  font-size: 0.85rem;
+  color: #4c587b;
 }
 
 .grid {

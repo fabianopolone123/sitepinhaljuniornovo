@@ -148,7 +148,6 @@ class DirectorApplication(models.Model):
     term_nationality = models.CharField(max_length=80, blank=True)
     term_marital_status = models.CharField(max_length=60, blank=True)
     term_rg_number = models.CharField(max_length=30, blank=True)
-    term_rg_issuer = models.CharField(max_length=40, blank=True)
     term_residence = models.CharField(max_length=255, blank=True)
     term_municipality = models.CharField(max_length=120, blank=True)
     term_cpf = models.CharField(max_length=20, blank=True)
@@ -176,6 +175,9 @@ class DirectorApplication(models.Model):
     health_limitation = models.BooleanField(default=False)
     health_description = models.TextField(blank=True)
     education_level = models.CharField(max_length=20, choices=EDUCATION_CHOICES)
+    photo = models.ImageField(
+        upload_to="director_photos/%Y/%m", blank=True, null=True
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -43,6 +43,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderStep(currentStep);
 
+  const termNameDisplay = document.querySelector("#term-name-display");
+  const updateTermName = () => {
+    const source = document.querySelector("#director_full_name");
+    if (!termNameDisplay || !source) return;
+    const value = source.value.trim();
+    termNameDisplay.textContent = value || "[nome completo]";
+  };
+
   const syncFullName = () => {
     const first = document.querySelector("#responsavel_nome")?.value.trim() || "";
     const last = document.querySelector("#responsavel_sobrenome")?.value.trim() || "";
@@ -52,31 +60,99 @@ document.addEventListener("DOMContentLoaded", () => {
     if (combined) {
       target.value = combined;
     }
+    updateTermName();
   };
 
   const syncCPF = () => {
     const source = document.querySelector("#responsavel_cpf")?.value.trim() || "";
-    const target = document.querySelector("#director_cpf");
-    if (target && source) {
-      target.value = source;
+    const termTarget = document.querySelector("#term_cpf");
+    const directorTarget = document.querySelector("#director_cpf");
+    if (termTarget && source) {
+      termTarget.value = source;
+    }
+    if (directorTarget && source) {
+      directorTarget.value = source;
     }
   };
 
-  const syncMaritalStatus = () => {
-    const source = document.querySelector("input[name='term_marital_status']")?.value.trim() || "";
-    const target = document.querySelector("#director_marital_status");
-    if (target && source) {
-      target.value = source;
+  const copyValueIfEmpty = (source, target) => {
+    if (!source || !target) return;
+    const value = source.value.trim();
+    if (!value) return;
+    if (!target.value.trim() || target.dataset.autoSourceValue === value) {
+      target.value = value;
+      target.dataset.autoSourceValue = value;
     }
+  };
+
+  const syncAddressFromTerm = () => {
+    copyValueIfEmpty(
+      document.querySelector("#term_residence"),
+      document.querySelector("#director_street_address")
+    );
+    copyValueIfEmpty(
+      document.querySelector("#term_municipality"),
+      document.querySelector("#director_city")
+    );
+    copyValueIfEmpty(
+      document.querySelector("#term_marital_status"),
+      document.querySelector("#director_marital_status")
+    );
+  };
+
+  const handlePhotoPreview = () => {
+    const input = document.querySelector("input[name='director_photo']");
+    const previewWrapper = document.querySelector(".director-photo-preview");
+    if (!input || !previewWrapper) return;
+    const placeholder = previewWrapper.querySelector(".preview-placeholder");
+    const showImage = (src) => {
+      previewWrapper.innerHTML = "";
+      const img = document.createElement("img");
+      img.src = src;
+      previewWrapper.appendChild(img);
+    };
+    const resetPreview = () => {
+      previewWrapper.innerHTML = "";
+      if (placeholder) {
+        previewWrapper.appendChild(placeholder);
+      }
+    };
+    input.addEventListener("change", () => {
+      const file = input.files?.[0];
+      if (!file) {
+        resetPreview();
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        showImage(event.target.result);
+      };
+      reader.readAsDataURL(file);
+    });
   };
 
   document.querySelector("#responsavel_nome")?.addEventListener("input", syncFullName);
   document.querySelector("#responsavel_sobrenome")?.addEventListener("input", syncFullName);
-  document.querySelector("#responsavel_cpf")?.addEventListener("input", syncCPF);
-  document.querySelector("input[name='term_marital_status']")?.addEventListener("input", syncMaritalStatus);
+  document.querySelector("#director_full_name")?.addEventListener("input", updateTermName);
+  document.querySelector("#responsavel_cpf")?.addEventListener("input", () => {
+    syncCPF();
+  });
+  document.querySelector("#term_cpf")?.addEventListener("input", (event) => {
+    copyValueIfEmpty(event.target, document.querySelector("#director_cpf"));
+  });
+  document
+    .querySelector("#term_residence")
+    ?.addEventListener("input", syncAddressFromTerm);
+  document
+    .querySelector("#term_municipality")
+    ?.addEventListener("input", syncAddressFromTerm);
+  document
+    .querySelector("#term_marital_status")
+    ?.addEventListener("input", syncAddressFromTerm);
 
-  // Initialize sync in case fields already have value
   syncFullName();
   syncCPF();
-  syncMaritalStatus();
+  syncAddressFromTerm();
+  updateTermName();
+  handlePhotoPreview();
 });

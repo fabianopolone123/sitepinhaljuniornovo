@@ -893,11 +893,12 @@ def register_director(request):
         term_nationality = form_values.get("term_nationality", "").strip()
         term_marital_status = form_values.get("term_marital_status", "").strip()
         term_rg_number = form_values.get("term_rg_number", "").strip()
-        term_rg_issuer = form_values.get("term_rg_issuer", "").strip()
         term_residence = form_values.get("term_residence", "").strip()
         term_municipality = form_values.get("term_municipality", "").strip()
         term_cpf = form_values.get("term_cpf", "").strip()
         term_accept = request.POST.get("term_accept") == "on"
+        form_values["term_accept"] = term_accept
+        director_photo = request.FILES.get("director_photo")
 
         for field_key, message in (
             ("term_nationality", "Informe sua nacionalidade."),
@@ -912,6 +913,8 @@ def register_director(request):
 
         if not term_accept:
             field_errors["term_accept"] = "Você precisa aceitar o termo de autorização."
+        if not director_photo:
+            field_errors["director_photo"] = "Anexe a foto 3x4 do voluntário."
 
         director_full_name = form_values.get("director_full_name", "").strip()
         director_church = form_values.get("director_church", "").strip()
@@ -936,6 +939,7 @@ def register_director(request):
         director_child_one = form_values.get("director_child_one", "").strip()
         director_child_two = form_values.get("director_child_two", "").strip()
         health_limitation = request.POST.get("director_health_limitation") == "on"
+        form_values["director_health_limitation"] = health_limitation
         health_description = form_values.get("director_health_description", "").strip()
         education_level = form_values.get("director_education_level", "").strip()
 
@@ -1020,6 +1024,7 @@ def register_director(request):
                         health_limitation=health_limitation,
                         health_description=health_description,
                         education_level=education_level,
+                        photo=director_photo,
                     )
                 messages.success(
                     request,
