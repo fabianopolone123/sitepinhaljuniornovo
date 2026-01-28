@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
     copyValueToTargets(event.target, [document.querySelector("#director_rg")]);
   });
 
-  const handlePhotoPreview = () => {
+  function handlePhotoPreview() {
     const input = document.querySelector("input[name='director_photo']");
     const previewWrapper = document.querySelector(".director-photo-preview");
     if (!input || !previewWrapper) return;

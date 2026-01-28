@@ -394,3 +394,8 @@ tira o quadrado do funcoi
 - **Actions**: atualizei static/js/register-director.js para que o helper setupSync marque um campo como “manual” apenas quando o evento de input for confiável (verificando event.isTrusted), permitindo que os dados continuem sendo copiados enquanto o usuário digita e mantendo o preview da foto intacto.
 - **Technical**: static/js/register-director.js (ajuste em setupSync para ignorar eventos programáticos ao definir data-manual).
 - **Notes**: validar manualmente no navegador que o preview aparece e que os campos replicados continuam mostrando todo o texto digitado.
+## 2026-01-28T02:39:00Z — Corrige ReferenceError em register-director.js
+- **Request**: o console do navegador aponta Uncaught ReferenceError: Cannot access 'handlePhotoPreview' before initialization em egister-director.js:83, impedindo a pré-visualização da foto.
+- **Actions**: Transformei handlePhotoPreview em declaração de função para que seja “hoisted” e possa ser chamada antes da definição; o resto do fluxo continua intacto.
+- **Technical**: static/js/register-director.js (função handlePhotoPreview).
+- **Notes**: teste manual simples no navegador confirmando que o preview 3x4 abre sem erros.
