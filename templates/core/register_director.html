@@ -173,15 +173,87 @@
             </div>
             <div class="field-group">
               <label>
-                Endereço
+                Av / Rua
                 <input
+                  id="responsavel_street"
                   type="text"
-                  name="responsavel_endereco"
-                  value="{{ form_values.responsavel_endereco|default:'' }}"
+                  name="responsavel_street"
+                  value="{{ form_values.responsavel_street|default:'' }}"
                   required
                 />
               </label>
-              <small class="error-message">{{ field_errors.responsavel_endereco|default:'' }}</small>
+              <small class="error-message">{{ field_errors.responsavel_street|default:'' }}</small>
+            </div>
+          </div>
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                Número
+                <input
+                  type="text"
+                  id="responsavel_house_number"
+                  name="responsavel_house_number"
+                  value="{{ form_values.responsavel_house_number|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_house_number|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Bairro
+                <input
+                  id="responsavel_neighborhood"
+                  type="text"
+                  name="responsavel_neighborhood"
+                  value="{{ form_values.responsavel_neighborhood|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_neighborhood|default:'' }}</small>
+            </div>
+          </div>
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                CEP
+                <input
+                  id="responsavel_postal_code"
+                  type="text"
+                  name="responsavel_postal_code"
+                  value="{{ form_values.responsavel_postal_code|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_postal_code|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Cidade
+                <input
+                  id="responsavel_city"
+                  type="text"
+                  name="responsavel_city"
+                  value="{{ form_values.responsavel_city|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_city|default:'' }}</small>
+            </div>
+          </div>
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                Estado
+                <input
+                  id="responsavel_state"
+                  type="text"
+                  name="responsavel_state"
+                  value="{{ form_values.responsavel_state|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_state|default:'' }}</small>
             </div>
           </div>
           <div class="field-group file-group">
@@ -269,6 +341,51 @@
             </div>
             <div class="field-group">
               <label>
+                Número
+                <input
+                  id="term_number"
+                  type="text"
+                  name="term_number"
+                  value="{{ form_values.term_number|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.term_number|default:'' }}</small>
+            </div>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                Bairro
+                <input
+                  id="term_neighborhood"
+                  type="text"
+                  name="term_neighborhood"
+                  value="{{ form_values.term_neighborhood|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.term_neighborhood|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                CEP
+                <input
+                  id="term_postal_code"
+                  type="text"
+                  name="term_postal_code"
+                  value="{{ form_values.term_postal_code|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.term_postal_code|default:'' }}</small>
+            </div>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
                 Município
                 <input
                   id="term_municipality"
@@ -279,6 +396,19 @@
                 />
               </label>
               <small class="error-message">{{ field_errors.term_municipality|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Estado
+                <input
+                  id="term_state"
+                  type="text"
+                  name="term_state"
+                  value="{{ form_values.term_state|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.term_state|default:'' }}</small>
             </div>
           </div>
 
@@ -630,10 +760,19 @@
                   {{ label }}
                 </option>
                 {% endfor %}
-              </select>
+            </select>
             </label>
             <small class="error-message">{{ field_errors.director_education_level|default:'' }}</small>
           </div>
+          <label class="checkbox-field">
+            <input
+              type="checkbox"
+              name="volunteer_acceptance"
+              {% if form_values.volunteer_acceptance %}checked{% endif %}
+            />
+            Aceito o Compromisso para Voluntários descrito acima.
+          </label>
+          <small class="error-message">{{ field_errors.volunteer_acceptance|default:'' }}</small>
         </section>
 
         <div class="form-navigation">

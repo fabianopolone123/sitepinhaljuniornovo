@@ -149,7 +149,11 @@ class DirectorApplication(models.Model):
     term_marital_status = models.CharField(max_length=60, blank=True)
     term_rg_number = models.CharField(max_length=30, blank=True)
     term_residence = models.CharField(max_length=255, blank=True)
+    term_number = models.CharField(max_length=20, blank=True)
+    term_neighborhood = models.CharField(max_length=120, blank=True)
+    term_postal_code = models.CharField(max_length=20, blank=True)
     term_municipality = models.CharField(max_length=120, blank=True)
+    term_state = models.CharField(max_length=60, blank=True)
     term_cpf = models.CharField(max_length=20, blank=True)
     term_accepted = models.BooleanField(default=False)
 
@@ -178,6 +182,7 @@ class DirectorApplication(models.Model):
     photo = models.ImageField(
         upload_to="director_photos/%Y/%m", blank=True, null=True
     )
+    volunteer_acceptance = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -861,7 +861,12 @@ def register_director(request):
         cpf = form_values.get("responsavel_cpf", "").strip()
         telefone = form_values.get("responsavel_telefone", "").strip()
         whatsapp = form_values.get("responsavel_whatsapp", "").strip()
-        endereco = form_values.get("responsavel_endereco", "").strip()
+        responsavel_street = form_values.get("responsavel_street", "").strip()
+        responsavel_house_number = form_values.get("responsavel_house_number", "").strip()
+        responsavel_neighborhood = form_values.get("responsavel_neighborhood", "").strip()
+        responsavel_postal_code = form_values.get("responsavel_postal_code", "").strip()
+        responsavel_city = form_values.get("responsavel_city", "").strip()
+        responsavel_state = form_values.get("responsavel_state", "").strip()
 
         for field_key, error_label in (
             ("responsavel_username", "Informe um nome de usuário."),
@@ -872,7 +877,12 @@ def register_director(request):
             ("responsavel_cpf", "Informe o CPF."),
             ("responsavel_telefone", "Informe o telefone."),
             ("responsavel_whatsapp", "Informe o WhatsApp."),
-            ("responsavel_endereco", "Informe o endereço."),
+            ("responsavel_street", "Informe a Av/Rua."),
+            ("responsavel_house_number", "Informe o número."),
+            ("responsavel_neighborhood", "Informe o bairro."),
+            ("responsavel_postal_code", "Informe o CEP."),
+            ("responsavel_city", "Informe a cidade."),
+            ("responsavel_state", "Informe o estado."),
         ):
             if not form_values.get(field_key, "").strip():
                 field_errors[field_key] = error_label
@@ -894,18 +904,28 @@ def register_director(request):
         term_marital_status = form_values.get("term_marital_status", "").strip()
         term_rg_number = form_values.get("term_rg_number", "").strip()
         term_residence = form_values.get("term_residence", "").strip()
+        term_number = form_values.get("term_number", "").strip()
+        term_neighborhood = form_values.get("term_neighborhood", "").strip()
+        term_postal_code = form_values.get("term_postal_code", "").strip()
         term_municipality = form_values.get("term_municipality", "").strip()
+        term_state = form_values.get("term_state", "").strip()
         term_cpf = form_values.get("term_cpf", "").strip()
         term_accept = request.POST.get("term_accept") == "on"
         form_values["term_accept"] = term_accept
         director_photo = request.FILES.get("director_photo")
+        volunteer_acceptance = request.POST.get("volunteer_acceptance") == "on"
+        form_values["volunteer_acceptance"] = volunteer_acceptance
 
         for field_key, message in (
             ("term_nationality", "Informe sua nacionalidade."),
             ("term_marital_status", "Informe o estado civil."),
             ("term_rg_number", "Informe o número do RG."),
-            ("term_residence", "Informe o endereço."),
+            ("term_residence", "Informe a Av/Rua."),
+            ("term_number", "Informe o número."),
+            ("term_neighborhood", "Informe o bairro."),
+            ("term_postal_code", "Informe o CEP."),
             ("term_municipality", "Informe o município."),
+            ("term_state", "Informe o estado."),
             ("term_cpf", "Informe o CPF."),
         ):
             if not form_values.get(field_key, "").strip():
@@ -915,6 +935,8 @@ def register_director(request):
             field_errors["term_accept"] = "Você precisa aceitar o termo de autorização."
         if not director_photo:
             field_errors["director_photo"] = "Anexe a foto 3x4 do voluntário."
+        if not volunteer_acceptance:
+            field_errors["volunteer_acceptance"] = "Você precisa aceitar o compromisso."
 
         director_full_name = form_values.get("director_full_name", "").strip()
         director_church = form_values.get("director_church", "").strip()
@@ -983,12 +1005,16 @@ def register_director(request):
                         first_name=responsavel_nome,
                         last_name=responsavel_sobrenome,
                     )
+                    responsible_address = (
+                        f"{responsavel_street}, {responsavel_house_number} - {responsavel_neighborhood}, "
+                        f"CEP {responsavel_postal_code}, {responsavel_city} - {responsavel_state}"
+                    )
                     responsible = Responsible.objects.create(
                         user=user,
                         cpf=cpf,
                         telefone=telefone,
                         whatsapp=whatsapp,
-                        endereco=endereco,
+                        endereco=responsible_address,
                         sexo=responsavel_sexo,
                     )
                     DirectorApplication.objects.create(
@@ -996,9 +1022,12 @@ def register_director(request):
                         term_nationality=term_nationality,
                         term_marital_status=term_marital_status,
                         term_rg_number=term_rg_number,
-                        term_rg_issuer=term_rg_issuer,
                         term_residence=term_residence,
+                        term_number=term_number,
+                        term_neighborhood=term_neighborhood,
+                        term_postal_code=term_postal_code,
                         term_municipality=term_municipality,
+                        term_state=term_state,
                         term_cpf=term_cpf,
                         term_accepted=term_accept,
                         church=director_church,
@@ -1025,6 +1054,7 @@ def register_director(request):
                         health_description=health_description,
                         education_level=education_level,
                         photo=director_photo,
+                        volunteer_acceptance=volunteer_acceptance,
                     )
                 messages.success(
                     request,
