@@ -17,14 +17,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  const toggleButtons = document.querySelectorAll("[data-toggle='cadastro-details']");
-  toggleButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const targetId = button.dataset.target;
+  const panelToggles = document.querySelectorAll("[data-toggle='panel-details']");
+  panelToggles.forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      const targetId = trigger.dataset.target;
       const panel = document.getElementById(targetId);
       if (!panel) return;
       const isOpen = panel.classList.toggle("is-open");
-      button.textContent = isOpen ? "Ocultar detalhes" : "Ver detalhes";
+      const toggleButton = trigger.querySelector(".ghost-btn");
+      if (toggleButton) {
+        toggleButton.textContent = isOpen ? "Ocultar detalhes" : "Ver detalhes";
+      }
     });
   });
 
