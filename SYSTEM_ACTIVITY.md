@@ -357,3 +357,9 @@ tira o quadrado do funcoi
 - **Actions**: Atualizei o listener para procurar [data-toggle='panel-details'], ativar o painel correspondente e trocar o texto apenas no ghost-btn dentro do resumo, mantendo o resto do conteudo intacto ao alternar is-open.
 - **Technical**: static/js/dashboard.js (corrige seletor e seta o texto somente no botao interno ao abrir/fechar).
 - **Notes**: Nenhum teste automatizado rodado; validacao manual no painel de cadastros.
+
+## 2026-01-28T00:47:55+00:00Z — Corrige visualização da foto do aventureiro
+- **Request**: Foto atual do aventureiro nos cadastros fica um icone ao inves da foto
+- **Actions**: Defini MEDIA_URL como /media/ e acrescentei o static() de media nas urls de desenvolvimento para garantir que dventurer.photo.url gere o caminho absoluto correto, eliminando o erro de rota relativa que mostrava o ícone quebrado; agora o preview carrega a imagem real quando o backend entrega a mídia.
+- **Technical**: pinhaljunior/settings.py (nova MEDIA_URL); pinhaljunior/urls.py (adiciona static() para servir /media/ no DEBUG).
+- **Notes**: No VPS, configure o OpenLiteSpeed para servir /media/ a partir de /var/www/sitepinhaljuniornovo/media e reinicie o serviço conforme o fluxo.
