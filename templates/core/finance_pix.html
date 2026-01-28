@@ -27,15 +27,13 @@
         {{ error_message }}
         </div>
       {% endif %}
-        {% if charge.last_notification %}
-        <div class="form-feedback form-feedback--success">
-          Última tentativa do webhook em {{ charge.last_notification_at|date:"d/m/Y H:i:s" }}:
-          <pre class="webhook-log">{{ charge.last_notification }}</pre>
-        </div>
-        {% endif %}
       {% if charge.status == charge.PAID %}
       <div class="form-feedback form-feedback--success">
         Pagamento confirmado em {{ charge.approved_at|date:"d/m/Y H:i" }}.
+      </div>
+      {% else %}
+      <div class="form-feedback form-feedback--error">
+        Status: pendente. Assim que a confirmação chegar o pagamento será registrado.
       </div>
       {% endif %}
       <div class="finance-qr">
