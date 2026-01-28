@@ -76,6 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
   syncFullName();
   syncCPF();
   syncAddressFromInitial();
+  setupSync("#term_rg_number", ["#director_rg"]);
   updateTermName();
   handlePhotoPreview();
 
@@ -99,12 +100,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function syncAddressFromInitial() {
-    setupSync("#responsavel_street", ["#term_residence", "#director_street_address"]);
-    setupSync("#responsavel_house_number", ["#term_number", "#director_house_number"]);
-    setupSync("#responsavel_neighborhood", ["#term_neighborhood", "#director_neighborhood"]);
-    setupSync("#responsavel_postal_code", ["#term_postal_code", "#director_postal_code"]);
-    setupSync("#responsavel_city", ["#term_municipality", "#director_city"]);
-    setupSync("#responsavel_state", ["#term_state", "#director_state"]);
+  setupSync("#responsavel_street", ["#term_residence", "#director_street_address"]);
+  setupSync("#responsavel_house_number", ["#term_number", "#director_house_number"]);
+  setupSync("#responsavel_neighborhood", ["#term_neighborhood", "#director_neighborhood"]);
+  setupSync("#responsavel_postal_code", ["#term_postal_code", "#director_postal_code"]);
+  setupSync("#responsavel_city", ["#term_municipality", "#director_city"]);
+  setupSync("#responsavel_state", ["#term_state", "#director_state"]);
+  setupSync("#responsavel_telefone", ["#director_cellphone"]);
   }
 
   document.querySelector("#responsavel_nome")?.addEventListener("input", () => {
@@ -120,12 +122,15 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelector("#term_cpf")?.addEventListener("input", (event) => {
     copyValueToTargets(event.target, [document.querySelector("#director_cpf")]);
   });
+  document.querySelector("#term_rg_number")?.addEventListener("input", (event) => {
+    copyValueToTargets(event.target, [document.querySelector("#director_rg")]);
+  });
 
   const handlePhotoPreview = () => {
     const input = document.querySelector("input[name='director_photo']");
     const previewWrapper = document.querySelector(".director-photo-preview");
     if (!input || !previewWrapper) return;
-    const placeholder = previewWrapper.querySelector(".preview-placeholder");
+    const previewTemplate = previewWrapper.innerHTML;
     const showImage = (src) => {
       previewWrapper.innerHTML = "";
       const img = document.createElement("img");
@@ -135,10 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
     input.addEventListener("change", () => {
       const file = input.files?.[0];
       if (!file) {
-        previewWrapper.innerHTML = "";
-        if (placeholder) {
-          previewWrapper.appendChild(placeholder);
-        }
+        previewWrapper.innerHTML = previewTemplate;
         return;
       }
       const reader = new FileReader();
