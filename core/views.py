@@ -19,6 +19,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 from .models import (
     Adventurer,
@@ -541,6 +542,22 @@ def pay_monthly_fees(request, year, month):
 
 @login_required
 def finance_pix(request, year, month):
+    if request.GET.get("poll") == "1":
+        charge = get_object_or_404(
+            PixCharge,
+            responsible=request.user.responsavel,
+            year=year,
+            month=month,
+        )
+        return JsonResponse(
+            {
+                "status": charge.status,
+                "paid": charge.status == PixCharge.PAID,
+                "approved_at": charge.approved_at.isoformat()
+                if charge.approved_at
+                else "",
+            }
+        )
     if not hasattr(request.user, "responsavel"):
         messages.error(request, "Você precisa ser responsável para gerar o PIX.")
         return redirect("dashboard")

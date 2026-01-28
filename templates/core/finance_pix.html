@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/finance.css' %}" />
   </head>
   <body class="finance-page">
-    <main class="finance-card">
+    <main class="finance-card" data-charge-status="{{ charge.status }}">
       <p class="tag">Financeiro</p>
       <h1>PIX Mensalidades {{ charge.month|default:"00" }}/{{ charge.year|default:"0000" }}</h1>
       <p class="hero-text">Responsável: {{ charge.responsible.user.get_full_name }}</p>
