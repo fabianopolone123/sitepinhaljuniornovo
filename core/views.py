@@ -23,6 +23,7 @@ from django.http import JsonResponse
 
 from .models import (
     Adventurer,
+    DirectorApplication,
     MonthlyFee,
     PasswordRecovery,
     PixCharge,
@@ -72,6 +73,12 @@ MONTH_OPTIONS = [
     ("12", "Dez"),
 ]
 YEAR_OPTIONS = [str(year) for year in range(2026, 1979, -1)]
+
+EDUCATION_CHOICES = [
+    ("fundamental", "Ensino Fundamental"),
+    ("medio", "Ensino Médio"),
+    ("faculdade", "Faculdade"),
+]
 
 MONTHLY_FEE_DUE_DAY = 10
 
@@ -700,7 +707,7 @@ def mp_webhook(request):
         return JsonResponse({"status": "paid"})
 
     return JsonResponse({"status": "pending"})
-def register(request):
+def register_adventurer(request):
     """Render the registration workflow for responsáveis e aventureiros."""
 
     field_errors = {}
@@ -830,6 +837,208 @@ def register(request):
         "sex_choices": SEX_CHOICES,
     }
     return render(request, "core/register.html", context)
+
+
+def registration_choice(request):
+    """Tela intermediária para escolher o tipo de cadastro desejado."""
+
+    return render(request, "core/register_choice.html")
+
+
+def register_director(request):
+    field_errors = {}
+    form_values = {}
+    success_message = ""
+
+    if request.method == "POST":
+        form_values = request.POST.dict()
+        responsible_username = form_values.get("responsavel_username", "").strip()
+        password1 = form_values.get("responsavel_password1", "")
+        password2 = form_values.get("responsavel_password2", "")
+        responsavel_nome = form_values.get("responsavel_nome", "").strip()
+        responsavel_sobrenome = form_values.get("responsavel_sobrenome", "").strip()
+        responsavel_sexo = form_values.get("responsavel_sexo", "").strip()
+        cpf = form_values.get("responsavel_cpf", "").strip()
+        telefone = form_values.get("responsavel_telefone", "").strip()
+        whatsapp = form_values.get("responsavel_whatsapp", "").strip()
+        endereco = form_values.get("responsavel_endereco", "").strip()
+
+        for field_key, error_label in (
+            ("responsavel_username", "Informe um nome de usuário."),
+            ("responsavel_password1", "Informe e confirme a senha."),
+            ("responsavel_nome", "Informe o nome do responsável."),
+            ("responsavel_sobrenome", "Informe o sobrenome."),
+            ("responsavel_sexo", "Informe o sexo do responsável."),
+            ("responsavel_cpf", "Informe o CPF."),
+            ("responsavel_telefone", "Informe o telefone."),
+            ("responsavel_whatsapp", "Informe o WhatsApp."),
+            ("responsavel_endereco", "Informe o endereço."),
+        ):
+            if not form_values.get(field_key, "").strip():
+                field_errors[field_key] = error_label
+
+        if password1 or password2:
+            if password1 != password2:
+                field_errors["responsavel_password2"] = "As senhas não conferem."
+            elif len(password1) != 4 or not password1.isdigit():
+                field_errors["responsavel_password1"] = "A senha precisa ter 4 dígitos."
+        else:
+            field_errors["responsavel_password1"] = "Informe e confirme a senha."
+
+        if User.objects.filter(username=responsible_username).exists():
+            field_errors["responsavel_username"] = "Nome de usuário indisponível."
+        if Responsible.objects.filter(cpf=cpf).exists():
+            field_errors["responsavel_cpf"] = "Esse CPF já está cadastrado."
+
+        term_nationality = form_values.get("term_nationality", "").strip()
+        term_marital_status = form_values.get("term_marital_status", "").strip()
+        term_rg_number = form_values.get("term_rg_number", "").strip()
+        term_rg_issuer = form_values.get("term_rg_issuer", "").strip()
+        term_residence = form_values.get("term_residence", "").strip()
+        term_municipality = form_values.get("term_municipality", "").strip()
+        term_cpf = form_values.get("term_cpf", "").strip()
+        term_accept = request.POST.get("term_accept") == "on"
+
+        for field_key, message in (
+            ("term_nationality", "Informe sua nacionalidade."),
+            ("term_marital_status", "Informe o estado civil."),
+            ("term_rg_number", "Informe o número do RG."),
+            ("term_residence", "Informe o endereço."),
+            ("term_municipality", "Informe o município."),
+            ("term_cpf", "Informe o CPF."),
+        ):
+            if not form_values.get(field_key, "").strip():
+                field_errors[field_key] = message
+
+        if not term_accept:
+            field_errors["term_accept"] = "Você precisa aceitar o termo de autorização."
+
+        director_full_name = form_values.get("director_full_name", "").strip()
+        director_church = form_values.get("director_church", "").strip()
+        director_district = form_values.get("director_district", "").strip()
+        director_street = form_values.get("director_street_address", "").strip()
+        director_house_number = form_values.get("director_house_number", "").strip()
+        director_neighborhood = form_values.get("director_neighborhood", "").strip()
+        director_postal_code = form_values.get("director_postal_code", "").strip()
+        director_city = form_values.get("director_city", "").strip()
+        director_state = form_values.get("director_state", "").strip()
+        director_email = form_values.get("director_email", "").strip()
+        director_cellphone = form_values.get("director_cellphone", "").strip()
+        director_home_phone = form_values.get("director_home_phone", "").strip()
+        director_work_phone = form_values.get("director_work_phone", "").strip()
+        director_birth_day = form_values.get("director_birth_day", "").strip()
+        director_birth_month = form_values.get("director_birth_month", "").strip()
+        director_birth_year = form_values.get("director_birth_year", "").strip()
+        director_marital_status = form_values.get("director_marital_status", "").strip()
+        director_cpf = form_values.get("director_cpf", "").strip()
+        director_rg = form_values.get("director_rg", "").strip()
+        director_spouse = form_values.get("director_spouse", "").strip()
+        director_child_one = form_values.get("director_child_one", "").strip()
+        director_child_two = form_values.get("director_child_two", "").strip()
+        health_limitation = request.POST.get("director_health_limitation") == "on"
+        health_description = form_values.get("director_health_description", "").strip()
+        education_level = form_values.get("director_education_level", "").strip()
+
+        for field_key, message in (
+            ("director_full_name", "Informe o nome completo."),
+            ("director_church", "Informe o nome da igreja."),
+            ("director_district", "Informe o distrito."),
+            ("director_street_address", "Informe o endereço completo."),
+            ("director_city", "Informe a cidade."),
+            ("director_state", "Informe o estado."),
+            ("director_email", "Informe o e-mail."),
+            ("director_cellphone", "Informe o celular."),
+            ("director_marital_status", "Informe o estado civil."),
+            ("director_cpf", "Informe o CPF."),
+            ("director_rg", "Informe o RG."),
+            ("director_education_level", "Informe a escolaridade."),
+        ):
+            if not form_values.get(field_key, "").strip():
+                field_errors[field_key] = message
+
+        birth_date = None
+        if director_birth_day and director_birth_month and director_birth_year:
+            try:
+                birth_date = date(
+                    int(director_birth_year), int(director_birth_month), int(director_birth_day)
+                )
+            except (ValueError, TypeError):
+                field_errors["director_birth_date"] = "Informe uma data de nascimento válida."
+        else:
+            field_errors["director_birth_date"] = "Informe a data de nascimento completa."
+
+        if education_level not in dict(EDUCATION_CHOICES):
+            field_errors["director_education_level"] = "Escolha um nível de escolaridade."
+
+        if not field_errors:
+            try:
+                with transaction.atomic():
+                    user = User.objects.create_user(
+                        username=responsible_username,
+                        password=password1,
+                        first_name=responsavel_nome,
+                        last_name=responsavel_sobrenome,
+                    )
+                    responsible = Responsible.objects.create(
+                        user=user,
+                        cpf=cpf,
+                        telefone=telefone,
+                        whatsapp=whatsapp,
+                        endereco=endereco,
+                        sexo=responsavel_sexo,
+                    )
+                    DirectorApplication.objects.create(
+                        responsible=responsible,
+                        term_nationality=term_nationality,
+                        term_marital_status=term_marital_status,
+                        term_rg_number=term_rg_number,
+                        term_rg_issuer=term_rg_issuer,
+                        term_residence=term_residence,
+                        term_municipality=term_municipality,
+                        term_cpf=term_cpf,
+                        term_accepted=term_accept,
+                        church=director_church,
+                        district=director_district,
+                        full_name=director_full_name,
+                        street_address=director_street,
+                        house_number=director_house_number,
+                        neighborhood=director_neighborhood,
+                        postal_code=director_postal_code,
+                        city=director_city,
+                        state=director_state,
+                        email=director_email,
+                        cellphone=director_cellphone,
+                        home_phone=director_home_phone,
+                        work_phone=director_work_phone,
+                        birth_date=birth_date,
+                        volunteer_marital_status=director_marital_status,
+                        director_cpf=director_cpf,
+                        director_rg=director_rg,
+                        spouse=director_spouse,
+                        child_one=director_child_one,
+                        child_two=director_child_two,
+                        health_limitation=health_limitation,
+                        health_description=health_description,
+                        education_level=education_level,
+                    )
+                messages.success(
+                    request,
+                    "Cadastro da diretoria enviado! Um membro da coordenação entrará em contato.",
+                )
+                return redirect("login")
+            except IntegrityError:
+                field_errors["responsavel_username"] = "Erro ao criar usuário; tente um nome diferente."
+
+    context = {
+        "form_values": form_values,
+        "field_errors": field_errors,
+        "sex_choices": SEX_CHOICES,
+        "days": DAY_OPTIONS,
+        "months": MONTH_OPTIONS,
+        "years": YEAR_OPTIONS,
+        "education_choices": EDUCATION_CHOICES,
+    }
+    return render(request, "core/register_director.html", context)
 
 
 @login_required

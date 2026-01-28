@@ -1,0 +1,635 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cadastro de Diretoria | Clube de Aventureiros</title>
+    <link rel="stylesheet" href="{% static 'css/register-director.css' %}" />
+  </head>
+  <body class="director-page">
+    <main class="director-wrapper">
+      <header class="hero">
+        <div>
+          <p class="tag">Cadastro guiado</p>
+          <h1>Diretoria e voluntariado</h1>
+          <p>
+            Escolha os passos abaixo para entregar o Termo de Autorização de Uso de Imagem e o Compromisso para
+            Voluntários em um único fluxo responsivo, com campos que mantêm os dados inseridos mesmo em caso de erro.
+          </p>
+        </div>
+        <img
+          src="{% static 'images/logo-removebg-preview.png' %}"
+          alt="Logo Clube de Aventureiros"
+        />
+      </header>
+
+      <div class="director-stepper" role="tablist">
+        <button type="button" class="step-btn is-active" data-step-target="1">01. Dados iniciais</button>
+        <button type="button" class="step-btn" data-step-target="2">02. Termo de autorização</button>
+        <button type="button" class="step-btn" data-step-target="3">03. Compromisso voluntário</button>
+      </div>
+
+      {% if field_errors %}
+      <div class="form-feedback form-feedback--error">
+        Revise os campos destacados e finalize o cadastro.
+      </div>
+      {% endif %}
+
+      <form class="director-form" method="post" novalidate>
+        {% csrf_token %}
+
+        <section class="director-step is-active" data-step="1">
+          <h3>1. Dados iniciais</h3>
+          <p>Estas informações equivalem ao cadastro do responsável: mantenha a senha segura e use um CPF válido.</p>
+
+          <div class="field-group">
+            <label>
+              Nome de usuário
+              <input
+                type="text"
+                name="responsavel_username"
+                value="{{ form_values.responsavel_username|default:'' }}"
+                required
+              />
+            </label>
+            <small class="error-message">{{ field_errors.responsavel_username|default:'' }}</small>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                Senha (4 dígitos)
+                <input
+                  type="password"
+                  name="responsavel_password1"
+                  value=""
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_password1|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Repita a senha
+                <input
+                  type="password"
+                  name="responsavel_password2"
+                  value=""
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_password2|default:'' }}</small>
+            </div>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                Nome
+                <input
+                  id="responsavel_nome"
+                  type="text"
+                  name="responsavel_nome"
+                  value="{{ form_values.responsavel_nome|default:'' }}"
+                  required
+                  data-sync-target="#director_full_name"
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_nome|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Sobrenome
+                <input
+                  id="responsavel_sobrenome"
+                  type="text"
+                  name="responsavel_sobrenome"
+                  value="{{ form_values.responsavel_sobrenome|default:'' }}"
+                  required
+                  data-sync-target="#director_full_name"
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_sobrenome|default:'' }}</small>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>
+              Sexo
+              <select name="responsavel_sexo" required>
+                <option value="">Selecione</option>
+                {% for value, label in sex_choices %}
+                <option value="{{ value }}" {% if form_values.responsavel_sexo == value %}selected{% endif %}>
+                  {{ label }}
+                </option>
+                {% endfor %}
+              </select>
+            </label>
+            <small class="error-message">{{ field_errors.responsavel_sexo|default:'' }}</small>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                CPF
+                <input
+                  id="responsavel_cpf"
+                  type="text"
+                  name="responsavel_cpf"
+                  value="{{ form_values.responsavel_cpf|default:'' }}"
+                  required
+                  data-sync-target="#director_cpf"
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_cpf|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Telefone
+                <input
+                  type="tel"
+                  name="responsavel_telefone"
+                  value="{{ form_values.responsavel_telefone|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_telefone|default:'' }}</small>
+            </div>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                WhatsApp
+                <input
+                  type="tel"
+                  name="responsavel_whatsapp"
+                  value="{{ form_values.responsavel_whatsapp|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_whatsapp|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Endereço
+                <input
+                  type="text"
+                  name="responsavel_endereco"
+                  value="{{ form_values.responsavel_endereco|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_endereco|default:'' }}</small>
+            </div>
+          </div>
+        </section>
+
+        <section class="director-step" data-step="2">
+          <h3>2. Termo de Autorização de Uso de Imagem</h3>
+          <p>
+            Eu, abaixo assinado, autorizo o uso gratuito da minha imagem para campanhas promocionais e institucionais
+            do Clube de Aventureiros Pinhal Junior em todo o território nacional e em mídias como outdoors, folders,
+            revistas, Facebook, vídeos, televisão e rádio.
+          </p>
+          <div class="term-columns">
+            <div class="field-group">
+              <label>
+                Nacionalidade
+                <input
+                  type="text"
+                  name="term_nationality"
+                  value="{{ form_values.term_nationality|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.term_nationality|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Estado civil
+                <input
+                  type="text"
+                  name="term_marital_status"
+                  value="{{ form_values.term_marital_status|default:'' }}"
+                  required
+                  data-sync-target="#director_marital_status"
+                />
+              </label>
+              <small class="error-message">{{ field_errors.term_marital_status|default:'' }}</small>
+            </div>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                RG
+                <input
+                  type="text"
+                  name="term_rg_number"
+                  value="{{ form_values.term_rg_number|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.term_rg_number|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Órgão emissor
+                <input
+                  type="text"
+                  name="term_rg_issuer"
+                  value="{{ form_values.term_rg_issuer|default:'' }}"
+                />
+              </label>
+              <small class="error-message">{{ field_errors.term_rg_issuer|default:'' }}</small>
+            </div>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                Av / Rua
+                <input
+                  type="text"
+                  name="term_residence"
+                  value="{{ form_values.term_residence|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.term_residence|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Município
+                <input
+                  type="text"
+                  name="term_municipality"
+                  value="{{ form_values.term_municipality|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.term_municipality|default:'' }}</small>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>
+              CPF
+              <input
+                type="text"
+                name="term_cpf"
+                value="{{ form_values.term_cpf|default:'' }}"
+                required
+              />
+            </label>
+            <small class="error-message">{{ field_errors.term_cpf|default:'' }}</small>
+          </div>
+
+          <label class="checkbox-field">
+            <input
+              type="checkbox"
+              name="term_accept"
+              {% if form_values.term_accept %}checked{% endif %}
+            />
+            Aceito o Termo de Autorização de Uso de Imagem descrito acima.
+          </label>
+          <small class="error-message">{{ field_errors.term_accept|default:'' }}</small>
+        </section>
+
+        <section class="director-step" data-step="3">
+          <h3>3. Compromisso para Voluntários</h3>
+          <p>Preencha os dados abaixo para finalizar o compromisso com o Clube.</p>
+
+          <div class="field-group">
+            <label>
+              Nome completo
+              <input
+                type="text"
+                id="director_full_name"
+                name="director_full_name"
+                value="{{ form_values.director_full_name|default:'' }}"
+                required
+              />
+            </label>
+            <small class="error-message">{{ field_errors.director_full_name|default:'' }}</small>
+          </div>
+
+          <div class="field-group">
+            <label>
+              Igreja
+              <input
+                type="text"
+                name="director_church"
+                value="{{ form_values.director_church|default:'' }}"
+                required
+              />
+            </label>
+            <small class="error-message">{{ field_errors.director_church|default:'' }}</small>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                Distrito
+                <input
+                  type="text"
+                  name="director_district"
+                  value="{{ form_values.director_district|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.director_district|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Endereço
+                <input
+                  type="text"
+                  name="director_street_address"
+                  value="{{ form_values.director_street_address|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.director_street_address|default:'' }}</small>
+            </div>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                Número
+                <input
+                  type="text"
+                  name="director_house_number"
+                  value="{{ form_values.director_house_number|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.director_house_number|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Bairro
+                <input
+                  type="text"
+                  name="director_neighborhood"
+                  value="{{ form_values.director_neighborhood|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.director_neighborhood|default:'' }}</small>
+            </div>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                CEP
+                <input
+                  type="text"
+                  name="director_postal_code"
+                  value="{{ form_values.director_postal_code|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.director_postal_code|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Cidade
+                <input
+                  type="text"
+                  name="director_city"
+                  value="{{ form_values.director_city|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.director_city|default:'' }}</small>
+            </div>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                Estado
+                <input
+                  type="text"
+                  name="director_state"
+                  value="{{ form_values.director_state|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.director_state|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                E-mail
+                <input
+                  type="email"
+                  name="director_email"
+                  value="{{ form_values.director_email|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.director_email|default:'' }}</small>
+            </div>
+          </div>
+
+          <div class="grid two-columns link">
+            <div class="field-group">
+              <label>
+                Celular
+                <input
+                  type="tel"
+                  name="director_cellphone"
+                  value="{{ form_values.director_cellphone|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.director_cellphone|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Tel. Residencial
+                <input
+                  type="tel"
+                  name="director_home_phone"
+                  value="{{ form_values.director_home_phone|default:'' }}"
+                />
+              </label>
+              <small class="error-message">{{ field_errors.director_home_phone|default:'' }}</small>
+            </div>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                Tel. Comercial
+                <input
+                  type="tel"
+                  name="director_work_phone"
+                  value="{{ form_values.director_work_phone|default:'' }}"
+                />
+              </label>
+              <small class="error-message">{{ field_errors.director_work_phone|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Data de nascimento
+                <div class="date-selects">
+                  <select name="director_birth_day" required>
+                    <option value="">Dia</option>
+                    {% for day in days %}
+                    <option value="{{ day }}" {% if form_values.director_birth_day == day %}selected{% endif %}>
+                      {{ day }}
+                    </option>
+                    {% endfor %}
+                  </select>
+                  <select name="director_birth_month" required>
+                    <option value="">Mês</option>
+                    {% for num, name in months %}
+                    <option value="{{ num }}" {% if form_values.director_birth_month == num %}selected{% endif %}>
+                      {{ name }}
+                    </option>
+                    {% endfor %}
+                  </select>
+                  <select name="director_birth_year" required>
+                    <option value="">Ano</option>
+                    {% for year in years %}
+                    <option value="{{ year }}" {% if form_values.director_birth_year == year %}selected{% endif %}>
+                      {{ year }}
+                    </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </label>
+              <small class="error-message">{{ field_errors.director_birth_date|default:'' }}</small>
+            </div>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                Estado civil
+                <input
+                  id="director_marital_status"
+                  type="text"
+                  name="director_marital_status"
+                  value="{{ form_values.director_marital_status|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.director_marital_status|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                CPF
+                <input
+                  id="director_cpf"
+                  type="text"
+                  name="director_cpf"
+                  value="{{ form_values.director_cpf|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.director_cpf|default:'' }}</small>
+            </div>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                RG
+                <input
+                  type="text"
+                  name="director_rg"
+                  value="{{ form_values.director_rg|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.director_rg|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Esposa(o)
+                <input
+                  type="text"
+                  name="director_spouse"
+                  value="{{ form_values.director_spouse|default:'' }}"
+                />
+              </label>
+              <small class="error-message">{{ field_errors.director_spouse|default:'' }}</small>
+            </div>
+          </div>
+
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                Filho(a)
+                <input
+                  type="text"
+                  name="director_child_one"
+                  value="{{ form_values.director_child_one|default:'' }}"
+                />
+              </label>
+              <small class="error-message">{{ field_errors.director_child_one|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Filho(a)
+                <input
+                  type="text"
+                  name="director_child_two"
+                  value="{{ form_values.director_child_two|default:'' }}"
+                />
+              </label>
+              <small class="error-message">{{ field_errors.director_child_two|default:'' }}</small>
+            </div>
+          </div>
+
+          <fieldset class="field-group">
+            <legend>Informações de saúde</legend>
+            <label class="checkbox-field">
+              <input
+                type="checkbox"
+                name="director_health_limitation"
+                {% if form_values.director_health_limitation %}checked{% endif %}
+              />
+              Possui alguma limitação de saúde?
+            </label>
+            <small class="error-message">{{ field_errors.director_health_limitation|default:'' }}</small>
+            <label>
+              Em caso afirmativo, descreva
+              <textarea name="director_health_description">{{ form_values.director_health_description|default:'' }}</textarea>
+            </label>
+            <small class="error-message">{{ field_errors.director_health_description|default:'' }}</small>
+          </fieldset>
+
+          <div class="field-group">
+            <label>
+              Escolaridade
+              <select name="director_education_level" required>
+                <option value="">Selecione</option>
+                {% for value, label in education_choices %}
+                <option value="{{ value }}" {% if form_values.director_education_level == value %}selected{% endif %}>
+                  {{ label }}
+                </option>
+                {% endfor %}
+              </select>
+            </label>
+            <small class="error-message">{{ field_errors.director_education_level|default:'' }}</small>
+          </div>
+        </section>
+
+        <div class="form-navigation">
+          <button type="button" class="ghost-btn" data-prev>Voltar</button>
+          <button type="button" class="primary-btn" data-next>Próximo</button>
+          <button type="submit" class="primary-btn is-hidden" data-submit>Concluir cadastro</button>
+        </div>
+      </form>
+    </main>
+    <script src="{% static 'js/register-director.js' %}" defer></script>
+  </body>
+</html>

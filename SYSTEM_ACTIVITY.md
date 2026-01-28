@@ -363,3 +363,9 @@ tira o quadrado do funcoi
 - **Actions**: Defini MEDIA_URL como /media/ e acrescentei o static() de media nas urls de desenvolvimento para garantir que dventurer.photo.url gere o caminho absoluto correto, eliminando o erro de rota relativa que mostrava o ícone quebrado; agora o preview carrega a imagem real quando o backend entrega a mídia.
 - **Technical**: pinhaljunior/settings.py (nova MEDIA_URL); pinhaljunior/urls.py (adiciona static() para servir /media/ no DEBUG).
 - **Notes**: No VPS, configure o OpenLiteSpeed para servir /media/ a partir de /var/www/sitepinhaljuniornovo/media e reinicie o serviço conforme o fluxo.
+
+## 2026-01-28T01:12:19+00:00Z — Nova jornada de cadastro
+- **Request**: separar o fluxo de cadastro entre aventureiros e diretoria, com tela bonita, etapas guiadas para responsÃ¡vel/termo/compromisso e campos mantidos em caso de erro.
+- **Actions**: criei a nova rota cadastro/ que mostra a escolha entre inscrever aventureiros ou registrar a diretoria, mantive o form original em cadastro/aventureiro/ e adicionei cadastro/diretoria/ com layout multi-step (Termo + Compromisso), validaÃ§Ãµes, auto-preenchimento via JS e o armazenamento dos campos extras no modelo DirectorApplication. Atualizei o admin para listar essas solicitaÃ§Ãµes e adicionei os assets CSS/JS que compõem a experiÃªncia.
+- **Technical**: core/views.py, core/urls.py, core/models.py, core/admin.py, core/migrations/0009_directorapplication.py, 	emplates/core/register_choice.html, 	emplates/core/register_director.html, static/css/register-choice.css, static/css/register-director.css, static/js/register-director.js.
+- **Notes**: testes manuais pelo browser garantindo que as etapas naveguem e mantenham os dados preenchidos (falta rodar python manage.py check).

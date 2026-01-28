@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Escolha do cadastro | Clube de Aventureiros</title>
+    <link rel="stylesheet" href="{% static 'css/register-choice.css' %}" />
+  </head>
+  <body class="register-choice-page">
+    <main class="choice-wrapper">
+      <header class="choice-hero">
+        <div>
+          <p class="tag">Novo por aqui?</p>
+          <h1>Bem-vindo ao Clube de Aventureiros Pinhal Junior</h1>
+          <p>
+            Escolha o caminho certo: inscreva aventureiros ou cadastre-se como parte da diretoria/voluntariado,
+            mantendo o estilo gráfico do site e navegando passo a passo.
+          </p>
+        </div>
+        <img
+          src="{% static 'images/logo-removebg-preview.png' %}"
+          alt="Logo Clube de Aventureiros"
+        />
+      </header>
+
+      <section class="choice-grid">
+        <article class="choice-card">
+          <p class="tag light">Cadastre um aventureiro</p>
+          <h2>Inscrição de aventureiros</h2>
+          <p>
+            Use o formulário completo já conhecido para reunir responsáveis e aventureiros com validação
+            em tempo real, fotos 3x4 e envio seguro.
+          </p>
+          <a class="primary-btn" href="{% url 'register_adventurer' %}">Quero inscrever um aventureiro</a>
+        </article>
+        <article class="choice-card">
+          <p class="tag light">Cadastre-se como diretoria</p>
+          <h2>Cadastro de voluntariado</h2>
+          <p>
+            Entregue seu Termo de Autorização de Uso de Imagem e o Compromisso para Voluntários em um fluxo guiado
+            por etapas, com campos pré-preenchidos e revisão antes de concluir.
+          </p>
+          <a class="primary-btn secondary" href="{% url 'register_director' %}"
+            >Cadastrar diretoria / voluntário</a
+          >
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

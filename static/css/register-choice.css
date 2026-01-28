@@ -1,0 +1,126 @@
+:root {
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  color: #14223d;
+  background-color: #eef4ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #eef4ff;
+}
+
+.register-choice-page {
+  min-height: 100vh;
+  padding: 2rem 1rem 3rem;
+}
+
+.choice-wrapper {
+  width: min(1100px, 95vw);
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 32px;
+  padding: 2rem;
+  box-shadow: 0 30px 60px rgba(17, 67, 124, 0.1);
+}
+
+.choice-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.choice-hero h1 {
+  margin: 0.2rem 0;
+  font-size: 2.4rem;
+  color: #0f3a74;
+}
+
+.choice-hero p {
+  margin: 0;
+  color: #4c587b;
+  max-width: 480px;
+}
+
+.choice-hero img {
+  width: 160px;
+  height: 160px;
+}
+
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.choice-card {
+  border-radius: 24px;
+  border: 1px solid rgba(16, 48, 100, 0.15);
+  padding: 1.75rem;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.8), #f0f4ff);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.choice-card h2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: #0f3a74;
+}
+
+.choice-card p {
+  margin: 0;
+  color: #4c587b;
+  line-height: 1.5;
+}
+
+.choice-card .tag.light {
+  color: #5c93ff;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+.primary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.25rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: 14px;
+  border: none;
+  color: #fff;
+  background: linear-gradient(135deg, #7abfff, #4a9fe6);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primary-btn.secondary {
+  background: linear-gradient(135deg, #4a9fe6, #7abfff);
+  border: 1px solid rgba(74, 159, 230, 0.5);
+}
+
+.primary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 20px rgba(74, 159, 230, 0.35);
+}
+
+@media (max-width: 900px) {
+  .choice-hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .choice-hero img {
+    width: 140px;
+    height: 140px;
+  }
+}

@@ -132,3 +132,53 @@ class PixCharge(models.Model):
         self.status = self.PAID
         self.approved_at = timezone.now()
         self.save(update_fields=("status", "approved_at"))
+
+
+class DirectorApplication(models.Model):
+    EDUCATION_CHOICES = [
+        ("fundamental", "Ensino Fundamental"),
+        ("medio", "Ensino Médio"),
+        ("faculdade", "Faculdade"),
+    ]
+
+    responsible = models.OneToOneField(
+        Responsible, on_delete=models.CASCADE, related_name="director_profile"
+    )
+    full_name = models.CharField(max_length=200)
+    term_nationality = models.CharField(max_length=80, blank=True)
+    term_marital_status = models.CharField(max_length=60, blank=True)
+    term_rg_number = models.CharField(max_length=30, blank=True)
+    term_rg_issuer = models.CharField(max_length=40, blank=True)
+    term_residence = models.CharField(max_length=255, blank=True)
+    term_municipality = models.CharField(max_length=120, blank=True)
+    term_cpf = models.CharField(max_length=20, blank=True)
+    term_accepted = models.BooleanField(default=False)
+
+    church = models.CharField(max_length=150)
+    district = models.CharField(max_length=80)
+    street_address = models.CharField(max_length=255)
+    house_number = models.CharField(max_length=20)
+    neighborhood = models.CharField(max_length=120)
+    postal_code = models.CharField(max_length=20)
+    city = models.CharField(max_length=120)
+    state = models.CharField(max_length=60)
+    email = models.EmailField()
+    cellphone = models.CharField(max_length=20)
+    home_phone = models.CharField(max_length=20, blank=True)
+    work_phone = models.CharField(max_length=20, blank=True)
+    birth_date = models.DateField()
+    volunteer_marital_status = models.CharField(max_length=60)
+    director_cpf = models.CharField(max_length=20)
+    director_rg = models.CharField(max_length=30)
+    spouse = models.CharField(max_length=120, blank=True)
+    child_one = models.CharField(max_length=120, blank=True)
+    child_two = models.CharField(max_length=120, blank=True)
+    health_limitation = models.BooleanField(default=False)
+    health_description = models.TextField(blank=True)
+    education_level = models.CharField(max_length=20, choices=EDUCATION_CHOICES)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Diretoria — {self.responsible.user.get_full_name()}"
