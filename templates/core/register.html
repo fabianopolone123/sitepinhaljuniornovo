@@ -266,6 +266,43 @@
               </div>
             </fieldset>
           </div>
+          <div class="signature-block">
+            <div class="signature-block__header">
+              <p>Assinatura dos pais</p>
+              <button
+                type="button"
+                class="ghost-btn signature-block__trigger"
+                data-signature-trigger="parent"
+              >
+                Assinar os dados do pai/mãe
+              </button>
+            </div>
+            <div class="signature-preview" id="parent-signature-preview">
+              {% if form_values.parent_signature %}
+              <img src="{{ form_values.parent_signature }}" alt="Assinatura registrada" />
+              {% else %}
+              <span>Nenhum registro ainda</span>
+              {% endif %}
+            </div>
+            <input
+              type="hidden"
+              name="parent_signature"
+              id="parent-signature-input"
+              value="{{ form_values.parent_signature|default:'' }}"
+              required
+            />
+            <small class="error-message">{{ field_errors.parent_signature|default:'' }}</small>
+          </div>
+          <label class="checkbox-field">
+            <input
+              type="checkbox"
+              name="parent_data_truth"
+              {% if form_values.parent_data_truth %}checked{% endif %}
+              required
+            />
+            Declaro que os dados do pai e da mãe são verdadeiros.
+          </label>
+          <small class="error-message">{{ field_errors.parent_data_truth|default:'' }}</small>
         </section>
 
         <section class="adventurer-step" data-step="3">
@@ -477,6 +514,43 @@
             </div>
             <small class="error-message">{{ field_errors.adventure_photo|default:'' }}</small>
           </div>
+          <div class="signature-block">
+            <div class="signature-block__header">
+              <p>Assinatura dos dados do aventureiro</p>
+              <button
+                type="button"
+                class="ghost-btn signature-block__trigger"
+                data-signature-trigger="adventure-data"
+              >
+                Assinar os dados do aventureiro
+              </button>
+            </div>
+            <div class="signature-preview" id="adventure-data-signature-preview">
+              {% if form_values.adventure_data_signature %}
+              <img src="{{ form_values.adventure_data_signature }}" alt="Assinatura registrada" />
+              {% else %}
+              <span>Nenhum registro ainda</span>
+              {% endif %}
+            </div>
+            <input
+              type="hidden"
+              name="adventure_data_signature"
+              id="adventure-data-signature-input"
+              value="{{ form_values.adventure_data_signature|default:'' }}"
+              required
+            />
+            <small class="error-message">{{ field_errors.adventure_data_signature|default:'' }}</small>
+          </div>
+          <label class="checkbox-field">
+            <input
+              type="checkbox"
+              name="adventure_data_truth"
+              {% if form_values.adventure_data_truth %}checked{% endif %}
+              required
+            />
+            Declaro que os dados do aventureiro estão corretos.
+          </label>
+          <small class="error-message">{{ field_errors.adventure_data_truth|default:'' }}</small>
         </section>
 
         <section class="adventurer-step" data-step="4">
@@ -923,10 +997,38 @@
         </div>
       </div>
     </div>
+    <div class="signature-modal" id="parent-signature-modal" aria-hidden="true">
+      <div class="signature-modal__content" role="dialog" aria-modal="true" aria-label="Assinar dados dos pais">
+        <div class="signature-modal__header">
+          <strong>Assine os dados do pai e da mãe</strong>
+          <button type="button" class="signature-modal__close" data-close-signature aria-label="Fechar janela">×</button>
+        </div>
+        <p class="signature-modal__hint">Use o dedo ou o mouse para desenhar.</p>
+        <canvas tabindex="0"></canvas>
+        <div class="signature-modal__actions">
+          <button type="button" class="ghost-btn" data-clear-signature>Limpar</button>
+          <button type="button" class="primary-btn" data-save-signature>Salvar assinatura</button>
+        </div>
+      </div>
+    </div>
     <div class="signature-modal" id="medical-signature-modal" aria-hidden="true">
       <div class="signature-modal__content" role="dialog" aria-modal="true" aria-label="Assinar ficha médica">
         <div class="signature-modal__header">
           <strong>Assine a ficha médica</strong>
+          <button type="button" class="signature-modal__close" data-close-signature aria-label="Fechar janela">×</button>
+        </div>
+        <p class="signature-modal__hint">Use o dedo ou o mouse para desenhar.</p>
+        <canvas tabindex="0"></canvas>
+        <div class="signature-modal__actions">
+          <button type="button" class="ghost-btn" data-clear-signature>Limpar</button>
+          <button type="button" class="primary-btn" data-save-signature>Salvar assinatura</button>
+        </div>
+      </div>
+    </div>
+    <div class="signature-modal" id="adventure-data-signature-modal" aria-hidden="true">
+      <div class="signature-modal__content" role="dialog" aria-modal="true" aria-label="Assinar dados do aventureiro">
+        <div class="signature-modal__header">
+          <strong>Assine os dados do aventureiro</strong>
           <button type="button" class="signature-modal__close" data-close-signature aria-label="Fechar janela">×</button>
         </div>
         <p class="signature-modal__hint">Use o dedo ou o mouse para desenhar.</p>

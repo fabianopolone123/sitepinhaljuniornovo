@@ -256,7 +256,44 @@
               <small class="error-message">{{ field_errors.responsavel_state|default:'' }}</small>
             </div>
           </div>
-          <div class="field-group file-group">
+          <div class="signature-block">
+            <div class="signature-block__header">
+              <p>Assinatura dos dados iniciais</p>
+              <button
+                type="button"
+                class="ghost-btn signature-block__trigger"
+                data-signature-trigger="director-initial"
+              >
+                Assinar os dados iniciais
+              </button>
+            </div>
+            <div class="signature-preview" id="director-initial-signature-preview">
+              {% if form_values.director_initial_signature %}
+              <img src="{{ form_values.director_initial_signature }}" alt="Assinatura registrada" />
+              {% else %}
+              <span>Nenhum registro ainda</span>
+              {% endif %}
+            </div>
+            <input
+              type="hidden"
+              name="director_initial_signature"
+              id="director-initial-signature-input"
+              value="{{ form_values.director_initial_signature|default:'' }}"
+              required
+            />
+            <small class="error-message">{{ field_errors.director_initial_signature|default:'' }}</small>
+          </div>
+          <label class="checkbox-field">
+            <input
+              type="checkbox"
+              name="director_initial_data_truth"
+              {% if form_values.director_initial_data_truth %}checked{% endif %}
+              required
+            />
+            Declaro que os dados iniciais são verdadeiros.
+          </label>
+          <small class="error-message">{{ field_errors.director_initial_data_truth|default:'' }}</small>
+        <div class="field-group file-group">
             <label>
               Foto 3x4 do voluntário
               <input
@@ -804,6 +841,43 @@
             </label>
             <small class="error-message">{{ field_errors.director_education_level|default:'' }}</small>
           </div>
+          <div class="signature-block">
+            <div class="signature-block__header">
+              <p>Assinatura do compromisso voluntário</p>
+              <button
+                type="button"
+                class="ghost-btn signature-block__trigger"
+                data-signature-trigger="director-volunteer"
+              >
+                Assinar o compromisso
+              </button>
+            </div>
+            <div class="signature-preview" id="director-volunteer-signature-preview">
+              {% if form_values.director_volunteer_signature %}
+              <img src="{{ form_values.director_volunteer_signature }}" alt="Assinatura registrada" />
+              {% else %}
+              <span>Nenhum registro ainda</span>
+              {% endif %}
+            </div>
+            <input
+              type="hidden"
+              name="director_volunteer_signature"
+              id="director-volunteer-signature-input"
+              value="{{ form_values.director_volunteer_signature|default:'' }}"
+              required
+            />
+            <small class="error-message">{{ field_errors.director_volunteer_signature|default:'' }}</small>
+          </div>
+          <label class="checkbox-field">
+            <input
+              type="checkbox"
+              name="director_volunteer_data_truth"
+              {% if form_values.director_volunteer_data_truth %}checked{% endif %}
+              required
+            />
+            Declaro que os dados do compromisso voluntário são verdadeiros.
+          </label>
+          <small class="error-message">{{ field_errors.director_volunteer_data_truth|default:'' }}</small>
           <label class="checkbox-field">
             <input
               type="checkbox"
@@ -822,6 +896,34 @@
         </div>
       </form>
     </main>
+    <div class="signature-modal" id="director-initial-signature-modal" aria-hidden="true">
+      <div class="signature-modal__content" role="dialog" aria-modal="true" aria-label="Assinar dados iniciais">
+        <div class="signature-modal__header">
+          <strong>Assine os dados iniciais</strong>
+          <button type="button" class="signature-modal__close" data-close-signature aria-label="Fechar janela">×</button>
+        </div>
+        <p class="signature-modal__hint">Use o dedo ou o mouse para desenhar.</p>
+        <canvas tabindex="0"></canvas>
+        <div class="signature-modal__actions">
+          <button type="button" class="ghost-btn" data-clear-signature>Limpar</button>
+          <button type="button" class="primary-btn" data-save-signature>Salvar assinatura</button>
+        </div>
+      </div>
+    </div>
+    <div class="signature-modal" id="director-volunteer-signature-modal" aria-hidden="true">
+      <div class="signature-modal__content" role="dialog" aria-modal="true" aria-label="Assinar compromisso voluntário">
+        <div class="signature-modal__header">
+          <strong>Assine o compromisso voluntário</strong>
+          <button type="button" class="signature-modal__close" data-close-signature aria-label="Fechar janela">×</button>
+        </div>
+        <p class="signature-modal__hint">Use o dedo ou o mouse para desenhar.</p>
+        <canvas tabindex="0"></canvas>
+        <div class="signature-modal__actions">
+          <button type="button" class="ghost-btn" data-clear-signature>Limpar</button>
+          <button type="button" class="primary-btn" data-save-signature>Salvar assinatura</button>
+        </div>
+      </div>
+    </div>
     <div class="signature-modal" id="director-signature-modal" aria-hidden="true">
       <div class="signature-modal__content" role="dialog" aria-modal="true" aria-label="Assinar com o dedo">
         <div class="signature-modal__header">

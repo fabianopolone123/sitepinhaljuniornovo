@@ -177,6 +177,12 @@ class DirectorApplication(models.Model):
     term_accepted = models.BooleanField(default=False)
     term_signature = models.TextField(blank=True)
     term_data_truth = models.BooleanField(default=False)
+    initial_signature = models.TextField(blank=True)
+    initial_data_truth = models.BooleanField(default=False)
+    volunteer_signature = models.TextField(blank=True)
+    volunteer_data_truth = models.BooleanField(default=False)
+    term_signature = models.TextField(blank=True)
+    term_data_truth = models.BooleanField(default=False)
 
     church = models.CharField(max_length=150)
     district = models.CharField(max_length=80)

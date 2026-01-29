@@ -717,6 +717,9 @@ def register_adventurer(request):
             "telefone": form_values.get("mae_telefone", "").strip(),
             "celular": form_values.get("mae_celular", "").strip(),
         }
+        parent_signature = form_values.get("parent_signature", "").strip()
+        parent_data_truth = request.POST.get("parent_data_truth") == "on"
+        form_values["parent_data_truth"] = parent_data_truth
         medical_plan = form_values.get("medical_plan", "").strip()
         medical_plan_name = form_values.get("medical_plan_name", "").strip()
         medical_plan_number = form_values.get("medical_plan_number", "").strip()
@@ -766,6 +769,9 @@ def register_adventurer(request):
         adventure_cpf = form_values.get("adventure_cpf", "").strip()
         adventure_parent_whatsapp_phone = form_values.get("adventure_parent_whatsapp_phone", "").strip()
         adventure_shirt_size = form_values.get("adventure_shirt_size", "").strip()
+        adventure_data_signature = form_values.get("adventure_data_signature", "").strip()
+        adventure_data_truth = request.POST.get("adventure_data_truth") == "on"
+        form_values["adventure_data_truth"] = adventure_data_truth
 
         term_responsible = form_values.get("term_responsible", "").strip()
         term_nationality = form_values.get("term_nationality", "").strip()
@@ -871,6 +877,14 @@ def register_adventurer(request):
             field_errors["adventure_parent_whatsapp_phone"] = "Informe o WhatsApp do responsável."
         if not adventure_shirt_size:
             field_errors["adventure_shirt_size"] = "Informe o tamanho da camiseta."
+        if not parent_signature:
+            field_errors["parent_signature"] = "Assine os dados dos pais."
+        if not parent_data_truth:
+            field_errors["parent_data_truth"] = "Confirme que os dados dos pais são verdadeiros."
+        if not adventure_data_signature:
+            field_errors["adventure_data_signature"] = "Assine os dados do aventureiro."
+        if not adventure_data_truth:
+            field_errors["adventure_data_truth"] = "Confirme que os dados do aventureiro são verdadeiros."
 
         if not medical_plan:
             field_errors["medical_plan"] = "Informe se possui plano de saúde."
@@ -1010,6 +1024,10 @@ def register_adventurer(request):
                             "mae": mae_data,
                             "assinatura_dados_iniciais": responsavel_signature,
                             "dados_iniciais_verdadeiros": responsavel_data_truth,
+                            "assinatura_pais": parent_signature,
+                            "dados_pais_verdadeiros": parent_data_truth,
+                            "assinatura_dados_aventureiro": adventure_data_signature,
+                            "dados_aventureiro_verdadeiros": adventure_data_truth,
                         },
                         medical_data={
                             "plano": medical_plan,
@@ -1102,6 +1120,9 @@ def register_director(request):
         responsavel_postal_code = form_values.get("responsavel_postal_code", "").strip()
         responsavel_city = form_values.get("responsavel_city", "").strip()
         responsavel_state = form_values.get("responsavel_state", "").strip()
+        director_initial_signature = form_values.get("director_initial_signature", "").strip()
+        director_initial_data_truth = request.POST.get("director_initial_data_truth") == "on"
+        form_values["director_initial_data_truth"] = director_initial_data_truth
         responsavel_signature = form_values.get("responsavel_signature", "").strip()
         responsavel_data_truth = request.POST.get("responsavel_data_truth") == "on"
         form_values["responsavel_data_truth"] = responsavel_data_truth
@@ -1161,6 +1182,9 @@ def register_director(request):
         director_photo = request.FILES.get("director_photo")
         volunteer_acceptance = request.POST.get("volunteer_acceptance") == "on"
         form_values["volunteer_acceptance"] = volunteer_acceptance
+        director_volunteer_signature = form_values.get("director_volunteer_signature", "").strip()
+        director_volunteer_data_truth = request.POST.get("director_volunteer_data_truth") == "on"
+        form_values["director_volunteer_data_truth"] = director_volunteer_data_truth
 
         for field_key, message in (
             ("term_nationality", "Informe sua nacionalidade."),
@@ -1187,6 +1211,14 @@ def register_director(request):
             field_errors["volunteer_acceptance"] = "Você precisa aceitar o compromisso."
         if not director_data_truth:
             field_errors["director_data_truth"] = "Confirme que todas as informações fornecidas são verdadeiras."
+        if not director_initial_signature:
+            field_errors["director_initial_signature"] = "Assine os dados iniciais."
+        if not director_initial_data_truth:
+            field_errors["director_initial_data_truth"] = "Confirme que os dados iniciais são verdadeiros."
+        if not director_volunteer_signature:
+            field_errors["director_volunteer_signature"] = "Assine o compromisso voluntário."
+        if not director_volunteer_data_truth:
+            field_errors["director_volunteer_data_truth"] = "Confirme que os dados do compromisso são verdadeiros."
 
         director_full_name = form_values.get("director_full_name", "").strip()
         director_church = form_values.get("director_church", "").strip()
@@ -1282,6 +1314,8 @@ def register_director(request):
                         term_accepted=term_accept,
                         term_signature=term_signature,
                         term_data_truth=director_data_truth,
+                        initial_signature=director_initial_signature,
+                        initial_data_truth=director_initial_data_truth,
                         church=director_church,
                         district=director_district,
                         full_name=director_full_name,
@@ -1306,6 +1340,8 @@ def register_director(request):
                         health_description=health_description,
                         education_level=education_level,
                         photo=director_photo,
+                        volunteer_signature=director_volunteer_signature,
+                        volunteer_data_truth=director_volunteer_data_truth,
                         volunteer_acceptance=volunteer_acceptance,
                     )
                 messages.success(

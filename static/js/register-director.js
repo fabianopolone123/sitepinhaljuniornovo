@@ -154,6 +154,20 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   initSignatureModal({
+    modalId: "director-initial-signature-modal",
+    triggerSelector: "[data-signature-trigger='director-initial']",
+    inputSelector: "#director-initial-signature-input",
+    previewSelector: "#director-initial-signature-preview",
+    placeholder: "Nenhum registro ainda",
+  });
+  initSignatureModal({
+    modalId: "director-volunteer-signature-modal",
+    triggerSelector: "[data-signature-trigger='director-volunteer']",
+    inputSelector: "#director-volunteer-signature-input",
+    previewSelector: "#director-volunteer-signature-preview",
+    placeholder: "Nenhum registro ainda",
+  });
+  initSignatureModal({
     modalId: "director-signature-modal",
     triggerSelector: "[data-signature-trigger='director']",
     inputSelector: "#director-signature-input",

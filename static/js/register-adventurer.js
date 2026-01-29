@@ -135,10 +135,24 @@ document.addEventListener("DOMContentLoaded", () => {
     placeholder: "Nenhum registro ainda",
   });
   initSignatureModal({
+    modalId: "parent-signature-modal",
+    triggerSelector: "[data-signature-trigger='parent']",
+    inputSelector: "#parent-signature-input",
+    previewSelector: "#parent-signature-preview",
+    placeholder: "Nenhum registro ainda",
+  });
+  initSignatureModal({
     modalId: "medical-signature-modal",
     triggerSelector: "[data-signature-trigger='medical']",
     inputSelector: "#medical-signature-input",
     previewSelector: "#medical-signature-preview",
+    placeholder: "Nenhum registro ainda",
+  });
+  initSignatureModal({
+    modalId: "adventure-data-signature-modal",
+    triggerSelector: "[data-signature-trigger='adventure-data']",
+    inputSelector: "#adventure-data-signature-input",
+    previewSelector: "#adventure-data-signature-preview",
     placeholder: "Nenhum registro ainda",
   });
   initSignatureModal({
