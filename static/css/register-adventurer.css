@@ -171,8 +171,30 @@ body {
 
 .checkbox-grid {
   display: grid;
-  gap: 0.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.checkbox-grid label {
+  font-weight: 500;
+  gap: 0.4rem;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 61, 103, 0.15);
+  padding: 0.35rem 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  background: #f7f9ff;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.checkbox-grid label input {
+  margin: 0;
+  width: 1rem;
+  height: 1rem;
+}
+
+.checkbox-grid label input:focus-visible {
+  outline: 2px solid #0f3a74;
 }
 
 .date-selects {

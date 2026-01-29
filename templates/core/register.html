@@ -409,14 +409,15 @@
 
           <div class="grid two-columns">
             <div class="field-group">
-              <label>
-                Pai/Mãe tem WhatsApp?
-                <select name="adventure_parent_whatsapp" required>
-                  <option value="">Selecione</option>
-                  <option value="sim" {% if form_values.adventure_parent_whatsapp == 'sim' %}selected{% endif %}>Sim</option>
-                  <option value="nao" {% if form_values.adventure_parent_whatsapp == 'nao' %}selected{% endif %}>Não</option>
-                </select>
-              </label>
+            <label>
+              Pai/Mãe tem WhatsApp?
+              <select name="adventure_parent_whatsapp" required>
+                <option value="">Selecione</option>
+                <option value="sim" {% if form_values.adventure_parent_whatsapp == 'sim' %}selected{% endif %}>Sim</option>
+                <option value="nao" {% if form_values.adventure_parent_whatsapp == 'nao' %}selected{% endif %}>Não</option>
+              </select>
+              <small class="field-hint">Use o WhatsApp cadastrado em <strong>{{ form_values.responsavel_whatsapp|default:'-' }}</strong> como referência.</small>
+            </label>
             </div>
             <div class="field-group">
               <label>
