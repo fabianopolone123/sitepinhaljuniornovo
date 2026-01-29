@@ -284,6 +284,122 @@ body {
   box-shadow: 0 25px 40px rgba(60, 152, 255, 0.45);
 }
 
+.registration-stepper {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.step-btn {
+  flex: 1;
+  min-width: 140px;
+  padding: 0.7rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 61, 103, 0.2);
+  background: #f5f9ff;
+  color: #0f3a74;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.step-btn.is-active {
+  background: linear-gradient(135deg, #7abfff, #4a9fe6);
+  color: #fff;
+  border-color: transparent;
+}
+
+.registration-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.registration-step {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.registration-step.is-active {
+  display: block;
+}
+
+.panel-parents,
+.panel-medical,
+.panel-termo {
+  background: #fdfdfd;
+}
+
+.panel-parents fieldset {
+  border: 1px solid rgba(15, 61, 103, 0.1);
+  padding: 1rem;
+  border-radius: 18px;
+  background: rgba(122, 191, 255, 0.04);
+}
+
+.panel-parents legend {
+  font-weight: 700;
+  color: #0f3a74;
+}
+
+.medical-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.classes-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.medical-grid label {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.term-note {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #233358;
+  line-height: 1.8;
+}
+
+.term-note input {
+  border: none;
+  border-bottom: 1px dashed rgba(15, 61, 103, 0.4);
+  padding: 0.1rem;
+  margin: 0 0.2rem;
+  background: transparent;
+  font-weight: 600;
+  width: min(220px, 100%);
+}
+
+.form-navigation {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.is-hidden {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .registration-stepper {
+    flex-direction: column;
+  }
+
+  .grid.two-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 900px) {
   .hero {
     flex-direction: column;
