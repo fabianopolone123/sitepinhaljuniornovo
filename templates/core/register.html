@@ -130,7 +130,7 @@
           <div class="field-group">
             <label>
               WhatsApp
-              <input type="tel" name="responsavel_whatsapp" value="{{ form_values.responsavel_whatsapp|default:'' }}" required />
+              <input type="tel" name="responsavel_whatsapp" value="{{ form_values|dict_get:'responsavel_whatsapp'|default:'' }}" required />
             </label>
             <small class="error-message">{{ field_errors.responsavel_whatsapp|default:'' }}</small>
           </div>
@@ -414,10 +414,10 @@
                 <input
                   type="tel"
                   name="adventure_parent_whatsapp_phone"
-                  value="{{ form_values.adventure_parent_whatsapp_phone|default:form_values.responsavel_whatsapp|default:'' }}"
+                  value="{{ form_values.adventure_parent_whatsapp_phone|default:form_values|dict_get:'responsavel_whatsapp'|default:'' }}"
                   required
                 />
-                <small class="field-hint">Use o mesmo número registrado no responsável.</small>
+                <small class="field-hint">Use o mesmo número registrado no responsável ({{ form_values|dict_get:'responsavel_whatsapp'|default:'-' }}).</small>
               </label>
               <small class="error-message">{{ field_errors.adventure_parent_whatsapp_phone|default:'' }}</small>
             </div>
