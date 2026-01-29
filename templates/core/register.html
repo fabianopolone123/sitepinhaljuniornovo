@@ -1,4 +1,4 @@
-{% load static %}
+{% load static form_extras %}
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
@@ -313,17 +313,19 @@
 
           <div class="field-group">
             <label>Classes investidas</label>
-            <div class="checkbox-grid">
+              <div class="checkbox-grid">
               {% for slug, label in class_options %}
+              {% with key="adventure_class_"|add:slug %}
               <label>
                 <input
                   type="checkbox"
-                  name="adventure_class_{{ slug }}"
+                  name="{{ key }}"
                   value="on"
-                  {% if form_values.adventure_class_{{ slug }} %}checked{% endif %}
+                  {% if form_values|dict_get:key %}checked{% endif %}
                 />
                 {{ label }}
               </label>
+              {% endwith %}
               {% endfor %}
             </div>
           </div>
