@@ -414,3 +414,9 @@ tira o quadrado do funcoi
 - **Actions**: Confirmei que o template guiado de cadastro (	emplates/core/register.html) já expõe um bloco de assinatura e uma checkbox obrigatória para cada etapa (responsável, pais, aventureiro, ficha médica e termo), os modais (static/js/signature-modal.js) e o init no static/js/register-adventurer.js cuidam da captura/preview e os campos ocultos necessários, e o backend (core/views.py) já valida/armazenar os dados de assinatura e as declarações correspondentes.
 - **Technical**: 	emplates/core/register.html, static/js/signature-modal.js, static/js/register-adventurer.js, core/views.py.
 - **Notes**: não houve alteração de código porque a funcionalidade já estava presente; aconselho testar no navegador para garantir que os modais aparecem em cada etapa.
+
+## 2026-01-29T05:30:00+00:00Z — Atualiza textos da escolha de cadastro
+- **Request**: atualiza os textos da tela de escolha para colocar as frases solicitadas
+- **Actions**: reescrevi os parágrafos da página egister_choice.html para as novas mensagens (introdução geral, card de aventureiros e card de diretoria) preservando o layout e os links.
+- **Technical**: 	emplates/core/register_choice.html.
+- **Notes**: nenhuma alteração funcional a testar.
