@@ -128,6 +128,20 @@ document.addEventListener("DOMContentLoaded", () => {
   handlePhotoPreview();
   renderStep(currentStep);
   initSignatureModal({
+    modalId: "responsavel-signature-modal",
+    triggerSelector: "[data-signature-trigger='responsavel']",
+    inputSelector: "#responsavel-signature-input",
+    previewSelector: "#responsavel-signature-preview",
+    placeholder: "Nenhum registro ainda",
+  });
+  initSignatureModal({
+    modalId: "medical-signature-modal",
+    triggerSelector: "[data-signature-trigger='medical']",
+    inputSelector: "#medical-signature-input",
+    previewSelector: "#medical-signature-preview",
+    placeholder: "Nenhum registro ainda",
+  });
+  initSignatureModal({
     modalId: "adventurer-signature-modal",
     triggerSelector: "[data-signature-trigger='adventurer']",
     inputSelector: "#adventurer-signature-input",

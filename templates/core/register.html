@@ -142,6 +142,43 @@
             </label>
             <small class="error-message">{{ field_errors.responsavel_endereco|default:'' }}</small>
           </div>
+          <div class="signature-block">
+            <div class="signature-block__header">
+              <p>Assinatura dos dados iniciais</p>
+              <button
+                type="button"
+                class="ghost-btn signature-block__trigger"
+                data-signature-trigger="responsavel"
+              >
+                Assinar os dados iniciais
+              </button>
+            </div>
+            <div class="signature-preview" id="responsavel-signature-preview">
+              {% if form_values.responsavel_signature %}
+              <img src="{{ form_values.responsavel_signature }}" alt="Assinatura registrada" />
+              {% else %}
+              <span>Nenhum registro ainda</span>
+              {% endif %}
+            </div>
+            <input
+              type="hidden"
+              name="responsavel_signature"
+              id="responsavel-signature-input"
+              value="{{ form_values.responsavel_signature|default:'' }}"
+              required
+            />
+            <small class="error-message">{{ field_errors.responsavel_signature|default:'' }}</small>
+          </div>
+          <label class="checkbox-field">
+            <input
+              type="checkbox"
+              name="responsavel_data_truth"
+              {% if form_values.responsavel_data_truth %}checked{% endif %}
+              required
+            />
+            Declaro que os dados iniciais digitados são verdadeiros.
+          </label>
+          <small class="error-message">{{ field_errors.responsavel_data_truth|default:'' }}</small>
         </section>
 
         <section class="adventurer-step" data-step="2">
@@ -718,6 +755,43 @@
               </label>
             </div>
           </div>
+          <div class="signature-block">
+            <div class="signature-block__header">
+              <p>Assinatura da ficha médica</p>
+              <button
+                type="button"
+                class="ghost-btn signature-block__trigger"
+                data-signature-trigger="medical"
+              >
+                Assinar a ficha médica
+              </button>
+            </div>
+            <div class="signature-preview" id="medical-signature-preview">
+              {% if form_values.medical_signature %}
+              <img src="{{ form_values.medical_signature }}" alt="Assinatura registrada" />
+              {% else %}
+              <span>Nenhum registro ainda</span>
+              {% endif %}
+            </div>
+            <input
+              type="hidden"
+              name="medical_signature"
+              id="medical-signature-input"
+              value="{{ form_values.medical_signature|default:'' }}"
+              required
+            />
+            <small class="error-message">{{ field_errors.medical_signature|default:'' }}</small>
+          </div>
+          <label class="checkbox-field">
+            <input
+              type="checkbox"
+              name="medical_data_truth"
+              {% if form_values.medical_data_truth %}checked{% endif %}
+              required
+            />
+            Declaro que os dados médicos fornecidos são verdadeiros.
+          </label>
+          <small class="error-message">{{ field_errors.medical_data_truth|default:'' }}</small>
         </section>
 
         <section class="adventurer-step" data-step="5">
@@ -786,12 +860,13 @@
           <label class="checkbox-field">
             <input
               type="checkbox"
-              name="adventurer_data_truth"
-              {% if form_values.adventurer_data_truth %}checked{% endif %}
+              name="term_data_truth"
+              {% if form_values.term_data_truth %}checked{% endif %}
+              required
             />
-            Declaro que os dados digitados são verdadeiros e completos.
+            Declaro que os dados do termo são verdadeiros.
           </label>
-          <small class="error-message">{{ field_errors.adventurer_data_truth|default:'' }}</small>
+          <small class="error-message">{{ field_errors.term_data_truth|default:'' }}</small>
 
           <div class="termino-inline-inputs">
             <div class="field-group">
@@ -834,6 +909,34 @@
         </div>
       </form>
     </main>
+    <div class="signature-modal" id="responsavel-signature-modal" aria-hidden="true">
+      <div class="signature-modal__content" role="dialog" aria-modal="true" aria-label="Assinar dados iniciais">
+        <div class="signature-modal__header">
+          <strong>Assine os dados iniciais</strong>
+          <button type="button" class="signature-modal__close" data-close-signature aria-label="Fechar janela">×</button>
+        </div>
+        <p class="signature-modal__hint">Use o dedo ou o mouse para desenhar.</p>
+        <canvas tabindex="0"></canvas>
+        <div class="signature-modal__actions">
+          <button type="button" class="ghost-btn" data-clear-signature>Limpar</button>
+          <button type="button" class="primary-btn" data-save-signature>Salvar assinatura</button>
+        </div>
+      </div>
+    </div>
+    <div class="signature-modal" id="medical-signature-modal" aria-hidden="true">
+      <div class="signature-modal__content" role="dialog" aria-modal="true" aria-label="Assinar ficha médica">
+        <div class="signature-modal__header">
+          <strong>Assine a ficha médica</strong>
+          <button type="button" class="signature-modal__close" data-close-signature aria-label="Fechar janela">×</button>
+        </div>
+        <p class="signature-modal__hint">Use o dedo ou o mouse para desenhar.</p>
+        <canvas tabindex="0"></canvas>
+        <div class="signature-modal__actions">
+          <button type="button" class="ghost-btn" data-clear-signature>Limpar</button>
+          <button type="button" class="primary-btn" data-save-signature>Salvar assinatura</button>
+        </div>
+      </div>
+    </div>
     <div class="signature-modal" id="adventurer-signature-modal" aria-hidden="true">
       <div class="signature-modal__content" role="dialog" aria-modal="true" aria-label="Assinar com o dedo">
         <div class="signature-modal__header">

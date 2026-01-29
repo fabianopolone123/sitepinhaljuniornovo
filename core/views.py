@@ -742,6 +742,9 @@ def register_adventurer(request):
         medical_kidney_meds_detail = form_values.get("medical_kidney_meds_detail", "").strip()
         medical_psychological = form_values.get("medical_psychological", "").strip()
         medical_blood_type = form_values.get("medical_blood_type", "").strip()
+        medical_signature = form_values.get("medical_signature", "").strip()
+        medical_data_truth = request.POST.get("medical_data_truth") == "on"
+        form_values["medical_data_truth"] = medical_data_truth
 
         adventure_full_name = form_values.get("adventure_full_name", "").strip()
         adventure_sexo = form_values.get("adventure_sexo", "").strip()
@@ -771,8 +774,8 @@ def register_adventurer(request):
         term_signature = form_values.get("term_signature", "").strip()
         term_child_name = form_values.get("term_child_name", "").strip()
         term_contact_phone = form_values.get("term_contact_phone", "").strip()
-        adventurer_data_truth = request.POST.get("adventurer_data_truth") == "on"
-        form_values["adventurer_data_truth"] = adventurer_data_truth
+        term_data_truth = request.POST.get("term_data_truth") == "on"
+        form_values["term_data_truth"] = term_data_truth
 
         for slug, _ in CLASS_OPTIONS:
             if request.POST.get(f"adventure_class_{slug}"):
@@ -903,6 +906,10 @@ def register_adventurer(request):
             field_errors["medical_blood_type"] = "Informe o tipo sanguíneo."
         if not medical_confirmation:
             field_errors["medical_confirmation"] = "Confirme as informações médicas."
+        if not medical_signature:
+            field_errors["medical_signature"] = "Assine a ficha médica."
+        if not medical_data_truth:
+            field_errors["medical_data_truth"] = "Confirme que os dados médicos são verdadeiros."
 
         if not term_responsible:
             field_errors["term_responsible"] = "Informe o responsável do termo."
@@ -920,8 +927,8 @@ def register_adventurer(request):
             field_errors["term_contact_phone"] = "Informe um telefone para contato."
         if not term_confirmation:
             field_errors["term_confirmation"] = "Confirme o termo."
-        if not adventurer_data_truth:
-            field_errors["adventurer_data_truth"] = "Confirme que os dados digitados são verdadeiros."
+        if not term_data_truth:
+            field_errors["term_data_truth"] = "Confirme que os dados do termo são verdadeiros."
 
         if User.objects.filter(username=responsible_username).exists():
             field_errors["responsavel_username"] = "Nome de usuário indisponível."
@@ -998,7 +1005,12 @@ def register_adventurer(request):
                         parent_whatsapp=bool(adventure_parent_whatsapp_phone),
                         shirt_size=adventure_shirt_size,
                         blood_type=form_values.get("medical_blood_type", ""),
-                        family_data={"pai": pai_data, "mae": mae_data},
+                        family_data={
+                            "pai": pai_data,
+                            "mae": mae_data,
+                            "assinatura_dados_iniciais": responsavel_signature,
+                            "dados_iniciais_verdadeiros": responsavel_data_truth,
+                        },
                         medical_data={
                             "plano": medical_plan,
                             "plano_nome": medical_plan_name,
@@ -1025,19 +1037,21 @@ def register_adventurer(request):
                             "fraturas_recentes": medical_recent_fractures,
                             "cirurgias": medical_surgeries,
                             "internacao": medical_hospitalization,
+                            "assinatura": medical_signature,
+                            "dados_verdadeiros": medical_data_truth,
                             "tipo_sanguineo": medical_blood_type,
                         },
                         term_data={
                             "responsavel": term_responsible,
                             "nacionalidade": term_nationality,
                             "crianca": term_child,
-                        "local": term_local,
-                        "assinatura": term_signature,
-                        "nome_crianca": term_child_name,
-                        "telefone": term_contact_phone,
-                        "confirmacao": bool(term_confirmation),
-                        "declaracao_dados_verdadeiros": adventurer_data_truth,
-                    },
+                            "local": term_local,
+                            "assinatura": term_signature,
+                            "nome_crianca": term_child_name,
+                            "telefone": term_contact_phone,
+                            "confirmacao": bool(term_confirmation),
+                            "dados_verdadeiros": term_data_truth,
+                        },
                     )
                     _create_monthly_fees(responsible, adventurer)
                 messages.success(request, "Cadastro enviado! Faça login para acessar o painel.")
@@ -1088,6 +1102,9 @@ def register_director(request):
         responsavel_postal_code = form_values.get("responsavel_postal_code", "").strip()
         responsavel_city = form_values.get("responsavel_city", "").strip()
         responsavel_state = form_values.get("responsavel_state", "").strip()
+        responsavel_signature = form_values.get("responsavel_signature", "").strip()
+        responsavel_data_truth = request.POST.get("responsavel_data_truth") == "on"
+        form_values["responsavel_data_truth"] = responsavel_data_truth
 
         for field_key, error_label in (
             ("responsavel_username", "Informe um nome de usuário."),
@@ -1107,6 +1124,11 @@ def register_director(request):
         ):
             if not form_values.get(field_key, "").strip():
                 field_errors[field_key] = error_label
+
+        if not responsavel_signature:
+            field_errors["responsavel_signature"] = "Assine os dados iniciais."
+        if not responsavel_data_truth:
+            field_errors["responsavel_data_truth"] = "Confirme que os dados iniciais são verdadeiros."
 
         if password1 or password2:
             if password1 != password2:
