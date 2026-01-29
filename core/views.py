@@ -771,6 +771,8 @@ def register_adventurer(request):
         term_signature = form_values.get("term_signature", "").strip()
         term_child_name = form_values.get("term_child_name", "").strip()
         term_contact_phone = form_values.get("term_contact_phone", "").strip()
+        adventurer_data_truth = request.POST.get("adventurer_data_truth") == "on"
+        form_values["adventurer_data_truth"] = adventurer_data_truth
 
         for slug, _ in CLASS_OPTIONS:
             if request.POST.get(f"adventure_class_{slug}"):
@@ -918,6 +920,8 @@ def register_adventurer(request):
             field_errors["term_contact_phone"] = "Informe um telefone para contato."
         if not term_confirmation:
             field_errors["term_confirmation"] = "Confirme o termo."
+        if not adventurer_data_truth:
+            field_errors["adventurer_data_truth"] = "Confirme que os dados digitados são verdadeiros."
 
         if User.objects.filter(username=responsible_username).exists():
             field_errors["responsavel_username"] = "Nome de usuário indisponível."
@@ -1027,12 +1031,13 @@ def register_adventurer(request):
                             "responsavel": term_responsible,
                             "nacionalidade": term_nationality,
                             "crianca": term_child,
-                            "local": term_local,
-                            "assinatura": term_signature,
-                            "nome_crianca": term_child_name,
-                            "telefone": term_contact_phone,
-                            "confirmacao": bool(term_confirmation),
-                        },
+                        "local": term_local,
+                        "assinatura": term_signature,
+                        "nome_crianca": term_child_name,
+                        "telefone": term_contact_phone,
+                        "confirmacao": bool(term_confirmation),
+                        "declaracao_dados_verdadeiros": adventurer_data_truth,
+                    },
                     )
                     _create_monthly_fees(responsible, adventurer)
                 messages.success(request, "Cadastro enviado! Faça login para acessar o painel.")
@@ -1126,8 +1131,11 @@ def register_director(request):
         term_municipality = form_values.get("term_municipality", "").strip()
         term_state = form_values.get("term_state", "").strip()
         term_cpf = form_values.get("term_cpf", "").strip()
+        term_signature = form_values.get("term_signature", "").strip()
         term_accept = request.POST.get("term_accept") == "on"
         form_values["term_accept"] = term_accept
+        director_data_truth = request.POST.get("director_data_truth") == "on"
+        form_values["director_data_truth"] = director_data_truth
         director_photo = request.FILES.get("director_photo")
         volunteer_acceptance = request.POST.get("volunteer_acceptance") == "on"
         form_values["volunteer_acceptance"] = volunteer_acceptance
@@ -1149,10 +1157,14 @@ def register_director(request):
 
         if not term_accept:
             field_errors["term_accept"] = "Você precisa aceitar o termo de autorização."
+        if not term_signature:
+            field_errors["term_signature"] = "Informe a assinatura do responsável."
         if not director_photo:
             field_errors["director_photo"] = "Anexe a foto 3x4 do voluntário."
         if not volunteer_acceptance:
             field_errors["volunteer_acceptance"] = "Você precisa aceitar o compromisso."
+        if not director_data_truth:
+            field_errors["director_data_truth"] = "Confirme que todas as informações fornecidas são verdadeiras."
 
         director_full_name = form_values.get("director_full_name", "").strip()
         director_church = form_values.get("director_church", "").strip()
@@ -1246,6 +1258,8 @@ def register_director(request):
                         term_state=term_state,
                         term_cpf=term_cpf,
                         term_accepted=term_accept,
+                        term_signature=term_signature,
+                        term_data_truth=director_data_truth,
                         church=director_church,
                         district=director_district,
                         full_name=director_full_name,

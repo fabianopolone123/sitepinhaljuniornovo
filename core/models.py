@@ -175,6 +175,8 @@ class DirectorApplication(models.Model):
     term_state = models.CharField(max_length=60, blank=True)
     term_cpf = models.CharField(max_length=20, blank=True)
     term_accepted = models.BooleanField(default=False)
+    term_signature = models.TextField(blank=True)
+    term_data_truth = models.BooleanField(default=False)
 
     church = models.CharField(max_length=150)
     district = models.CharField(max_length=80)

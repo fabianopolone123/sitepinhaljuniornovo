@@ -783,6 +783,16 @@
             <small class="error-message">{{ field_errors.term_signature|default:'' }}</small>
           </div>
 
+          <label class="checkbox-field">
+            <input
+              type="checkbox"
+              name="adventurer_data_truth"
+              {% if form_values.adventurer_data_truth %}checked{% endif %}
+            />
+            Declaro que os dados digitados são verdadeiros e completos.
+          </label>
+          <small class="error-message">{{ field_errors.adventurer_data_truth|default:'' }}</small>
+
           <div class="termino-inline-inputs">
             <div class="field-group">
               <label>

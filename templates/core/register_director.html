@@ -456,6 +456,15 @@
           <label class="checkbox-field">
             <input
               type="checkbox"
+              name="director_data_truth"
+              {% if form_values.director_data_truth %}checked{% endif %}
+            />
+            Declaro que todas as informações fornecidas neste cadastro são verdadeiras.
+          </label>
+          <small class="error-message">{{ field_errors.director_data_truth|default:'' }}</small>
+          <label class="checkbox-field">
+            <input
+              type="checkbox"
               name="term_accept"
               {% if form_values.term_accept %}checked{% endif %}
             />
