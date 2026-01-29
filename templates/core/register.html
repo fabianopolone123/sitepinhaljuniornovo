@@ -449,7 +449,7 @@
             <div class="field-group">
               <label>
                 Tem plano de saúde?
-                <select name="medical_plan" required>
+                <select name="medical_plan" data-detail-target="medical-plan-number-detail" required>
                   <option value="">Selecione</option>
                   <option value="sim" {% if form_values.medical_plan == 'sim' %}selected{% endif %}>Sim</option>
                   <option value="nao" {% if form_values.medical_plan == 'nao' %}selected{% endif %}>Não</option>
@@ -464,6 +464,14 @@
               </label>
               <small class="error-message">{{ field_errors.medical_plan_name|default:'' }}</small>
             </div>
+          </div>
+
+          <div class="field-group dependent-detail" id="medical-plan-number-detail">
+            <label>
+              Número da carteirinha do plano de saúde
+              <input type="text" name="medical_plan_number" value="{{ form_values.medical_plan_number|default:'' }}" />
+            </label>
+            <small class="error-message">{{ field_errors.medical_plan_number|default:'' }}</small>
           </div>
 
           <div class="field-group">
@@ -643,27 +651,15 @@
             </div>
           </div>
 
-          <div class="grid two-columns">
-            <div class="field-group">
-              <label>
-                Problemas psicológicos?
-                <select name="medical_psychological" required>
-                  <option value="">Selecione</option>
-                  <option value="sim" {% if form_values.medical_psychological == 'sim' %}selected{% endif %}>Sim</option>
-                  <option value="nao" {% if form_values.medical_psychological == 'nao' %}selected{% endif %}>Não</option>
-                </select>
-              </label>
-            </div>
-            <div class="field-group">
-              <label>
-                Condições de saúde recentes?
-                <select name="medical_recent_conditions" required>
-                  <option value="">Selecione</option>
-                  <option value="sim" {% if form_values.medical_recent_conditions == 'sim' %}selected{% endif %}>Sim</option>
-                  <option value="nao" {% if form_values.medical_recent_conditions == 'nao' %}selected{% endif %}>Não</option>
-                </select>
-              </label>
-            </div>
+          <div class="field-group">
+            <label>
+              Problemas psicológicos?
+              <select name="medical_psychological" required>
+                <option value="">Selecione</option>
+                <option value="sim" {% if form_values.medical_psychological == 'sim' %}selected{% endif %}>Sim</option>
+                <option value="nao" {% if form_values.medical_psychological == 'nao' %}selected{% endif %}>Não</option>
+              </select>
+            </label>
           </div>
 
           <div class="field-group">

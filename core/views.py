@@ -719,6 +719,7 @@ def register_adventurer(request):
         }
         medical_plan = form_values.get("medical_plan", "").strip()
         medical_plan_name = form_values.get("medical_plan_name", "").strip()
+        medical_plan_number = form_values.get("medical_plan_number", "").strip()
         medical_sus = form_values.get("medical_sus", "").strip()
         medical_allergy_skin = form_values.get("medical_allergy_skin", "").strip()
         medical_allergy_food = form_values.get("medical_allergy_food", "").strip()
@@ -727,7 +728,6 @@ def register_adventurer(request):
         medical_allergy_med_detail = form_values.get("medical_allergy_med_detail", "").strip()
         medical_other = form_values.get("medical_other", "").strip()
         medical_recent_medicines = form_values.get("medical_recent_medicines", "").strip()
-        medical_recent_conditions = form_values.get("medical_recent_conditions", "").strip()
         medical_recent_fractures = form_values.get("medical_recent_fractures", "").strip()
         medical_surgeries = form_values.get("medical_surgeries", "").strip()
         medical_hospitalization = form_values.get("medical_hospitalization", "").strip()
@@ -869,6 +869,8 @@ def register_adventurer(request):
 
         if not medical_plan:
             field_errors["medical_plan"] = "Informe se possui plano de saúde."
+        if medical_plan == "sim" and not medical_plan_number:
+            field_errors["medical_plan_number"] = "Informe o número da carteirinha do plano de saúde."
         if not medical_sus:
             field_errors["medical_sus"] = "Informe o número do SUS."
         if not medical_allergy_skin:
@@ -891,8 +893,6 @@ def register_adventurer(request):
             field_errors["medical_kidney_meds"] = "Informe o uso de remédios renais."
         if not medical_psychological:
             field_errors["medical_psychological"] = "Informe se possui problemas psicológicos."
-        if not medical_recent_conditions:
-            field_errors["medical_recent_conditions"] = "Informe se houve problemas de saúde recentes."
         if not medical_recent_fractures:
             field_errors["medical_recent_fractures"] = "Informe se houve fraturas recentes."
         if not medical_surgeries:
@@ -998,6 +998,7 @@ def register_adventurer(request):
                         medical_data={
                             "plano": medical_plan,
                             "plano_nome": medical_plan_name,
+                            "plano_numero": medical_plan_number,
                             "sus": medical_sus,
                             "alergia_cutanea": medical_allergy_skin,
                             "alergia_alimentar": medical_allergy_food,
@@ -1016,7 +1017,6 @@ def register_adventurer(request):
                             "medicacao_renal": medical_kidney_meds,
                             "medicacao_renal_det": medical_kidney_meds_detail,
                             "psicologico": medical_psychological,
-                            "problemas_recentes": medical_recent_conditions,
                             "medicamentos_recentes": medical_recent_medicines,
                             "fraturas_recentes": medical_recent_fractures,
                             "cirurgias": medical_surgeries,

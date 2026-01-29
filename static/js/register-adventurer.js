@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     detail.classList.toggle("is-active", select.value === "sim");
   };
 
-  ["medical_heart_meds", "medical_diabetic_meds", "medical_kidney_meds"].forEach((name) => {
+  ["medical_plan", "medical_heart_meds", "medical_diabetic_meds", "medical_kidney_meds"].forEach((name) => {
     const select = form?.querySelector(`[name='${name}']`);
     if (!select) return;
     select.addEventListener("change", () => toggleDependentDetail(select));
