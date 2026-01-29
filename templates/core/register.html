@@ -475,15 +475,17 @@
             <p class="tag light">Já teve ou tem (marque as positivas)</p>
             <div class="checkbox-grid">
               {% for slug,label in medical_conditions %}
+              {% with key="medical_condition_"|add:slug %}
               <label>
                 <input
                   type="checkbox"
-                  name="medical_condition_{{ slug }}"
+                  name="{{ key }}"
                   value="on"
-                  {% if form_values.medical_condition_{{ slug }} %}checked{% endif %}
+                  {% if form_values|dict_get:key %}checked{% endif %}
                 />
                 {{ label }}
               </label>
+              {% endwith %}
               {% endfor %}
             </div>
           </div>
