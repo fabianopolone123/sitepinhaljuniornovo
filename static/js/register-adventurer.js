@@ -127,4 +127,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   handlePhotoPreview();
   renderStep(currentStep);
+  initSignatureModal({
+    modalId: "adventurer-signature-modal",
+    triggerSelector: "[data-signature-trigger='adventurer']",
+    inputSelector: "#adventurer-signature-input",
+    previewSelector: "#adventurer-signature-preview",
+    placeholder: "Nenhum registro ainda",
+  });
 });

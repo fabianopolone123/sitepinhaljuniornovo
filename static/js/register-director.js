@@ -149,8 +149,16 @@ document.addEventListener("DOMContentLoaded", () => {
       reader.onload = (event) => {
         showImage(event.target.result);
       };
-      reader.readAsDataURL(file);
-    });
+    reader.readAsDataURL(file);
+  });
   };
+
+  initSignatureModal({
+    modalId: "director-signature-modal",
+    triggerSelector: "[data-signature-trigger='director']",
+    inputSelector: "#director-signature-input",
+    previewSelector: "#director-signature-preview",
+    placeholder: "Nenhum registro ainda",
+  });
 
 });

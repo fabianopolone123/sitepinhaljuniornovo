@@ -755,17 +755,39 @@
             Declaro que não haverá reivindicação futura de direitos de imagem.
           </p>
 
+          <div class="signature-block">
+            <div class="signature-block__header">
+              <p>Assinatura digital do responsável</p>
+              <button
+                type="button"
+                class="ghost-btn signature-block__trigger"
+                data-signature-trigger="adventurer"
+              >
+                Assinar digitalmente
+              </button>
+            </div>
+            <div class="signature-preview" id="adventurer-signature-preview">
+              {% if form_values.term_signature %}
+              <img src="{{ form_values.term_signature }}" alt="Assinatura registrada" />
+              {% else %}
+              <span>Nenhum registro ainda</span>
+              {% endif %}
+            </div>
+            <input
+              type="hidden"
+              name="term_signature"
+              id="adventurer-signature-input"
+              value="{{ form_values.term_signature|default:'' }}"
+              required
+            />
+            <small class="error-message">{{ field_errors.term_signature|default:'' }}</small>
+          </div>
+
           <div class="termino-inline-inputs">
             <div class="field-group">
               <label>
                 Local e data
                 <input type="text" name="term_local" value="{{ form_values.term_local|default:'' }}" required />
-              </label>
-            </div>
-            <div class="field-group">
-              <label>
-                Assinatura do responsável
-                <input type="text" name="term_signature" value="{{ form_values.term_signature|default:'' }}" required />
               </label>
             </div>
             <div class="field-group">
@@ -802,6 +824,21 @@
         </div>
       </form>
     </main>
+    <div class="signature-modal" id="adventurer-signature-modal" aria-hidden="true">
+      <div class="signature-modal__content" role="dialog" aria-modal="true" aria-label="Assinar com o dedo">
+        <div class="signature-modal__header">
+          <strong>Assine abaixo</strong>
+          <button type="button" class="signature-modal__close" data-close-signature aria-label="Fechar janela">×</button>
+        </div>
+        <p class="signature-modal__hint">Use o dedo ou o mouse para desenhar. Salve quando terminar.</p>
+        <canvas tabindex="0"></canvas>
+        <div class="signature-modal__actions">
+          <button type="button" class="ghost-btn" data-clear-signature>Limpar</button>
+          <button type="button" class="primary-btn" data-save-signature>Salvar assinatura</button>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'js/signature-modal.js' %}" defer></script>
     <script src="{% static 'js/register-adventurer.js' %}" defer></script>
   </body>
 </html>
