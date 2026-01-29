@@ -219,6 +219,15 @@ body {
   width: auto;
 }
 
+.dependent-detail {
+  display: none;
+  margin-top: 0.6rem;
+}
+
+.dependent-detail.is-active {
+  display: block;
+}
+
 .form-navigation {
   display: flex;
   gap: 0.8rem;

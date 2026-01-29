@@ -733,10 +733,13 @@ def register_adventurer(request):
         medical_hospitalization = form_values.get("medical_hospitalization", "").strip()
         medical_heart = form_values.get("medical_heart", "").strip()
         medical_heart_meds = form_values.get("medical_heart_meds", "").strip()
+        medical_heart_meds_detail = form_values.get("medical_heart_meds_detail", "").strip()
         medical_diabetic = form_values.get("medical_diabetic", "").strip()
         medical_diabetic_meds = form_values.get("medical_diabetic_meds", "").strip()
+        medical_diabetic_meds_detail = form_values.get("medical_diabetic_meds_detail", "").strip()
         medical_kidney = form_values.get("medical_kidney", "").strip()
         medical_kidney_meds = form_values.get("medical_kidney_meds", "").strip()
+        medical_kidney_meds_detail = form_values.get("medical_kidney_meds_detail", "").strip()
         medical_psychological = form_values.get("medical_psychological", "").strip()
         medical_blood_type = form_values.get("medical_blood_type", "").strip()
 
@@ -758,7 +761,7 @@ def register_adventurer(request):
         adventure_rg = form_values.get("adventure_rg", "").strip()
         adventure_rg_issuer = form_values.get("adventure_rg_issuer", "").strip()
         adventure_cpf = form_values.get("adventure_cpf", "").strip()
-        adventure_parent_whatsapp = form_values.get("adventure_parent_whatsapp", "").strip()
+        adventure_parent_whatsapp_phone = form_values.get("adventure_parent_whatsapp_phone", "").strip()
         adventure_shirt_size = form_values.get("adventure_shirt_size", "").strip()
 
         term_responsible = form_values.get("term_responsible", "").strip()
@@ -852,15 +855,15 @@ def register_adventurer(request):
             "adventure_certidao": adventure_certidao,
             "adventure_rg": adventure_rg,
             "adventure_cpf": adventure_cpf,
-            "adventure_parent_whatsapp": adventure_parent_whatsapp,
+            "adventure_parent_whatsapp_phone": adventure_parent_whatsapp_phone,
             "adventure_shirt_size": adventure_shirt_size,
         }
         for key, value in adventure_required.items():
             if not value:
                 field_errors[key] = "Campo obrigatório."
 
-        if not adventure_parent_whatsapp:
-            field_errors["adventure_parent_whatsapp"] = "Informe se pai/mãe tem WhatsApp."
+        if not adventure_parent_whatsapp_phone:
+            field_errors["adventure_parent_whatsapp_phone"] = "Informe o WhatsApp do responsável."
         if not adventure_shirt_size:
             field_errors["adventure_shirt_size"] = "Informe o tamanho da camiseta."
 
@@ -988,7 +991,7 @@ def register_adventurer(request):
                         rg=adventure_rg,
                         rg_issuer=adventure_rg_issuer,
                         cpf_number=adventure_cpf,
-                        parent_whatsapp=adventure_parent_whatsapp == "sim",
+                        parent_whatsapp=bool(adventure_parent_whatsapp_phone),
                         shirt_size=adventure_shirt_size,
                         blood_type=form_values.get("medical_blood_type", ""),
                         family_data={"pai": pai_data, "mae": mae_data},
@@ -1005,10 +1008,13 @@ def register_adventurer(request):
                             "deficientes": deficiencies,
                             "problema_cardiaco": medical_heart,
                             "medicacao_cardiaca": medical_heart_meds,
+                            "medicacao_cardiaca_det": medical_heart_meds_detail,
                             "diabetico": medical_diabetic,
                             "medicacao_diabetica": medical_diabetic_meds,
+                            "medicacao_diabetica_det": medical_diabetic_meds_detail,
                             "problema_renal": medical_kidney,
                             "medicacao_renal": medical_kidney_meds,
+                            "medicacao_renal_det": medical_kidney_meds_detail,
                             "psicologico": medical_psychological,
                             "problemas_recentes": medical_recent_conditions,
                             "medicamentos_recentes": medical_recent_medicines,

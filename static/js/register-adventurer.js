@@ -74,6 +74,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  const toggleDependentDetail = (select) => {
+    if (!select?.dataset?.detailTarget) return;
+    const detail = document.getElementById(select.dataset.detailTarget);
+    if (!detail) return;
+    detail.classList.toggle("is-active", select.value === "sim");
+  };
+
+  ["medical_heart_meds", "medical_diabetic_meds", "medical_kidney_meds"].forEach((name) => {
+    const select = form?.querySelector(`[name='${name}']`);
+    if (!select) return;
+    select.addEventListener("change", () => toggleDependentDetail(select));
+    toggleDependentDetail(select);
+  });
+
   form?.addEventListener("submit", (event) => {
     const invalidFields = Array.from(form.querySelectorAll(":invalid"));
     if (invalidFields.length) {

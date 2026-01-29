@@ -409,15 +409,17 @@
 
           <div class="grid two-columns">
             <div class="field-group">
-            <label>
-              Pai/Mãe tem WhatsApp?
-              <select name="adventure_parent_whatsapp" required>
-                <option value="">Selecione</option>
-                <option value="sim" {% if form_values.adventure_parent_whatsapp == 'sim' %}selected{% endif %}>Sim</option>
-                <option value="nao" {% if form_values.adventure_parent_whatsapp == 'nao' %}selected{% endif %}>Não</option>
-              </select>
-              <small class="field-hint">Use o WhatsApp cadastrado em <strong>{{ form_values.responsavel_whatsapp|default:'-' }}</strong> como referência.</small>
-            </label>
+              <label>
+                WhatsApp do responsável
+                <input
+                  type="tel"
+                  name="adventure_parent_whatsapp_phone"
+                  value="{{ form_values.adventure_parent_whatsapp_phone|default:form_values.responsavel_whatsapp|default:'' }}"
+                  required
+                />
+                <small class="field-hint">Use o mesmo número registrado no responsável.</small>
+              </label>
+              <small class="error-message">{{ field_errors.adventure_parent_whatsapp_phone|default:'' }}</small>
             </div>
             <div class="field-group">
               <label>
@@ -553,11 +555,22 @@
             <div class="field-group">
               <label>
                 Utiliza remédios?
-                <select name="medical_heart_meds" required>
+                <select name="medical_heart_meds" data-detail-target="medical-heart-meds-detail" required>
                   <option value="">Selecione</option>
                   <option value="sim" {% if form_values.medical_heart_meds == 'sim' %}selected{% endif %}>Sim</option>
                   <option value="nao" {% if form_values.medical_heart_meds == 'nao' %}selected{% endif %}>Não</option>
                 </select>
+                <small class="dependent-detail" id="medical-heart-meds-detail">
+                  <label>
+                    Nome do remédio
+                    <input
+                      type="text"
+                      name="medical_heart_meds_detail"
+                      value="{{ form_values.medical_heart_meds_detail|default:'' }}"
+                      placeholder="Informe os remédios utilizados"
+                    />
+                  </label>
+                </small>
               </label>
             </div>
           </div>
@@ -576,11 +589,22 @@
             <div class="field-group">
               <label>
                 Utiliza remédios?
-                <select name="medical_diabetic_meds" required>
+                <select name="medical_diabetic_meds" data-detail-target="medical-diabetic-meds-detail" required>
                   <option value="">Selecione</option>
                   <option value="sim" {% if form_values.medical_diabetic_meds == 'sim' %}selected{% endif %}>Sim</option>
                   <option value="nao" {% if form_values.medical_diabetic_meds == 'nao' %}selected{% endif %}>Não</option>
                 </select>
+                <small class="dependent-detail" id="medical-diabetic-meds-detail">
+                  <label>
+                    Nome do remédio
+                    <input
+                      type="text"
+                      name="medical_diabetic_meds_detail"
+                      value="{{ form_values.medical_diabetic_meds_detail|default:'' }}"
+                      placeholder="Informe os remédios utilizados"
+                    />
+                  </label>
+                </small>
               </label>
             </div>
           </div>
@@ -599,11 +623,22 @@
             <div class="field-group">
               <label>
                 Utiliza remédios?
-                <select name="medical_kidney_meds" required>
+                <select name="medical_kidney_meds" data-detail-target="medical-kidney-meds-detail" required>
                   <option value="">Selecione</option>
                   <option value="sim" {% if form_values.medical_kidney_meds == 'sim' %}selected{% endif %}>Sim</option>
                   <option value="nao" {% if form_values.medical_kidney_meds == 'nao' %}selected{% endif %}>Não</option>
                 </select>
+                <small class="dependent-detail" id="medical-kidney-meds-detail">
+                  <label>
+                    Nome do remédio
+                    <input
+                      type="text"
+                      name="medical_kidney_meds_detail"
+                      value="{{ form_values.medical_kidney_meds_detail|default:'' }}"
+                      placeholder="Informe os remédios utilizados"
+                    />
+                  </label>
+                </small>
               </label>
             </div>
           </div>
