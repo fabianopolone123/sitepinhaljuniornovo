@@ -476,3 +476,8 @@ tira o quadrado do funcoi
 - **Request**: Confirmar que o backend já grava os dados por slot (ficha médica, termo e assinaturas individuais) e que os campos adicionados no frontend estão no fluxo de registro.
 - **Actions**: Revisitei egister_adventurer e a estrutura de slots para garantir que todas as informações novas (ficha, termo, assinaturas) continuam sendo persistidas por slot e que o preenchimento automático não modifica os nomes dos inputs esperados.
 - **Notes**: Testado com python manage.py check.
+
+## 2026-01-30T03:19:09+00:00Z — Balões e orientação
+- **Request**: Deixar claro para quem está cadastrando qual slot está ativo e em que sequência deve preencher dados/ ficha médica/ termo.
+- **Actions**: Adicionei uma explicação visual logo após o stepper (callout com instruções de fluxo), desenhei balões indicando cada etapa abaixo do rótulo do slot ativo e ajustei o CSS/JS das abas para deixar o botão atual preenchido e o restante tracejado, reforçando o destaque para o nome digitado de cada aventureiro.
+- **Notes**: rodado python manage.py check

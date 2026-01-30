@@ -122,7 +122,7 @@ body {
 
 .adventurer-tabs {
   display: inline-flex;
-  gap: 0.4rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
@@ -151,18 +151,20 @@ body {
 }
 
 .adventurer-tab {
-  font-size: 0.85rem;
-  padding: 0.35rem 0.8rem;
+  font-size: 0.9rem;
+  padding: 0.45rem 1.1rem;
   border-radius: 999px;
-  border: 1px solid #c7cfe7;
-  color: #234;
+  border: 1px dashed rgba(15, 61, 103, 0.6);
+  color: #0f3a74;
   background: transparent;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .adventurer-tab.is-active {
   background: #0f3a74;
-  color: white;
+  color: #fff;
   border-color: #0f3a74;
+  box-shadow: 0 10px 20px rgba(15, 61, 103, 0.25);
 }
 
 .adventurer-tab.is-hidden {
@@ -173,6 +175,43 @@ body {
   margin-top: 0.5rem;
   font-weight: 600;
   color: #0f3a74;
+}
+
+.slot-guidance {
+  margin-top: 0.35rem;
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: #4c587b;
+}
+
+.slot-guidance span {
+  border-radius: 999px;
+  padding: 0.2rem 0.75rem;
+  border: 1px solid rgba(74, 159, 230, 0.4);
+  background: rgba(122, 191, 255, 0.12);
+}
+
+.flow-helper {
+  margin: 1rem 0 1.5rem;
+  border-radius: 18px;
+  border: 1px solid rgba(15, 61, 103, 0.12);
+  padding: 1rem 1.25rem;
+  background: #f5f8ff;
+}
+
+.flow-helper p {
+  margin: 0;
+  font-weight: 600;
+  color: #0f3a74;
+  margin-bottom: 0.5rem;
+}
+
+.flow-helper ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: #3c4e6b;
+  list-style: disc;
 }
 
 .field-group {
