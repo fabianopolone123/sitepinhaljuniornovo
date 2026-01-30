@@ -103,6 +103,62 @@ body {
   color: #4c587b;
 }
 
+.adventurer-count-control {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.adventurer-count-control select {
+  margin-top: 0.5rem;
+  min-width: 120px;
+  padding: 0.4rem 0.6rem;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #c7cfe7;
+}
+
+.adventurer-tabs {
+  display: inline-flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.slot-panel {
+  display: none;
+}
+
+.slot-panel:not(.is-hidden) {
+  display: block;
+}
+
+.adventurer-tab {
+  font-size: 0.85rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid #c7cfe7;
+  color: #234;
+  background: transparent;
+}
+
+.adventurer-tab.is-active {
+  background: #0f3a74;
+  color: white;
+  border-color: #0f3a74;
+}
+
+.adventurer-tab.is-hidden {
+  display: none;
+}
+
+.adventurer-slot-label {
+  margin-top: 0.5rem;
+  font-weight: 600;
+  color: #0f3a74;
+}
+
 .field-group {
   display: flex;
   flex-direction: column;

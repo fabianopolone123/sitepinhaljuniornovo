@@ -1,0 +1,123 @@
+<div class="slot-panel" data-slot-panel data-slot="{{ slot }}">
+  <p class="termino-note">
+    TERMO DE AUTORIZAÇÃO DE USO DE IMAGEM
+    <br />
+    Eu,
+    <input
+      type="text"
+      name="term_responsible_{{ slot }}"
+      value="{% slot_value_for form_values 'term_responsible' slot %}"
+      placeholder="Nome do responsável"
+      required
+    />,
+    nacionalidade
+    <input
+      type="text"
+      name="term_nationality_{{ slot }}"
+      value="{% slot_value_for form_values 'term_nationality' slot %}"
+      required
+    />,
+    responsável legal pelo menor
+    <input
+      type="text"
+      name="term_child_{{ slot }}"
+      value="{% slot_value_for form_values 'term_child' slot %}"
+      placeholder="Nome da criança"
+      required
+    />,
+    AUTORIZO o uso de imagem em todo e qualquer material do CLUBE DE AVENTUREIROS,
+    incluindo campanhas promocionais, institucionais e educacionais, em mídias impressas,
+    digitais, redes sociais, vídeos e transmissões.
+    <br />
+    Declaro que não haverá reivindicação futura de direitos de imagem.
+  </p>
+
+  <div class="signature-block">
+    <div class="signature-block__header">
+      <p>Assinatura digital do responsável</p>
+      <button
+        type="button"
+        class="ghost-btn signature-block__trigger"
+        data-signature-trigger="adventurer"
+        data-target-input="#adventurer-signature-input-{{ slot }}"
+        data-target-preview="#adventurer-signature-preview-{{ slot }}"
+        data-slot="{{ slot }}"
+      >
+        Assinar digitalmente
+      </button>
+    </div>
+    <div class="signature-preview" id="adventurer-signature-preview-{{ slot }}">
+      {% if slot_value_for form_values 'term_signature' slot %}
+      <img src="{% slot_value_for form_values 'term_signature' slot %}" alt="Assinatura registrada" />
+      {% else %}
+      <span>Nenhum registro ainda</span>
+      {% endif %}
+    </div>
+    <input
+      type="hidden"
+      name="term_signature_{{ slot }}"
+      id="adventurer-signature-input-{{ slot }}"
+      value="{% slot_value_for form_values 'term_signature' slot %}"
+      required
+    />
+    <small class="error-message">{% slot_error_for field_errors 'term_signature' slot %}</small>
+  </div>
+
+  <label class="checkbox-field">
+    <input
+      type="checkbox"
+      name="term_data_truth_{{ slot }}"
+      {% if slot_value_for form_values 'term_data_truth' slot %}checked{% endif %}
+      required
+    />
+    Declaro que os dados do termo são verdadeiros.
+  </label>
+  <small class="error-message">{% slot_error_for field_errors 'term_data_truth' slot %}</small>
+
+  <div class="termino-inline-inputs">
+    <div class="field-group">
+      <label>
+        Local e data
+        <input
+          type="text"
+          name="term_local_{{ slot }}"
+          value="{% slot_value_for form_values 'term_local' slot %}"
+          required
+        />
+      </label>
+    </div>
+    <div class="field-group">
+      <label>
+        Nome da criança
+        <input
+          type="text"
+          name="term_child_name_{{ slot }}"
+          value="{% slot_value_for form_values 'term_child_name' slot %}"
+          required
+        />
+      </label>
+    </div>
+    <div class="field-group">
+      <label>
+        Telefone para contato
+        <input
+          type="tel"
+          name="term_contact_phone_{{ slot }}"
+          value="{% slot_value_for form_values 'term_contact_phone' slot %}"
+          required
+        />
+      </label>
+    </div>
+  </div>
+
+  <label class="checkbox-field">
+    <input
+      type="checkbox"
+      name="term_confirmation_{{ slot }}"
+      {% if slot_value_for form_values 'term_confirmation' slot %}checked{% endif %}
+      required
+    />
+    Declaro que os dados acima estão corretos e autorizo a utilização da imagem do menor.
+  </label>
+  <small class="error-message">{% slot_error_for field_errors 'term_confirmation' slot %}</small>
+</div>

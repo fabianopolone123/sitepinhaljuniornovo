@@ -5,7 +5,59 @@ document.addEventListener("DOMContentLoaded", () => {
   const prevBtn = document.querySelector("[data-prev]");
   const submitBtn = document.querySelector("[data-submit]");
   const form = document.querySelector(".adventurer-form");
+  const adventurerTabs = Array.from(document.querySelectorAll(".adventurer-tab"));
+  const adventurerCountSelect = document.querySelector("[name='adventure_count']");
+  const activeSlotInput = document.querySelector("[name='active_adventurer_slot']");
+  const adventurerSlotLabel = document.querySelector("#adventurer-slot-label");
+  const slotPanels = Array.from(document.querySelectorAll("[data-slot-panel]"));
+  const slotOrder = adventurerTabs.map((tab) => tab.dataset.adventurerTab);
   let currentStep = 1;
+  let currentAdventurerSlot = activeSlotInput?.value || "01";
+
+  const getNormalizedSlotCount = () => {
+    const rawValue = parseInt(adventurerCountSelect?.value || "1", 10);
+    if (Number.isNaN(rawValue)) {
+      return 1;
+    }
+    return Math.min(Math.max(1, rawValue), slotOrder.length || 1);
+  };
+
+  const updateSlotPanels = () => {
+    const allowedSlots = slotOrder.slice(0, getNormalizedSlotCount());
+    slotPanels.forEach((panel) => {
+      const slot = panel.dataset.slot;
+      const shouldShow = allowedSlots.includes(slot) && slot === currentAdventurerSlot;
+      panel.classList.toggle("is-hidden", !shouldShow);
+    });
+  };
+
+  const loadPhotoPreview = (slot) => {
+    if (!slot) return;
+    const input = document.querySelector(`[name='adventure_photo_${slot}']`);
+    const previewWrapper = document.querySelector(`#adventurer-photo-preview-${slot}`);
+    if (!input || !previewWrapper) return;
+    const previewTemplate =
+      previewWrapper.dataset.template || previewWrapper.innerHTML || "";
+    if (!previewWrapper.dataset.template) {
+      previewWrapper.dataset.template = previewTemplate;
+    }
+    const showImage = (src) => {
+      previewWrapper.innerHTML = "";
+      const img = document.createElement("img");
+      img.src = src;
+      previewWrapper.appendChild(img);
+    };
+    const file = input.files?.[0];
+    if (!file) {
+      previewWrapper.innerHTML = previewTemplate;
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      showImage(event.target.result);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const renderStep = (step) => {
     steps.forEach((section) => {
@@ -26,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (submitBtn) {
       submitBtn.classList.toggle("is-hidden", step !== steps.length);
     }
+    updateSlotPanels();
   };
 
   const goToStep = (step) => {
@@ -43,6 +96,64 @@ document.addEventListener("DOMContentLoaded", () => {
     const target = Number(button.dataset.stepTarget);
     button.addEventListener("click", () => goToStep(target));
   });
+
+  const normalizeSlotValue = (value) => value.toString().padStart(2, "0");
+
+  const updateTabVisibility = (count) => {
+    const normalizedCount = Math.min(Math.max(1, count), slotOrder.length || 1);
+    adventurerTabs.forEach((tab, index) => {
+      const visible = index < normalizedCount;
+      tab.classList.toggle("is-hidden", !visible);
+    });
+    const activeTab = adventurerTabs.find(
+      (tab) => !tab.classList.contains("is-hidden") && tab.dataset.adventurerTab === currentAdventurerSlot
+    );
+    if (!activeTab) {
+      const firstVisible = adventurerTabs.find((tab) => !tab.classList.contains("is-hidden"));
+      if (firstVisible) {
+        setActiveAdventurerSlot(firstVisible.dataset.adventurerTab, false);
+      }
+    }
+  };
+
+  const setActiveAdventurerSlot = (slot, syncInput = true) => {
+    const normalized = normalizeSlotValue(slot || "01");
+    currentAdventurerSlot = normalized;
+    if (syncInput && activeSlotInput) {
+      activeSlotInput.value = normalized;
+    }
+    adventurerTabs.forEach((tab) => {
+      tab.classList.toggle("is-active", tab.dataset.adventurerTab === normalized);
+    });
+    if (adventurerSlotLabel) {
+      adventurerSlotLabel.textContent = `Aventureiro ${normalized}`;
+    }
+    updateSlotPanels();
+    loadPhotoPreview(normalized);
+  };
+
+  adventurerTabs.forEach((tab) => {
+    tab.addEventListener("click", () => setActiveAdventurerSlot(tab.dataset.adventurerTab));
+  });
+
+  adventurerCountSelect?.addEventListener("change", () => {
+    const normalizedCount = getNormalizedSlotCount();
+    updateTabVisibility(normalizedCount);
+    const activeTab = adventurerTabs.find(
+      (tab) => !tab.classList.contains("is-hidden") && tab.dataset.adventurerTab === currentAdventurerSlot
+    );
+    if (!activeTab) {
+      const firstVisible = adventurerTabs.find((tab) => !tab.classList.contains("is-hidden"));
+      if (firstVisible) {
+        setActiveAdventurerSlot(firstVisible.dataset.adventurerTab);
+      }
+    }
+    updateSlotPanels();
+  });
+
+  const initialCount = getNormalizedSlotCount();
+  updateTabVisibility(initialCount);
+  setActiveAdventurerSlot(currentAdventurerSlot, false);
 
   const setError = (element) => {
     element.classList.add("input-error");
@@ -70,7 +181,10 @@ document.addEventListener("DOMContentLoaded", () => {
       field.focus();
     });
     if (field.type === "file") {
-      field.addEventListener("change", () => handlePhotoPreview());
+      const slotKey = field.dataset.slotPhoto;
+      if (slotKey) {
+        field.addEventListener("change", () => loadPhotoPreview(slotKey));
+      }
     }
   });
 
@@ -81,9 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
     detail.classList.toggle("is-active", select.value === "sim");
   };
 
-  ["medical_plan", "medical_heart_meds", "medical_diabetic_meds", "medical_kidney_meds"].forEach((name) => {
-    const select = form?.querySelector(`[name='${name}']`);
-    if (!select) return;
+  form?.querySelectorAll("[data-detail-target]").forEach((select) => {
     select.addEventListener("change", () => toggleDependentDetail(select));
     toggleDependentDetail(select);
   });
@@ -98,34 +210,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  const handlePhotoPreview = () => {
-    const input = document.querySelector("input[name='adventure_photo']");
-    const previewWrapper = document.querySelector(".adventurer-photo-preview");
-    if (!input || !previewWrapper) return;
-    const previewTemplate =
-      previewWrapper.dataset.template || previewWrapper.innerHTML || "";
-    if (!previewWrapper.dataset.template) {
-      previewWrapper.dataset.template = previewTemplate;
-    }
-    const showImage = (src) => {
-      previewWrapper.innerHTML = "";
-      const img = document.createElement("img");
-      img.src = src;
-      previewWrapper.appendChild(img);
-    };
-    const file = input.files?.[0];
-    if (!file) {
-      previewWrapper.innerHTML = previewTemplate;
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      showImage(event.target.result);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  handlePhotoPreview();
   renderStep(currentStep);
   initSignatureModal({
     modalId: "responsavel-signature-modal",

@@ -33,6 +33,7 @@ from .models import (
 from pagamento import criar_pix, consultar_pagamento, extrair_copia_cola, is_aprovado
 
 MONTHLY_FEE_DUE_DAY = 10
+ADVENTURER_SLOTS = [f"{i:02d}" for i in range(1, 6)]
 
 WAPI_INSTANCE = os.getenv("WAPI_INSTANCE", "LITE-F75JN4-FWW3NA")
 WAPI_TOKEN = os.getenv("WAPI_TOKEN", "o8bWQDnlomrsOaBF2CqnlHguBKIbX87By")
@@ -684,7 +685,7 @@ def mp_webhook(request):
 
     return JsonResponse({"status": "pending"})
 def register_adventurer(request):
-    """Render the registration workflow para responsÃ¡veis e aventureiros."""
+    """Render workflow to register responsible and one or more adventurers."""
 
     field_errors = {}
     form_values = {}
@@ -692,6 +693,15 @@ def register_adventurer(request):
 
     if request.method == "POST":
         form_values = request.POST.dict()
+        raw_slot_count = form_values.get("adventure_count", "01")
+        try:
+            adventure_count = max(1, min(len(ADVENTURER_SLOTS), int(raw_slot_count)))
+        except ValueError:
+            adventure_count = 1
+        form_values["adventure_count"] = f"{adventure_count:02d}"
+        selected_adventurer_count = adventure_count
+        form_values.setdefault("active_adventurer_slot", form_values.get("active_adventurer_slot", "01"))
+
         responsible_username = form_values.get("responsavel_username", "").strip()
         password1 = form_values.get("responsavel_password1", "")
         password2 = form_values.get("responsavel_password2", "")
@@ -720,78 +730,10 @@ def register_adventurer(request):
         parent_signature = form_values.get("parent_signature", "").strip()
         parent_data_truth = request.POST.get("parent_data_truth") == "on"
         form_values["parent_data_truth"] = parent_data_truth
-        medical_plan = form_values.get("medical_plan", "").strip()
-        medical_plan_name = form_values.get("medical_plan_name", "").strip()
-        medical_plan_number = form_values.get("medical_plan_number", "").strip()
-        medical_sus = form_values.get("medical_sus", "").strip()
-        medical_allergy_skin = form_values.get("medical_allergy_skin", "").strip()
-        medical_allergy_food = form_values.get("medical_allergy_food", "").strip()
-        medical_allergy_food_detail = form_values.get("medical_allergy_food_detail", "").strip()
-        medical_allergy_med = form_values.get("medical_allergy_med", "").strip()
-        medical_allergy_med_detail = form_values.get("medical_allergy_med_detail", "").strip()
-        medical_other = form_values.get("medical_other", "").strip()
-        medical_recent_medicines = form_values.get("medical_recent_medicines", "").strip()
-        medical_recent_fractures = form_values.get("medical_recent_fractures", "").strip()
-        medical_surgeries = form_values.get("medical_surgeries", "").strip()
-        medical_hospitalization = form_values.get("medical_hospitalization", "").strip()
-        medical_heart = form_values.get("medical_heart", "").strip()
-        medical_heart_meds = form_values.get("medical_heart_meds", "").strip()
-        medical_heart_meds_detail = form_values.get("medical_heart_meds_detail", "").strip()
-        medical_diabetic = form_values.get("medical_diabetic", "").strip()
-        medical_diabetic_meds = form_values.get("medical_diabetic_meds", "").strip()
-        medical_diabetic_meds_detail = form_values.get("medical_diabetic_meds_detail", "").strip()
-        medical_kidney = form_values.get("medical_kidney", "").strip()
-        medical_kidney_meds = form_values.get("medical_kidney_meds", "").strip()
-        medical_kidney_meds_detail = form_values.get("medical_kidney_meds_detail", "").strip()
-        medical_psychological = form_values.get("medical_psychological", "").strip()
-        medical_blood_type = form_values.get("medical_blood_type", "").strip()
-        medical_signature = form_values.get("medical_signature", "").strip()
-        medical_data_truth = request.POST.get("medical_data_truth") == "on"
-        form_values["medical_data_truth"] = medical_data_truth
 
-        adventure_full_name = form_values.get("adventure_full_name", "").strip()
-        adventure_sexo = form_values.get("adventure_sexo", "").strip()
-        adventure_birth_day = form_values.get("adventure_birth_day", "").strip()
-        adventure_birth_month = form_values.get("adventure_birth_month", "").strip()
-        adventure_birth_year = form_values.get("adventure_birth_year", "").strip()
-        adventure_school = form_values.get("adventure_school", "").strip()
-        adventure_grade = form_values.get("adventure_grade", "").strip()
-        adventure_bolsa = form_values.get("adventure_bolsa", "").strip()
-        adventure_street = form_values.get("adventure_street", "").strip()
-        adventure_number = form_values.get("adventure_number", "").strip()
-        adventure_neighborhood = form_values.get("adventure_neighborhood", "").strip()
-        adventure_postal_code = form_values.get("adventure_postal_code", "").strip()
-        adventure_city = form_values.get("adventure_city", "").strip()
-        adventure_state = form_values.get("adventure_state", "").strip()
-        adventure_certidao = form_values.get("adventure_certidao", "").strip()
-        adventure_rg = form_values.get("adventure_rg", "").strip()
-        adventure_rg_issuer = form_values.get("adventure_rg_issuer", "").strip()
-        adventure_cpf = form_values.get("adventure_cpf", "").strip()
-        adventure_parent_whatsapp_phone = form_values.get("adventure_parent_whatsapp_phone", "").strip()
-        adventure_shirt_size = form_values.get("adventure_shirt_size", "").strip()
-        adventure_data_signature = form_values.get("adventure_data_signature", "").strip()
-        adventure_data_truth = request.POST.get("adventure_data_truth") == "on"
-        form_values["adventure_data_truth"] = adventure_data_truth
-
-        term_responsible = form_values.get("term_responsible", "").strip()
-        term_nationality = form_values.get("term_nationality", "").strip()
-        term_child = form_values.get("term_child", "").strip()
-        term_local = form_values.get("term_local", "").strip()
-        term_signature = form_values.get("term_signature", "").strip()
-        term_child_name = form_values.get("term_child_name", "").strip()
-        term_contact_phone = form_values.get("term_contact_phone", "").strip()
-        term_data_truth = request.POST.get("term_data_truth") == "on"
-        form_values["term_data_truth"] = term_data_truth
-
-        for slug, _ in CLASS_OPTIONS:
-            if request.POST.get(f"adventure_class_{slug}"):
-                form_values[f"adventure_class_{slug}"] = "on"
-
-        conditions_list = []
-        for slug, label in MEDICAL_CONDITIONS:
-            if request.POST.get(f"medical_condition_{slug}"):
-                form_values[f"medical_condition_{slug}"] = "on"
-                conditions_list.append(label)
+        responsavel_signature = form_values.get("responsavel_signature", "").strip()
+        responsavel_data_truth = request.POST.get("responsavel_data_truth") == "on"
+        form_values["responsavel_data_truth"] = responsavel_data_truth
 
         deficiency_slugs = [
             ("cadeirante", "Cadeirante"),
@@ -799,42 +741,244 @@ def register_adventurer(request):
             ("auditivo", "Auditivo"),
             ("fala", "Fala - mudo ou dificuldade"),
         ]
-        deficiencies = []
-        for slug, label in deficiency_slugs:
-            key = f"medical_deficiente_{slug}"
-            if request.POST.get(key):
-                form_values[key] = "on"
-                deficiencies.append(label)
 
-        class_selected = [label for slug, label in CLASS_OPTIONS if form_values.get(f"adventure_class_{slug}")]
-        medical_confirmation = request.POST.get("medical_confirmation")
-        term_confirmation = request.POST.get("term_confirmation")
-        form_values["medical_confirmation"] = medical_confirmation
-        form_values["term_confirmation"] = term_confirmation
+        def slot_key(base, slot):
+            return f"{base}_{slot}"
 
-        if not responsible_username:
-            field_errors["responsavel_username"] = "Informe um nome de usuÃ¡rio."
-        if not password1 or not password2:
-            field_errors["responsavel_password1"] = "Informe e confirme a senha."
-        elif password1 != password2:
-            field_errors["responsavel_password2"] = "As senhas nÃ£o conferem."
-        elif len(password1) != 4 or not password1.isdigit():
-            field_errors["responsavel_password1"] = "A senha precisa ter 4 dÃ­gitos."
+        def slot_value(base, slot, *, trim=True):
+            key = slot_key(base, slot)
+            value = form_values.get(key, "")
+            if isinstance(value, str) and trim:
+                value = value.strip()
+            form_values[key] = value
+            return value
 
-        if not responsavel_nome:
-            field_errors["responsavel_nome"] = "Informe o nome do responsÃ¡vel."
-        if not responsavel_sobrenome:
-            field_errors["responsavel_sobrenome"] = "Informe o sobrenome."
-        if not responsavel_sexo:
-            field_errors["responsavel_sexo"] = "Informe o sexo do responsÃ¡vel."
-        if not cpf:
-            field_errors["responsavel_cpf"] = "Informe o CPF."
-        if not telefone:
-            field_errors["responsavel_telefone"] = "Informe o telefone."
-        if not whatsapp:
-            field_errors["responsavel_whatsapp"] = "Informe o WhatsApp."
-        if not endereco:
-            field_errors["responsavel_endereco"] = "Informe o endereÃ§o."
+        slot_contexts = []
+        selected_slots = ADVENTURER_SLOTS[:adventure_count]
+
+        for slot in selected_slots:
+            adventure_full_name = slot_value("adventure_full_name", slot)
+            adventure_sexo = slot_value("adventure_sexo", slot)
+            adventure_birth_day = slot_value("adventure_birth_day", slot)
+            adventure_birth_month = slot_value("adventure_birth_month", slot)
+            adventure_birth_year = slot_value("adventure_birth_year", slot)
+            adventure_school = slot_value("adventure_school", slot)
+            adventure_grade = slot_value("adventure_grade", slot)
+            adventure_bolsa = slot_value("adventure_bolsa", slot)
+            adventure_street = slot_value("adventure_street", slot)
+            adventure_number = slot_value("adventure_number", slot)
+            adventure_neighborhood = slot_value("adventure_neighborhood", slot)
+            adventure_postal_code = slot_value("adventure_postal_code", slot)
+            adventure_city = slot_value("adventure_city", slot)
+            adventure_state = slot_value("adventure_state", slot)
+            adventure_certidao = slot_value("adventure_certidao", slot)
+            adventure_rg = slot_value("adventure_rg", slot)
+            adventure_rg_issuer = slot_value("adventure_rg_issuer", slot)
+            adventure_cpf = slot_value("adventure_cpf", slot)
+            adventure_parent_whatsapp_phone = slot_value("adventure_parent_whatsapp_phone", slot)
+            adventure_shirt_size = slot_value("adventure_shirt_size", slot)
+            adventure_data_signature = slot_value("adventure_data_signature", slot, trim=False)
+            adventure_data_truth = request.POST.get(slot_key("adventure_data_truth", slot)) == "on"
+
+            class_selected = [
+                label
+                for slug, label in CLASS_OPTIONS
+                if request.POST.get(slot_key(f"adventure_class_{slug}", slot))
+            ]
+
+            medical_plan = slot_value("medical_plan", slot)
+            medical_plan_name = slot_value("medical_plan_name", slot)
+            medical_plan_number = slot_value("medical_plan_number", slot)
+            medical_sus = slot_value("medical_sus", slot)
+            medical_allergy_skin = slot_value("medical_allergy_skin", slot)
+            medical_allergy_food = slot_value("medical_allergy_food", slot)
+            medical_allergy_food_detail = slot_value("medical_allergy_food_detail", slot)
+            medical_allergy_med = slot_value("medical_allergy_med", slot)
+            medical_allergy_med_detail = slot_value("medical_allergy_med_detail", slot)
+            medical_other = slot_value("medical_other", slot, trim=False)
+            medical_recent_medicines = slot_value("medical_recent_medicines", slot)
+            medical_recent_fractures = slot_value("medical_recent_fractures", slot)
+            medical_surgeries = slot_value("medical_surgeries", slot)
+            medical_hospitalization = slot_value("medical_hospitalization", slot)
+            medical_heart = slot_value("medical_heart", slot)
+            medical_heart_meds = slot_value("medical_heart_meds", slot)
+            medical_heart_meds_detail = slot_value("medical_heart_meds_detail", slot)
+            medical_diabetic = slot_value("medical_diabetic", slot)
+            medical_diabetic_meds = slot_value("medical_diabetic_meds", slot)
+            medical_diabetic_meds_detail = slot_value("medical_diabetic_meds_detail", slot)
+            medical_kidney = slot_value("medical_kidney", slot)
+            medical_kidney_meds = slot_value("medical_kidney_meds", slot)
+            medical_kidney_meds_detail = slot_value("medical_kidney_meds_detail", slot)
+            medical_psychological = slot_value("medical_psychological", slot)
+            medical_blood_type = slot_value("medical_blood_type", slot)
+            medical_signature = slot_value("medical_signature", slot, trim=False)
+            medical_data_truth = request.POST.get(slot_key("medical_data_truth", slot)) == "on"
+            medical_confirmation = request.POST.get(slot_key("medical_confirmation", slot)) == "on"
+
+            term_responsible = slot_value("term_responsible", slot)
+            term_nationality = slot_value("term_nationality", slot)
+            term_child = slot_value("term_child", slot)
+            term_local = slot_value("term_local", slot)
+            term_signature = slot_value("term_signature", slot, trim=False)
+            term_child_name = slot_value("term_child_name", slot)
+            term_contact_phone = slot_value("term_contact_phone", slot)
+            term_confirmation = request.POST.get(slot_key("term_confirmation", slot)) == "on"
+            term_data_truth = request.POST.get(slot_key("term_data_truth", slot)) == "on"
+
+            adventure_photo = request.FILES.get(slot_key("adventure_photo", slot))
+
+            conditions_list = []
+            for slug, label in MEDICAL_CONDITIONS:
+                if request.POST.get(slot_key(f"medical_condition_{slug}", slot)):
+                    conditions_list.append(label)
+
+            deficiencies = []
+            for slug, label in deficiency_slugs:
+                if request.POST.get(slot_key(f"medical_deficiente_{slug}", slot)):
+                    deficiencies.append(label)
+
+            for key, value in (
+                ("adventure_full_name", adventure_full_name),
+                ("adventure_sexo", adventure_sexo),
+                ("adventure_school", adventure_school),
+                ("adventure_grade", adventure_grade),
+                ("adventure_bolsa", adventure_bolsa),
+                ("adventure_street", adventure_street),
+                ("adventure_number", adventure_number),
+                ("adventure_neighborhood", adventure_neighborhood),
+                ("adventure_postal_code", adventure_postal_code),
+                ("adventure_city", adventure_city),
+                ("adventure_state", adventure_state),
+                ("adventure_certidao", adventure_certidao),
+                ("adventure_rg", adventure_rg),
+                ("adventure_cpf", adventure_cpf),
+            ):
+                if not value:
+                    field_errors[f"{key}_{slot}"] = "Campo obrigatório."
+
+            if not adventure_parent_whatsapp_phone:
+                field_errors[f"adventure_parent_whatsapp_phone_{slot}"] = "Informe o WhatsApp do responsável."
+            if not adventure_shirt_size:
+                field_errors[f"adventure_shirt_size_{slot}"] = "Informe o tamanho da camiseta."
+            if not adventure_data_signature:
+                field_errors[f"adventure_data_signature_{slot}"] = "Assine os dados do aventureiro."
+            if not adventure_data_truth:
+                field_errors[f"adventure_data_truth_{slot}"] = "Confirme que os dados do aventureiro são verdadeiros."
+            if not adventure_photo:
+                field_errors[f"adventure_photo_{slot}"] = "Anexe a foto 3x4 do aventureiro."
+
+            if not medical_plan:
+                field_errors[f"medical_plan_{slot}"] = "Informe se possui plano de saúde."
+            if medical_plan == "sim" and not medical_plan_number:
+                field_errors[f"medical_plan_number_{slot}"] = "Informe o número da carteirinha do plano de saúde."
+            if not medical_sus:
+                field_errors[f"medical_sus_{slot}"] = "Informe o número da Carteira Nacional de Saúde (SUS)."
+            if not medical_blood_type:
+                field_errors[f"medical_blood_type_{slot}"] = "Informe o tipo sanguíneo."
+            if not medical_signature:
+                field_errors[f"medical_signature_{slot}"] = "Assine a ficha médica."
+            if not medical_confirmation:
+                field_errors[f"medical_confirmation_{slot}"] = "Confirme que as informações médicas acima são verdadeiras."
+            if not medical_data_truth:
+                field_errors[f"medical_data_truth_{slot}"] = "Confirme que os dados médicos são verdadeiros."
+
+            if not term_responsible:
+                field_errors[f"term_responsible_{slot}"] = "Informe o nome do responsável."
+            if not term_nationality:
+                field_errors[f"term_nationality_{slot}"] = "Informe sua nacionalidade."
+            if not term_child:
+                field_errors[f"term_child_{slot}"] = "Informe o nome da criança."
+            if not term_local:
+                field_errors[f"term_local_{slot}"] = "Informe local e data."
+            if not term_child_name:
+                field_errors[f"term_child_name_{slot}"] = "Informe o nome da criança."
+            if not term_contact_phone:
+                field_errors[f"term_contact_phone_{slot}"] = "Informe o telefone para contato."
+            if not term_signature:
+                field_errors[f"term_signature_{slot}"] = "Informe a assinatura do termo."
+            if not term_confirmation:
+                field_errors[f"term_confirmation_{slot}"] = "Confirme que os dados do termo estão corretos."
+            if not term_data_truth:
+                field_errors[f"term_data_truth_{slot}"] = "Confirme que os dados do termo são verdadeiros."
+
+            if not (adventure_birth_day and adventure_birth_month and adventure_birth_year):
+                field_errors[f"adventure_birth_date_{slot}"] = "Informe a data de nascimento completa."
+                birth_date = None
+            else:
+                try:
+                    birth_date = date(
+                        int(adventure_birth_year), int(adventure_birth_month), int(adventure_birth_day)
+                    )
+                except (ValueError, TypeError):
+                    field_errors[f"adventure_birth_date_{slot}"] = "Informe uma data de nascimento válida."
+                    birth_date = None
+
+            slot_contexts.append(
+                {
+                    "slot": slot,
+                    "full_name": adventure_full_name,
+                    "sex": adventure_sexo,
+                    "birth_date": birth_date,
+                    "school": adventure_school,
+                    "grade": adventure_grade,
+                    "bolsa": adventure_bolsa,
+                    "street": adventure_street,
+                    "number": adventure_number,
+                    "neighborhood": adventure_neighborhood,
+                    "postal_code": adventure_postal_code,
+                    "city": adventure_city,
+                    "state": adventure_state,
+                    "certidao": adventure_certidao,
+                    "rg": adventure_rg,
+                    "rg_issuer": adventure_rg_issuer,
+                    "cpf": adventure_cpf,
+                    "parent_whatsapp_phone": adventure_parent_whatsapp_phone,
+                    "shirt_size": adventure_shirt_size,
+                    "adventure_data_signature": adventure_data_signature,
+                    "adventure_data_truth": adventure_data_truth,
+                    "photo": adventure_photo,
+                    "classes": class_selected,
+                    "medical_plan": medical_plan,
+                    "medical_plan_name": medical_plan_name,
+                    "medical_plan_number": medical_plan_number,
+                    "medical_sus": medical_sus,
+                    "medical_allergy_skin": medical_allergy_skin,
+                    "medical_allergy_food": medical_allergy_food,
+                    "medical_allergy_food_detail": medical_allergy_food_detail,
+                    "medical_allergy_med": medical_allergy_med,
+                    "medical_allergy_med_detail": medical_allergy_med_detail,
+                    "medical_other": medical_other,
+                    "medical_recent_medicines": medical_recent_medicines,
+                    "medical_recent_fractures": medical_recent_fractures,
+                    "medical_surgeries": medical_surgeries,
+                    "medical_hospitalization": medical_hospitalization,
+                    "medical_heart": medical_heart,
+                    "medical_heart_meds": medical_heart_meds,
+                    "medical_heart_meds_detail": medical_heart_meds_detail,
+                    "medical_diabetic": medical_diabetic,
+                    "medical_diabetic_meds": medical_diabetic_meds,
+                    "medical_diabetic_meds_detail": medical_diabetic_meds_detail,
+                    "medical_kidney": medical_kidney,
+                    "medical_kidney_meds": medical_kidney_meds,
+                    "medical_kidney_meds_detail": medical_kidney_meds_detail,
+                    "medical_psychological": medical_psychological,
+                    "medical_blood_type": medical_blood_type,
+                    "medical_signature": medical_signature,
+                    "medical_data_truth": medical_data_truth,
+                    "medical_confirmation": medical_confirmation,
+                    "conditions_list": conditions_list,
+                    "deficiencies": deficiencies,
+                    "term_responsible": term_responsible,
+                    "term_nationality": term_nationality,
+                    "term_child": term_child,
+                    "term_local": term_local,
+                    "term_signature": term_signature,
+                    "term_child_name": term_child_name,
+                    "term_contact_phone": term_contact_phone,
+                    "term_confirmation": term_confirmation,
+                    "term_data_truth": term_data_truth,
+                }
+            )
 
         for parent, prefix in ((pai_data, "pai"), (mae_data, "mae")):
             if not parent["nome"]:
@@ -848,128 +992,40 @@ def register_adventurer(request):
             if not parent["celular"]:
                 field_errors[f"{prefix}_celular"] = f"Informe o celular do {prefix}."
 
-        adventure_required = {
-            "adventure_full_name": adventure_full_name,
-            "adventure_sexo": adventure_sexo,
-            "adventure_birth_day": adventure_birth_day,
-            "adventure_birth_month": adventure_birth_month,
-            "adventure_birth_year": adventure_birth_year,
-            "adventure_school": adventure_school,
-            "adventure_grade": adventure_grade,
-            "adventure_bolsa": adventure_bolsa,
-            "adventure_street": adventure_street,
-            "adventure_number": adventure_number,
-            "adventure_neighborhood": adventure_neighborhood,
-            "adventure_postal_code": adventure_postal_code,
-            "adventure_city": adventure_city,
-            "adventure_state": adventure_state,
-            "adventure_certidao": adventure_certidao,
-            "adventure_rg": adventure_rg,
-            "adventure_cpf": adventure_cpf,
-            "adventure_parent_whatsapp_phone": adventure_parent_whatsapp_phone,
-            "adventure_shirt_size": adventure_shirt_size,
-        }
-        for key, value in adventure_required.items():
-            if not value:
-                field_errors[key] = "Campo obrigatÃ³rio."
-
-        if not adventure_parent_whatsapp_phone:
-            field_errors["adventure_parent_whatsapp_phone"] = "Informe o WhatsApp do responsÃ¡vel."
-        if not adventure_shirt_size:
-            field_errors["adventure_shirt_size"] = "Informe o tamanho da camiseta."
         if not parent_signature:
             field_errors["parent_signature"] = "Assine os dados dos pais."
         if not parent_data_truth:
-            field_errors["parent_data_truth"] = "Confirme que os dados dos pais sÃ£o verdadeiros."
-        if not adventure_data_signature:
-            field_errors["adventure_data_signature"] = "Assine os dados do aventureiro."
-        if not adventure_data_truth:
-            field_errors["adventure_data_truth"] = "Confirme que os dados do aventureiro sÃ£o verdadeiros."
+            field_errors["parent_data_truth"] = "Confirme que os dados dos pais são verdadeiros."
 
-        if not medical_plan:
-            field_errors["medical_plan"] = "Informe se possui plano de saÃºde."
-        if medical_plan == "sim" and not medical_plan_number:
-            field_errors["medical_plan_number"] = "Informe o nÃºmero da carteirinha do plano de saÃºde."
-        if not medical_sus:
-            field_errors["medical_sus"] = "Informe o nÃºmero do SUS."
-        if not medical_allergy_skin:
-            field_errors["medical_allergy_skin"] = "Informe se possui alergia cutÃ¢nea."
-        if not medical_allergy_food:
-            field_errors["medical_allergy_food"] = "Informe se possui alergia alimentar."
-        if not medical_allergy_med:
-            field_errors["medical_allergy_med"] = "Informe se possui alergia a medicamentos."
-        if not medical_heart:
-            field_errors["medical_heart"] = "Informe se possui problemas cardÃ­acos."
-        if not medical_heart_meds:
-            field_errors["medical_heart_meds"] = "Informe o uso de remÃ©dios cardÃ­acos."
-        if not medical_diabetic:
-            field_errors["medical_diabetic"] = "Informe se Ã© diabÃ©tico."
-        if not medical_diabetic_meds:
-            field_errors["medical_diabetic_meds"] = "Informe o uso de remÃ©dios para diabetes."
-        if not medical_kidney:
-            field_errors["medical_kidney"] = "Informe se possui problemas renais."
-        if not medical_kidney_meds:
-            field_errors["medical_kidney_meds"] = "Informe o uso de remÃ©dios renais."
-        if not medical_psychological:
-            field_errors["medical_psychological"] = "Informe se possui problemas psicolÃ³gicos."
-        if not medical_recent_fractures:
-            field_errors["medical_recent_fractures"] = "Informe se houve fraturas recentes."
-        if not medical_surgeries:
-            field_errors["medical_surgeries"] = "Informe se passou por cirurgias."
-        if not medical_blood_type:
-            field_errors["medical_blood_type"] = "Informe o tipo sanguÃ­neo."
-        if not medical_confirmation:
-            field_errors["medical_confirmation"] = "Confirme as informaÃ§Ãµes mÃ©dicas."
-        if not medical_signature:
-            field_errors["medical_signature"] = "Assine a ficha mÃ©dica."
-        if not medical_data_truth:
-            field_errors["medical_data_truth"] = "Confirme que os dados mÃ©dicos sÃ£o verdadeiros."
-
-        if not term_responsible:
-            field_errors["term_responsible"] = "Informe o responsÃ¡vel do termo."
-        if not term_nationality:
-            field_errors["term_nationality"] = "Informe a nacionalidade."
-        if not term_child:
-            field_errors["term_child"] = "Informe o nome do menor."
-        if not term_local:
-            field_errors["term_local"] = "Informe o local e data."
-        if not term_signature:
-            field_errors["term_signature"] = "Informe a assinatura do responsÃ¡vel."
-        if not term_child_name:
-            field_errors["term_child_name"] = "Informe o nome da crianÃ§a."
-        if not term_contact_phone:
-            field_errors["term_contact_phone"] = "Informe um telefone para contato."
-        if not term_confirmation:
-            field_errors["term_confirmation"] = "Confirme o termo."
-        if not term_data_truth:
-            field_errors["term_data_truth"] = "Confirme que os dados do termo sÃ£o verdadeiros."
+        if not responsible_username:
+            field_errors["responsavel_username"] = "Informe um nome de usuário."
+        if not password1 or not password2:
+            field_errors["responsavel_password1"] = "Informe e confirme a senha."
+        elif password1 != password2:
+            field_errors["responsavel_password2"] = "As senhas não conferem."
+        elif len(password1) != 4 or not password1.isdigit():
+            field_errors["responsavel_password1"] = "A senha precisa ter 4 dígitos."
+        if not responsavel_nome:
+            field_errors["responsavel_nome"] = "Informe o nome do responsável."
+        if not responsavel_sobrenome:
+            field_errors["responsavel_sobrenome"] = "Informe o sobrenome."
+        if not responsavel_sexo:
+            field_errors["responsavel_sexo"] = "Informe o sexo do responsável."
+        if not cpf:
+            field_errors["responsavel_cpf"] = "Informe o CPF."
+        if not telefone:
+            field_errors["responsavel_telefone"] = "Informe o telefone."
+        if not whatsapp:
+            field_errors["responsavel_whatsapp"] = "Informe o WhatsApp."
+        if not endereco:
+            field_errors["responsavel_endereco"] = "Informe o endereço."
 
         if User.objects.filter(username=responsible_username).exists():
-            field_errors["responsavel_username"] = "Nome de usuÃ¡rio indisponÃ­vel."
+            field_errors["responsavel_username"] = "Nome de usuário indisponível."
         if Responsible.objects.filter(cpf=cpf).exists():
-            field_errors["responsavel_cpf"] = "Esse CPF jÃ¡ estÃ¡ cadastrado."
-
-        file_photo = request.FILES.get("adventure_photo")
-        if not file_photo:
-            field_errors["adventure_photo"] = "Anexe a foto 3x4."
-
-        try:
-            birth_date = date(int(adventure_birth_year), int(adventure_birth_month), int(adventure_birth_day))
-        except (ValueError, TypeError):
-            field_errors["adventure_birth_date"] = "Selecione uma data de nascimento vÃ¡lida."
+            field_errors["responsavel_cpf"] = "Esse CPF já está cadastrado."
 
         if not field_errors:
-            allergies_summary = []
-            if form_values.get("medical_allergy_skin") == "sim":
-                allergies_summary.append("Alergia cutÃ¢nea")
-            if form_values.get("medical_allergy_food") == "sim":
-                allergies_summary.append(f"Alergia alimentar: {form_values.get('medical_allergy_food_detail','')}")
-            if form_values.get("medical_allergy_med") == "sim":
-                allergies_summary.append(f"Alergia a remÃ©dios: {form_values.get('medical_allergy_med_detail','')}")
-
-            medication_text = medical_other or ""
-            observation_text = medical_recent_medicines
-
             try:
                 with transaction.atomic():
                     user = User.objects.create_user(
@@ -986,97 +1042,117 @@ def register_adventurer(request):
                         endereco=endereco,
                         sexo=responsavel_sexo,
                     )
-                    names = adventure_full_name.split()
-                    first_name = names[0] if names else adventure_full_name
-                    last_name = " ".join(names[1:]) if len(names) > 1 else ""
-                    adventurer = Adventurer.objects.create(
-                        responsible=responsible,
-                        first_name=first_name,
-                        last_name=last_name or first_name,
-                        document=adventure_certidao,
-                        birth_date=birth_date,
-                        allergies="; ".join(allergies_summary) or "Nenhuma",
-                        medication=medication_text,
-                        observation=observation_text,
-                        emergency_name=pai_data["nome"],
-                        emergency_phone=pai_data["telefone"],
-                        emergency_whatsapp=pai_data["celular"],
-                        photo=file_photo,
-                        sexo=adventure_sexo or "M",
-                        school=adventure_school,
-                        grade=adventure_grade,
-                        bolsa_familia=adventure_bolsa == "sim",
-                        classes_investidas=", ".join(class_selected),
-                        address=adventure_street,
-                        neighborhood=adventure_neighborhood,
-                        city=adventure_city,
-                        postal_code=adventure_postal_code,
-                        state=adventure_state,
-                        certidao=adventure_certidao,
-                        rg=adventure_rg,
-                        rg_issuer=adventure_rg_issuer,
-                        cpf_number=adventure_cpf,
-                        parent_whatsapp=bool(adventure_parent_whatsapp_phone),
-                        shirt_size=adventure_shirt_size,
-                        blood_type=form_values.get("medical_blood_type", ""),
-                        family_data={
-                            "pai": pai_data,
-                            "mae": mae_data,
-                            "assinatura_dados_iniciais": responsavel_signature,
-                            "dados_iniciais_verdadeiros": responsavel_data_truth,
-                            "assinatura_pais": parent_signature,
-                            "dados_pais_verdadeiros": parent_data_truth,
-                            "assinatura_dados_aventureiro": adventure_data_signature,
-                            "dados_aventureiro_verdadeiros": adventure_data_truth,
-                        },
-                        medical_data={
-                            "plano": medical_plan,
-                            "plano_nome": medical_plan_name,
-                            "plano_numero": medical_plan_number,
-                            "sus": medical_sus,
-                            "alergia_cutanea": medical_allergy_skin,
-                            "alergia_alimentar": medical_allergy_food,
-                            "alergia_alimento": medical_allergy_food_detail,
-                            "alergia_medicamento": medical_allergy_med,
-                            "alergia_remedio": medical_allergy_med_detail,
-                            "condicoes": conditions_list,
-                            "deficientes": deficiencies,
-                            "problema_cardiaco": medical_heart,
-                            "medicacao_cardiaca": medical_heart_meds,
-                            "medicacao_cardiaca_det": medical_heart_meds_detail,
-                            "diabetico": medical_diabetic,
-                            "medicacao_diabetica": medical_diabetic_meds,
-                            "medicacao_diabetica_det": medical_diabetic_meds_detail,
-                            "problema_renal": medical_kidney,
-                            "medicacao_renal": medical_kidney_meds,
-                            "medicacao_renal_det": medical_kidney_meds_detail,
-                            "psicologico": medical_psychological,
-                            "medicamentos_recentes": medical_recent_medicines,
-                            "fraturas_recentes": medical_recent_fractures,
-                            "cirurgias": medical_surgeries,
-                            "internacao": medical_hospitalization,
-                            "assinatura": medical_signature,
-                            "dados_verdadeiros": medical_data_truth,
-                            "tipo_sanguineo": medical_blood_type,
-                        },
-                        term_data={
-                            "responsavel": term_responsible,
-                            "nacionalidade": term_nationality,
-                            "crianca": term_child,
-                            "local": term_local,
-                            "assinatura": term_signature,
-                            "nome_crianca": term_child_name,
-                            "telefone": term_contact_phone,
-                            "confirmacao": bool(term_confirmation),
-                            "dados_verdadeiros": term_data_truth,
-                        },
-                    )
-                    _create_monthly_fees(responsible, adventurer)
-                messages.success(request, "Cadastro enviado! FaÃ§a login para acessar o painel.")
+                    for slot_data in slot_contexts:
+                        names = slot_data["full_name"].split()
+                        first_name = names[0] if names else slot_data["full_name"]
+                        last_name = " ".join(names[1:]) if len(names) > 1 else first_name
+                        allergies_summary = []
+                        if slot_data["medical_allergy_skin"] == "sim":
+                            allergies_summary.append("Alergia cutânea")
+                        if slot_data["medical_allergy_food"] == "sim":
+                            allergies_summary.append(
+                                f"Alergia alimentar: {slot_data['medical_allergy_food_detail']}"
+                            )
+                        if slot_data["medical_allergy_med"] == "sim":
+                            allergies_summary.append(
+                                f"Alergia a remédios: {slot_data['medical_allergy_med_detail']}"
+                            )
+                        medication_text = slot_data["medical_other"] or ""
+                        observation_text = slot_data["medical_recent_medicines"] or ""
+                        adventurer = Adventurer.objects.create(
+                            responsible=responsible,
+                            first_name=first_name,
+                            last_name=last_name or first_name,
+                            document=slot_data["certidao"],
+                            birth_date=slot_data["birth_date"],
+                            allergies="; ".join(allergies_summary) or "Nenhuma",
+                            medication=medication_text,
+                            observation=observation_text,
+                            emergency_name=pai_data["nome"],
+                            emergency_phone=pai_data["telefone"],
+                            emergency_whatsapp=pai_data["celular"],
+                            photo=slot_data["photo"],
+                            sexo=slot_data["sex"] or "M",
+                            school=slot_data["school"],
+                            grade=slot_data["grade"],
+                            bolsa_familia=slot_data["bolsa"] == "sim",
+                            classes_investidas=", ".join(slot_data["classes"]),
+                            address=slot_data["street"],
+                            neighborhood=slot_data["neighborhood"],
+                            city=slot_data["city"],
+                            postal_code=slot_data["postal_code"],
+                            state=slot_data["state"],
+                            certidao=slot_data["certidao"],
+                            rg=slot_data["rg"],
+                            rg_issuer=slot_data["rg_issuer"],
+                            cpf_number=slot_data["cpf"],
+                            parent_whatsapp=bool(slot_data["parent_whatsapp_phone"]),
+                            shirt_size=slot_data["shirt_size"],
+                            blood_type=slot_data["medical_blood_type"],
+                            family_data={
+                                "pai": pai_data,
+                                "mae": mae_data,
+                                "assinatura_dados_iniciais": responsavel_signature,
+                                "dados_iniciais_verdadeiros": responsavel_data_truth,
+                                "assinatura_pais": parent_signature,
+                                "dados_pais_verdadeiros": parent_data_truth,
+                                "assinatura_dados_aventureiro": slot_data["adventure_data_signature"],
+                                "dados_aventureiro_verdadeiros": slot_data["adventure_data_truth"],
+                            },
+                            medical_data={
+                                "plano": slot_data["medical_plan"],
+                                "plano_nome": slot_data["medical_plan_name"],
+                                "plano_numero": slot_data["medical_plan_number"],
+                                "sus": slot_data["medical_sus"],
+                                "alergia_cutanea": slot_data["medical_allergy_skin"],
+                                "alergia_alimentar": slot_data["medical_allergy_food"],
+                                "alergia_alimento": slot_data["medical_allergy_food_detail"],
+                                "alergia_medicamento": slot_data["medical_allergy_med"],
+                                "alergia_remedio": slot_data["medical_allergy_med_detail"],
+                                "condicoes": slot_data["conditions_list"],
+                                "deficientes": slot_data["deficiencies"],
+                                "problema_cardiaco": slot_data["medical_heart"],
+                                "medicacao_cardiaca": slot_data["medical_heart_meds"],
+                                "medicacao_cardiaca_det": slot_data["medical_heart_meds_detail"],
+                                "diabetico": slot_data["medical_diabetic"],
+                                "medicacao_diabetica": slot_data["medical_diabetic_meds"],
+                                "medicacao_diabetica_det": slot_data["medical_diabetic_meds_detail"],
+                                "problema_renal": slot_data["medical_kidney"],
+                                "medicacao_renal": slot_data["medical_kidney_meds"],
+                                "medicacao_renal_det": slot_data["medical_kidney_meds_detail"],
+                                "psicologico": slot_data["medical_psychological"],
+                                "medicamentos_recentes": slot_data["medical_recent_medicines"],
+                                "fraturas_recentes": slot_data["medical_recent_fractures"],
+                                "cirurgias": slot_data["medical_surgeries"],
+                                "internacao": slot_data["medical_hospitalization"],
+                                "assinatura": slot_data["medical_signature"],
+                                "dados_verdadeiros": slot_data["medical_data_truth"],
+                                "tipo_sanguineo": slot_data["medical_blood_type"],
+                            },
+                            term_data={
+                                "responsavel": slot_data["term_responsible"],
+                                "nacionalidade": slot_data["term_nationality"],
+                                "crianca": slot_data["term_child"],
+                                "local": slot_data["term_local"],
+                                "assinatura": slot_data["term_signature"],
+                                "nome_crianca": slot_data["term_child_name"],
+                                "telefone": slot_data["term_contact_phone"],
+                                "confirmacao": bool(slot_data["term_confirmation"]),
+                                "dados_verdadeiros": slot_data["term_data_truth"],
+                            },
+                        )
+                        _create_monthly_fees(responsible, adventurer)
+                messages.success(request, "Cadastro enviado! Faça login para acessar o painel.")
                 return redirect("login")
             except IntegrityError:
-                field_errors["responsavel_username"] = "Erro ao criar usuÃ¡rio; tente um nome diferente."
+                field_errors["responsavel_username"] = "Erro ao criar usuário; tente um nome diferente."
 
+    if request.method != "POST":
+        selected_adventurer_count = 1
+        form_values["adventure_count"] = "01"
+        form_values["active_adventurer_slot"] = "01"
+
+    active_adventurer_slot = form_values.get("active_adventurer_slot", "01")
     context = {
         "form_values": form_values,
         "field_errors": field_errors,
@@ -1088,9 +1164,11 @@ def register_adventurer(request):
         "class_options": CLASS_OPTIONS,
         "medical_conditions": MEDICAL_CONDITIONS,
         "blood_types": BLOOD_TYPES,
+        "adventurer_slots": ADVENTURER_SLOTS,
+        "selected_adventurer_count": selected_adventurer_count,
+        "active_adventurer_slot": active_adventurer_slot,
     }
     return render(request, "core/register.html", context)
-
 
 def registration_choice(request):
     """Tela intermediÃ¡ria para escolher o tipo de cadastro desejado."""

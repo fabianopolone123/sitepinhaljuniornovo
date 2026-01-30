@@ -1,0 +1,339 @@
+<div class="slot-panel" data-slot-panel data-slot="{{ slot }}">
+  <div class="field-group">
+    <label>
+      Nome completo
+      <input
+        type="text"
+        name="adventure_full_name_{{ slot }}"
+        value="{% slot_value_for form_values 'adventure_full_name' slot %}"
+        required
+      />
+    </label>
+    <small class="error-message">{% slot_error_for field_errors 'adventure_full_name' slot %}</small>
+  </div>
+
+  <div class="field-group">
+    <label>
+      Sexo
+      {% with adventure_sexo=slot_value_for form_values 'adventure_sexo' slot %}
+      <select name="adventure_sexo_{{ slot }}" required>
+        <option value="">Selecione</option>
+        {% for value, label in sex_choices %}
+        <option value="{{ value }}" {% if adventure_sexo == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      {% endwith %}
+    </label>
+    <small class="error-message">{% slot_error_for field_errors 'adventure_sexo' slot %}</small>
+  </div>
+
+  <div class="field-group">
+    <label>
+      Data de nascimento
+      <div class="date-selects">
+        {% with
+          selected_day=slot_value_for form_values 'adventure_birth_day' slot
+          selected_month=slot_value_for form_values 'adventure_birth_month' slot
+          selected_year=slot_value_for form_values 'adventure_birth_year' slot
+        %}
+        <select name="adventure_birth_day_{{ slot }}" required>
+          <option value="">Dia</option>
+          {% for day in days %}
+          <option value="{{ day }}" {% if selected_day == day %}selected{% endif %}>{{ day }}</option>
+          {% endfor %}
+        </select>
+        <select name="adventure_birth_month_{{ slot }}" required>
+          <option value="">Mês</option>
+          {% for num, name in months %}
+          <option value="{{ num }}" {% if selected_month == num %}selected{% endif %}>{{ name }}</option>
+          {% endfor %}
+        </select>
+        <select name="adventure_birth_year_{{ slot }}" required>
+          <option value="">Ano</option>
+          {% for year in years %}
+          <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}</option>
+          {% endfor %}
+        </select>
+        {% endwith %}
+      </div>
+    </label>
+    <small class="error-message">{% slot_error_for field_errors 'adventure_birth_date' slot %}</small>
+  </div>
+
+  <div class="grid two-columns">
+    <div class="field-group">
+      <label>
+        Colégio
+        <input
+          type="text"
+          name="adventure_school_{{ slot }}"
+          value="{% slot_value_for form_values 'adventure_school' slot %}"
+          required
+        />
+      </label>
+      <small class="error-message">{% slot_error_for field_errors 'adventure_school' slot %}</small>
+    </div>
+    <div class="field-group">
+      <label>
+        Série (ano)
+        <input
+          type="text"
+          name="adventure_grade_{{ slot }}"
+          value="{% slot_value_for form_values 'adventure_grade' slot %}"
+          required
+        />
+      </label>
+      <small class="error-message">{% slot_error_for field_errors 'adventure_grade' slot %}</small>
+    </div>
+  </div>
+
+  <div class="field-group">
+    <label>
+      Beneficiado pela Bolsa Família?
+      <select name="adventure_bolsa_{{ slot }}" required>
+        <option value="">Selecione</option>
+        {% with adventure_bolsa=slot_value_for form_values 'adventure_bolsa' slot %}
+        <option value="sim" {% if adventure_bolsa == 'sim' %}selected{% endif %}>Sim</option>
+        <option value="nao" {% if adventure_bolsa == 'nao' %}selected{% endif %}>Não</option>
+        {% endwith %}
+      </select>
+    </label>
+    <small class="error-message">{% slot_error_for field_errors 'adventure_bolsa' slot %}</small>
+  </div>
+
+  <div class="field-group">
+    <label>Classes investidas</label>
+    <div class="checkbox-grid">
+      {% for slug, label in class_options %}
+      {% with base="adventure_class_"|add:slug %}
+      <label>
+        <input
+          type="checkbox"
+          name="{{ base }}_{{ slot }}"
+          value="on"
+          {% if slot_value_for form_values base slot %}checked{% endif %}
+        />
+        {{ label }}
+      </label>
+      {% endwith %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="grid two-columns">
+    <div class="field-group">
+      <label>
+        Av / Rua
+        <input
+          type="text"
+          name="adventure_street_{{ slot }}"
+          value="{% slot_value_for form_values 'adventure_street' slot %}"
+          required
+        />
+      </label>
+      <small class="error-message">{% slot_error_for field_errors 'adventure_street' slot %}</small>
+    </div>
+    <div class="field-group">
+      <label>
+        Número
+        <input
+          type="text"
+          name="adventure_number_{{ slot }}"
+          value="{% slot_value_for form_values 'adventure_number' slot %}"
+          required
+        />
+      </label>
+      <small class="error-message">{% slot_error_for field_errors 'adventure_number' slot %}</small>
+    </div>
+  </div>
+
+  <div class="grid two-columns">
+    <div class="field-group">
+      <label>
+        Bairro
+        <input
+          type="text"
+          name="adventure_neighborhood_{{ slot }}"
+          value="{% slot_value_for form_values 'adventure_neighborhood' slot %}"
+          required
+        />
+      </label>
+    </div>
+    <div class="field-group">
+      <label>
+        CEP
+        <input
+          type="text"
+          name="adventure_postal_code_{{ slot }}"
+          value="{% slot_value_for form_values 'adventure_postal_code' slot %}"
+          required
+        />
+      </label>
+    </div>
+  </div>
+
+  <div class="grid two-columns">
+    <div class="field-group">
+      <label>
+        Cidade
+        <input
+          type="text"
+          name="adventure_city_{{ slot }}"
+          value="{% slot_value_for form_values 'adventure_city' slot %}"
+          required
+        />
+      </label>
+    </div>
+    <div class="field-group">
+      <label>
+        Estado
+        <input
+          type="text"
+          name="adventure_state_{{ slot }}"
+          value="{% slot_value_for form_values 'adventure_state' slot %}"
+          required
+        />
+      </label>
+    </div>
+  </div>
+
+  <div class="grid two-columns">
+    <div class="field-group">
+      <label>
+        Certidão de nascimento
+        <input
+          type="text"
+          name="adventure_certidao_{{ slot }}"
+          value="{% slot_value_for form_values 'adventure_certidao' slot %}"
+          required
+        />
+      </label>
+    </div>
+    <div class="field-group">
+      <label>
+        RG
+        <input
+          type="text"
+          name="adventure_rg_{{ slot }}"
+          value="{% slot_value_for form_values 'adventure_rg' slot %}"
+          required
+        />
+      </label>
+    </div>
+  </div>
+
+  <div class="grid two-columns">
+    <div class="field-group">
+      <label>
+        Órgão expedidor
+        <input
+          type="text"
+          name="adventure_rg_issuer_{{ slot }}"
+          value="{% slot_value_for form_values 'adventure_rg_issuer' slot %}"
+        />
+      </label>
+    </div>
+    <div class="field-group">
+      <label>
+        CPF do aventureiro
+        <input
+          type="text"
+          name="adventure_cpf_{{ slot }}"
+          value="{% slot_value_for form_values 'adventure_cpf' slot %}"
+          required
+        />
+      </label>
+    </div>
+  </div>
+
+  <div class="grid two-columns">
+    <div class="field-group">
+    <label>
+      WhatsApp do responsável
+      {% with parent_whatsapp=slot_value_for form_values 'adventure_parent_whatsapp_phone' slot %}
+      <input
+        type="tel"
+        name="adventure_parent_whatsapp_phone_{{ slot }}"
+        value="{% if parent_whatsapp %}{{ parent_whatsapp }}{% else %}{{ form_values|dict_get:'responsavel_whatsapp'|default:'' }}{% endif %}"
+        required
+      />
+      {% endwith %}
+      <small class="field-hint">
+        Use o mesmo número registrado no responsável ({{ form_values|dict_get:'responsavel_whatsapp'|default:'-' }}).
+      </small>
+    </label>
+      <small class="error-message">{% slot_error_for field_errors 'adventure_parent_whatsapp_phone' slot %}</small>
+    </div>
+    <div class="field-group">
+      <label>
+        Tamanho da camiseta
+        <input
+          type="text"
+          name="adventure_shirt_size_{{ slot }}"
+          value="{% slot_value_for form_values 'adventure_shirt_size' slot %}"
+          required
+        />
+      </label>
+    </div>
+  </div>
+
+  <div class="field-group file-group">
+    <label>
+      Foto 3x4
+      <input
+        type="file"
+        name="adventure_photo_{{ slot }}"
+        data-slot-photo="{{ slot }}"
+        accept="image/*"
+        capture="environment"
+        required
+      />
+    </label>
+    <small class="field-hint">Use a câmera ou envie o arquivo.</small>
+    <div class="adventurer-photo-preview" id="adventurer-photo-preview-{{ slot }}" data-slot-photo="{{ slot }}" aria-live="polite">
+      <span class="preview-placeholder">Pré-visualização 3x4</span>
+    </div>
+    <small class="error-message">{% slot_error_for field_errors 'adventure_photo' slot %}</small>
+  </div>
+
+  <div class="signature-block">
+    <div class="signature-block__header">
+      <p>Assinatura dos dados do aventureiro</p>
+      <button
+        type="button"
+        class="ghost-btn signature-block__trigger"
+        data-signature-trigger="adventure-data"
+        data-target-input="#adventure-data-signature-input-{{ slot }}"
+        data-target-preview="#adventure-data-signature-preview-{{ slot }}"
+        data-slot="{{ slot }}"
+      >
+        Assinar os dados do aventureiro
+      </button>
+    </div>
+    <div class="signature-preview" id="adventure-data-signature-preview-{{ slot }}">
+      {% if slot_value_for form_values 'adventure_data_signature' slot %}
+      <img src="{% slot_value_for form_values 'adventure_data_signature' slot %}" alt="Assinatura registrada" />
+      {% else %}
+      <span>Nenhum registro ainda</span>
+      {% endif %}
+    </div>
+    <input
+      type="hidden"
+      name="adventure_data_signature_{{ slot }}"
+      id="adventure-data-signature-input-{{ slot }}"
+      value="{% slot_value_for form_values 'adventure_data_signature' slot %}"
+      required
+    />
+    <small class="error-message">{% slot_error_for field_errors 'adventure_data_signature' slot %}</small>
+  </div>
+  <label class="checkbox-field">
+    <input
+      type="checkbox"
+      name="adventure_data_truth_{{ slot }}"
+      {% if slot_value_for form_values 'adventure_data_truth' slot %}checked{% endif %}
+      required
+    />
+    Declaro que os dados do aventureiro estão corretos.
+  </label>
+  <small class="error-message">{% slot_error_for field_errors 'adventure_data_truth' slot %}</small>
+</div>

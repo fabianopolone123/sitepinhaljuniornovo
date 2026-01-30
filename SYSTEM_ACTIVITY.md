@@ -420,3 +420,14 @@ tira o quadrado do funcoi
 - **Actions**: reescrevi os parágrafos da página egister_choice.html para as novas mensagens (introdução geral, card de aventureiros e card de diretoria) preservando o layout e os links.
 - **Technical**: 	emplates/core/register_choice.html.
 - **Notes**: nenhuma alteração funcional a testar.
+
+## 2026-01-29T06:15:00+00:00Z — Adiciona seletor de quantidade e abas para aventureiros
+- **Request**: no cadastro de aventureiro coloca no topo na parte dos dados do aventureiro para selecionar quantos aventureiros vai cadastrar de 01 a 05, 01 ja vem como padrao, se selecionar mais de 01 vai aparecer uma sub guia com aventureiro 01 e outra guia aventureiro02 etc, onde a pessoa vai ser responsável por esses 2 aventureiros, onde o cadastro dos dados do aventureiro vai ser um pra cada, com tudo ate assinatura para cada individual
+- **Actions**: inseri no passo 3 uma seleção de quantidade e botões que representam cada guia de aventureiro, adicionei classes e scripts para manter o estado ativo e ocultar guias extras conforme o número escolhido, e mantive o label que indica qual aventureiro está sendo editado naquele momento; o backend segue recebendo os mesmos campos (no momento apenas o slot ativo) e a seleção é enviada via campo oculto ctive_adventurer_slot para futuros avanços.
+- **Technical**: 	emplates/core/register.html, static/css/register-adventurer.css, static/js/register-adventurer.js, core/views.py
+- **Notes**: etapa 2 entregue; próximo passo será replicar os campos para cada slot e persistir os dados em múltiplos registros.
+
+## 2026-01-30T02:23:11+00:00Z â€” Cadastro com mÃºltiplos slots
+- **Request**: Ajustar o cadastro de aventureiros para que a seleÃ§Ã£o da quantidade gere mÃºltiplos cadastros vinculados ao mesmo responsÃ¡vel.
+- **Actions**: Reescrevi egister_adventurer para iterar por cada slot habilitado, validar os campos/assinaturas/fotos individuais e criar um Adventurer por slot, mantendo o formulÃ¡rio na tela com os valores preenchidos.
+- **Notes**: Revisar em navegador o fluxo com 2+ aventureiros para garantir que cada guia salva um registro distinto.

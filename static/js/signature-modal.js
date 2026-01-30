@@ -23,11 +23,13 @@
       previewSelector,
       placeholder = defaultPlaceholder,
     } = options;
-    const trigger = document.querySelector(triggerSelector);
+    const triggers = Array.from(document.querySelectorAll(triggerSelector));
     const modal = document.getElementById(modalId);
-    const input = document.querySelector(inputSelector);
-    const preview = document.querySelector(previewSelector);
-    if (!modal || !trigger || !input) {
+    const initialInput = inputSelector ? document.querySelector(inputSelector) : null;
+    const initialPreview = previewSelector ? document.querySelector(previewSelector) : null;
+    let currentInput = initialInput;
+    let currentPreview = initialPreview;
+    if (!modal || !triggers.length) {
       return null;
     }
 
@@ -64,11 +66,11 @@
     };
 
     const updatePreview = (value) => {
-      if (!preview) return;
+      if (!currentPreview) return;
       if (value) {
-        preview.innerHTML = `<img src="${value}" alt="Assinatura registrada" />`;
+        currentPreview.innerHTML = `<img src="${value}" alt="Assinatura registrada" />`;
       } else {
-        preview.innerHTML = `<span>${placeholder}</span>`;
+        currentPreview.innerHTML = `<span>${placeholder}</span>`;
       }
     };
 
@@ -119,6 +121,18 @@
       }
     };
 
+    const setTargets = (inputSelectorValue, previewSelectorValue) => {
+      const inputElement = inputSelectorValue ? document.querySelector(inputSelectorValue) : null;
+      const previewElement = previewSelectorValue ? document.querySelector(previewSelectorValue) : null;
+      if (inputElement) {
+        currentInput = inputElement;
+      }
+      if (previewElement) {
+        currentPreview = previewElement;
+      }
+      updatePreview(currentInput?.value || "");
+    };
+
     const openModal = () => {
       resizeCanvas();
       clearCanvas();
@@ -133,8 +147,12 @@
     };
 
     const handleSave = () => {
+      if (!currentInput) {
+        closeModal();
+        return;
+      }
       const dataUrl = canvas.toDataURL("image/png");
-      input.value = dataUrl;
+      currentInput.value = dataUrl;
       updatePreview(dataUrl);
       closeModal();
     };
@@ -147,10 +165,17 @@
       pointerleave: stopDrawing,
     };
 
-    trigger.addEventListener("click", (event) => {
-      event.preventDefault();
-      openModal();
-    });
+    const attachTrigger = (triggerElement) => {
+      triggerElement.addEventListener("click", (event) => {
+        event.preventDefault();
+        const targetInput = triggerElement.dataset.targetInput || inputSelector;
+        const targetPreview = triggerElement.dataset.targetPreview || previewSelector;
+        setTargets(targetInput, targetPreview);
+        openModal();
+      });
+    };
+
+    triggers.forEach(attachTrigger);
 
     saveBtn?.addEventListener("click", handleSave);
     clearBtn?.addEventListener("click", () => clearCanvas());
@@ -175,7 +200,7 @@
       }
     });
 
-    updatePreview(input.value || "");
+    updatePreview(currentInput?.value || "");
 
   };
 })();
