@@ -431,3 +431,8 @@ tira o quadrado do funcoi
 - **Request**: Ajustar o cadastro de aventureiros para que a seleção da quantidade gere múltiplos cadastros vinculados ao mesmo responsável.
 - **Actions**: Reescrevi egister_adventurer para iterar por cada slot habilitado, validar os campos/assinaturas/fotos individuais e criar um Adventurer por slot, mantendo o formulário na tela com os valores preenchidos.
 - **Notes**: Revisar em navegador o fluxo com 2+ aventureiros para garantir que cada guia salva um registro distinto.
+
+## 2026-01-30T02:30:44+00:00Z — Importa tags em partials
+- **Request**: O template de cadastro guiado em /cadastro/aventureiro/ usa slot_value_for em partials sem carregar as tags.
+- **Actions**: Adicionei {% load form_extras %} a cada partial (egister_slot_adventurer, _medical, _term) para garantir que as tags customizadas estejam disponíveis.
+- **Notes**: Executar python manage.py test não foi necessário; a alteração é apenas de template.
