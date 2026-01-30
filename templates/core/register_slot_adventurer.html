@@ -14,17 +14,16 @@
   </div>
 
   <div class="field-group">
-    <label>
-      Sexo
-      {% with adventure_sexo=slot_value_for form_values 'adventure_sexo' slot %}
-      <select name="adventure_sexo_{{ slot }}" required>
-        <option value="">Selecione</option>
-        {% for value, label in sex_choices %}
-        <option value="{{ value }}" {% if adventure_sexo == value %}selected{% endif %}>{{ label }}</option>
-        {% endfor %}
-      </select>
-      {% endwith %}
-    </label>
+      <label>
+        Sexo
+        {% slot_value_for form_values 'adventure_sexo' slot as adventure_sexo %}
+        <select name="adventure_sexo_{{ slot }}" required>
+          <option value="">Selecione</option>
+          {% for value, label in sex_choices %}
+          <option value="{{ value }}" {% if adventure_sexo == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </label>
     <small class="error-message">{% slot_error_for field_errors 'adventure_sexo' slot %}</small>
   </div>
 
@@ -89,16 +88,15 @@
   </div>
 
   <div class="field-group">
-    <label>
-      Beneficiado pela Bolsa Família?
-      <select name="adventure_bolsa_{{ slot }}" required>
-        <option value="">Selecione</option>
-        {% with adventure_bolsa=slot_value_for form_values 'adventure_bolsa' slot %}
-        <option value="sim" {% if adventure_bolsa == 'sim' %}selected{% endif %}>Sim</option>
-        <option value="nao" {% if adventure_bolsa == 'nao' %}selected{% endif %}>Não</option>
-        {% endwith %}
-      </select>
-    </label>
+      <label>
+        Beneficiado pela Bolsa Família?
+        <select name="adventure_bolsa_{{ slot }}" required>
+          <option value="">Selecione</option>
+          {% slot_value_for form_values 'adventure_bolsa' slot as adventure_bolsa %}
+          <option value="sim" {% if adventure_bolsa == 'sim' %}selected{% endif %}>Sim</option>
+          <option value="nao" {% if adventure_bolsa == 'nao' %}selected{% endif %}>Não</option>
+        </select>
+      </label>
     <small class="error-message">{% slot_error_for field_errors 'adventure_bolsa' slot %}</small>
   </div>
 
@@ -249,20 +247,19 @@
 
   <div class="grid two-columns">
     <div class="field-group">
-    <label>
-      WhatsApp do responsável
-      {% with parent_whatsapp=slot_value_for form_values 'adventure_parent_whatsapp_phone' slot %}
-      <input
-        type="tel"
-        name="adventure_parent_whatsapp_phone_{{ slot }}"
-        value="{% if parent_whatsapp %}{{ parent_whatsapp }}{% else %}{{ form_values|dict_get:'responsavel_whatsapp'|default:'' }}{% endif %}"
-        required
-      />
-      {% endwith %}
-      <small class="field-hint">
-        Use o mesmo número registrado no responsável ({{ form_values|dict_get:'responsavel_whatsapp'|default:'-' }}).
-      </small>
-    </label>
+      <label>
+        WhatsApp do responsável
+        {% slot_value_for form_values 'adventure_parent_whatsapp_phone' slot as parent_whatsapp %}
+        <input
+          type="tel"
+          name="adventure_parent_whatsapp_phone_{{ slot }}"
+          value="{% if parent_whatsapp %}{{ parent_whatsapp }}{% else %}{{ form_values|dict_get:'responsavel_whatsapp'|default:'' }}{% endif %}"
+          required
+        />
+        <small class="field-hint">
+          Use o mesmo número registrado no responsável ({{ form_values|dict_get:'responsavel_whatsapp'|default:'-' }}).
+        </small>
+      </label>
       <small class="error-message">{% slot_error_for field_errors 'adventure_parent_whatsapp_phone' slot %}</small>
     </div>
     <div class="field-group">

@@ -5,13 +5,12 @@
     <div class="field-group">
       <label>
         Tem plano de saúde?
-        {% with medical_plan=slot_value_for form_values 'medical_plan' slot %}
+        {% slot_value_for form_values 'medical_plan' slot as medical_plan %}
         <select name="medical_plan_{{ slot }}" data-detail-target="medical-plan-number-detail-{{ slot }}" required>
           <option value="">Selecione</option>
           <option value="sim" {% if medical_plan == 'sim' %}selected{% endif %}>Sim</option>
           <option value="nao" {% if medical_plan == 'nao' %}selected{% endif %}>Não</option>
         </select>
-        {% endwith %}
       </label>
       <small class="error-message">{% slot_error_for field_errors 'medical_plan' slot %}</small>
     </div>
@@ -76,26 +75,24 @@
     <div class="field-group">
       <label>
         Possui alergia cutânea?
-        {% with allergy_skin=slot_value_for form_values 'medical_allergy_skin' slot %}
+        {% slot_value_for form_values 'medical_allergy_skin' slot as allergy_skin %}
         <select name="medical_allergy_skin_{{ slot }}" required>
           <option value="">Selecione</option>
           <option value="sim" {% if allergy_skin == 'sim' %}selected{% endif %}>Sim</option>
           <option value="nao" {% if allergy_skin == 'nao' %}selected{% endif %}>Não</option>
         </select>
-        {% endwith %}
       </label>
     </div>
     <div class="field-group">
       <label>
         Possui alergia alimentar?
         <div class="grid two-columns">
-          {% with allergy_food=slot_value_for form_values 'medical_allergy_food' slot %}
+          {% slot_value_for form_values 'medical_allergy_food' slot as allergy_food %}
           <select name="medical_allergy_food_{{ slot }}" required>
             <option value="">Selecione</option>
             <option value="sim" {% if allergy_food == 'sim' %}selected{% endif %}>Sim</option>
             <option value="nao" {% if allergy_food == 'nao' %}selected{% endif %}>Não</option>
           </select>
-          {% endwith %}
           <input
             type="text"
             name="medical_allergy_food_detail_{{ slot }}"
@@ -111,13 +108,12 @@
     <label>
       Possui alergia a medicamentos?
       <div class="grid two-columns">
-        {% with allergy_med=slot_value_for form_values 'medical_allergy_med' slot %}
+        {% slot_value_for form_values 'medical_allergy_med' slot as allergy_med %}
         <select name="medical_allergy_med_{{ slot }}" required>
           <option value="">Selecione</option>
           <option value="sim" {% if allergy_med == 'sim' %}selected{% endif %}>Sim</option>
           <option value="nao" {% if allergy_med == 'nao' %}selected{% endif %}>Não</option>
         </select>
-        {% endwith %}
         <input
           type="text"
           name="medical_allergy_med_detail_{{ slot }}"
@@ -140,25 +136,23 @@
     <div class="field-group">
       <label>
         Possui problemas cardíacos?
-        {% with medical_heart=slot_value_for form_values 'medical_heart' slot %}
+        {% slot_value_for form_values 'medical_heart' slot as medical_heart %}
         <select name="medical_heart_{{ slot }}" required>
           <option value="">Selecione</option>
           <option value="sim" {% if medical_heart == 'sim' %}selected{% endif %}>Sim</option>
           <option value="nao" {% if medical_heart == 'nao' %}selected{% endif %}>Não</option>
         </select>
-        {% endwith %}
       </label>
     </div>
     <div class="field-group">
       <label>
         Utiliza remédios?
-        {% with medical_heart_meds=slot_value_for form_values 'medical_heart_meds' slot %}
+        {% slot_value_for form_values 'medical_heart_meds' slot as medical_heart_meds %}
         <select name="medical_heart_meds_{{ slot }}" data-detail-target="medical-heart-meds-detail-{{ slot }}" required>
           <option value="">Selecione</option>
           <option value="sim" {% if medical_heart_meds == 'sim' %}selected{% endif %}>Sim</option>
           <option value="nao" {% if medical_heart_meds == 'nao' %}selected{% endif %}>Não</option>
         </select>
-        {% endwith %}
         <small class="dependent-detail" id="medical-heart-meds-detail-{{ slot }}">
           <label>
             Nome do remédio
@@ -178,25 +172,23 @@
     <div class="field-group">
       <label>
         É diabético?
-        {% with medical_diabetic=slot_value_for form_values 'medical_diabetic' slot %}
+        {% slot_value_for form_values 'medical_diabetic' slot as medical_diabetic %}
         <select name="medical_diabetic_{{ slot }}" required>
           <option value="">Selecione</option>
           <option value="sim" {% if medical_diabetic == 'sim' %}selected{% endif %}>Sim</option>
           <option value="nao" {% if medical_diabetic == 'nao' %}selected{% endif %}>Não</option>
         </select>
-        {% endwith %}
       </label>
     </div>
     <div class="field-group">
       <label>
         Utiliza remédios?
-        {% with medical_diabetic_meds=slot_value_for form_values 'medical_diabetic_meds' slot %}
+        {% slot_value_for form_values 'medical_diabetic_meds' slot as medical_diabetic_meds %}
         <select name="medical_diabetic_meds_{{ slot }}" data-detail-target="medical-diabetic-meds-detail-{{ slot }}" required>
           <option value="">Selecione</option>
           <option value="sim" {% if medical_diabetic_meds == 'sim' %}selected{% endif %}>Sim</option>
           <option value="nao" {% if medical_diabetic_meds == 'nao' %}selected{% endif %}>Não</option>
         </select>
-        {% endwith %}
         <small class="dependent-detail" id="medical-diabetic-meds-detail-{{ slot }}">
           <label>
             Nome do remédio
@@ -216,25 +208,23 @@
     <div class="field-group">
       <label>
         Problemas renais?
-        {% with medical_kidney=slot_value_for form_values 'medical_kidney' slot %}
+        {% slot_value_for form_values 'medical_kidney' slot as medical_kidney %}
         <select name="medical_kidney_{{ slot }}" required>
           <option value="">Selecione</option>
           <option value="sim" {% if medical_kidney == 'sim' %}selected{% endif %}>Sim</option>
           <option value="nao" {% if medical_kidney == 'nao' %}selected{% endif %}>Não</option>
         </select>
-        {% endwith %}
       </label>
     </div>
     <div class="field-group">
       <label>
         Utiliza remédios?
-        {% with medical_kidney_meds=slot_value_for form_values 'medical_kidney_meds' slot %}
+        {% slot_value_for form_values 'medical_kidney_meds' slot as medical_kidney_meds %}
         <select name="medical_kidney_meds_{{ slot }}" data-detail-target="medical-kidney-meds-detail-{{ slot }}" required>
           <option value="">Selecione</option>
           <option value="sim" {% if medical_kidney_meds == 'sim' %}selected{% endif %}>Sim</option>
           <option value="nao" {% if medical_kidney_meds == 'nao' %}selected{% endif %}>Não</option>
         </select>
-        {% endwith %}
         <small class="dependent-detail" id="medical-kidney-meds-detail-{{ slot }}">
           <label>
             Nome do remédio
@@ -253,13 +243,12 @@
   <div class="field-group">
     <label>
       Problemas psicológicos?
-      {% with medical_psychological=slot_value_for form_values 'medical_psychological' slot %}
+      {% slot_value_for form_values 'medical_psychological' slot as medical_psychological %}
       <select name="medical_psychological_{{ slot }}" required>
         <option value="">Selecione</option>
         <option value="sim" {% if medical_psychological == 'sim' %}selected{% endif %}>Sim</option>
         <option value="nao" {% if medical_psychological == 'nao' %}selected{% endif %}>Não</option>
       </select>
-      {% endwith %}
     </label>
   </div>
 
@@ -278,25 +267,23 @@
     <div class="field-group">
       <label>
         Teve fraturas ou ferimentos graves recentes?
-        {% with medical_recent_fractures=slot_value_for form_values 'medical_recent_fractures' slot %}
+        {% slot_value_for form_values 'medical_recent_fractures' slot as medical_recent_fractures %}
         <select name="medical_recent_fractures_{{ slot }}" required>
           <option value="">Selecione</option>
           <option value="sim" {% if medical_recent_fractures == 'sim' %}selected{% endif %}>Sim</option>
           <option value="nao" {% if medical_recent_fractures == 'nao' %}selected{% endif %}>Não</option>
         </select>
-        {% endwith %}
       </label>
     </div>
     <div class="field-group">
       <label>
         Passou por cirurgias?
-        {% with medical_surgeries=slot_value_for form_values 'medical_surgeries' slot %}
+        {% slot_value_for form_values 'medical_surgeries' slot as medical_surgeries %}
         <select name="medical_surgeries_{{ slot }}" required>
           <option value="">Selecione</option>
           <option value="sim" {% if medical_surgeries == 'sim' %}selected{% endif %}>Sim</option>
           <option value="nao" {% if medical_surgeries == 'nao' %}selected{% endif %}>Não</option>
         </select>
-        {% endwith %}
       </label>
     </div>
   </div>
@@ -316,14 +303,13 @@
     <div class="field-group">
       <label>
         Tipo sanguíneo
-        {% with medical_blood_type=slot_value_for form_values 'medical_blood_type' slot %}
+        {% slot_value_for form_values 'medical_blood_type' slot as medical_blood_type %}
         <select name="medical_blood_type_{{ slot }}" required>
           <option value="">Selecione</option>
           {% for blood in blood_types %}
           <option value="{{ blood }}" {% if medical_blood_type == blood %}selected{% endif %}>{{ blood }}</option>
           {% endfor %}
         </select>
-        {% endwith %}
       </label>
     </div>
     <div class="field-group checkbox-field">

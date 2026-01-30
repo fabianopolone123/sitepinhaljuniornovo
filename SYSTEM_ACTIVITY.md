@@ -436,3 +436,8 @@ tira o quadrado do funcoi
 - **Request**: O template de cadastro guiado em /cadastro/aventureiro/ usa slot_value_for em partials sem carregar as tags.
 - **Actions**: Adicionei {% load form_extras %} a cada partial (egister_slot_adventurer, _medical, _term) para garantir que as tags customizadas estejam disponíveis.
 - **Notes**: Executar python manage.py test não foi necessário; a alteração é apenas de template.
+
+## 2026-01-30T02:32:42+00:00Z — Corrige with nos partials
+- **Request**: O cadastro guiado usa {% with ... slot_value_for ... %} em partials e estava quebrando a renderização em /cadastro/aventureiro/.
+- **Actions**: Substituí cada bloco with por {% slot_value_for ... as ... %} direto, removendo os endwith e mantendo os selects funcionando com os valores reusados.
+- **Notes**: rodado python manage.py check para garantir que os templates compilam.
