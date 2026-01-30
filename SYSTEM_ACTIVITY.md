@@ -441,3 +441,8 @@ tira o quadrado do funcoi
 - **Request**: O cadastro guiado usa {% with ... slot_value_for ... %} em partials e estava quebrando a renderização em /cadastro/aventureiro/.
 - **Actions**: Substituí cada bloco with por {% slot_value_for ... as ... %} direto, removendo os endwith e mantendo os selects funcionando com os valores reusados.
 - **Notes**: rodado python manage.py check para garantir que os templates compilam.
+
+## 2026-01-30T02:34:37+00:00Z — Remove endwith
+- **Request**: O cadastro de aventureiros quebrava em /cadastro/aventureiro/ porque restava um {% endwith %} sem {% with %}.
+- **Actions**: Reescrevi a data de nascimento para usar slot_value_for ... as ... isoladamente e removi o bloco inválido.
+- **Notes**: python manage.py check confirma os templates

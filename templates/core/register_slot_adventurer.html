@@ -31,11 +31,9 @@
     <label>
       Data de nascimento
       <div class="date-selects">
-        {% with
-          selected_day=slot_value_for form_values 'adventure_birth_day' slot
-          selected_month=slot_value_for form_values 'adventure_birth_month' slot
-          selected_year=slot_value_for form_values 'adventure_birth_year' slot
-        %}
+        {% slot_value_for form_values 'adventure_birth_day' slot as selected_day %}
+        {% slot_value_for form_values 'adventure_birth_month' slot as selected_month %}
+        {% slot_value_for form_values 'adventure_birth_year' slot as selected_year %}
         <select name="adventure_birth_day_{{ slot }}" required>
           <option value="">Dia</option>
           {% for day in days %}
@@ -54,7 +52,6 @@
           <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}</option>
           {% endfor %}
         </select>
-        {% endwith %}
       </div>
     </label>
     <small class="error-message">{% slot_error_for field_errors 'adventure_birth_date' slot %}</small>
