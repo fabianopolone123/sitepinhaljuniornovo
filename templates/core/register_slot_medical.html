@@ -1,5 +1,10 @@
 {% load form_extras %}
 <div class="slot-panel" data-slot-panel data-slot="{{ slot }}">
+  <div class="slot-heading">
+    <p class="slot-heading__title" data-slot-heading="medical" data-slot="{{ slot }}">
+      Ficha médica do Aventureiro {{ slot }}
+    </p>
+  </div>
   <p>Registre os dados solicitados no formulário oficial.</p>
   <div class="grid two-columns">
     <div class="field-group">

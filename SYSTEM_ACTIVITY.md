@@ -451,3 +451,28 @@ tira o quadrado do funcoi
 - **Request**: O template de cadastro de aventureiros falhava depois dos ajustes por causa de ifs com slot_value_for gerando erro 'Unused form_values' e ainda restavam with/endwith sem pares.
 - **Actions**: Passei os valores do helper para variáveis (s ...) antes de usar em if/checked, garantindo que os slot_value_for não apareçam diretamente dentro da condição. Também limpei o checkbox do loop de classes/condições para usar a variável atribuída e mantive as assinaturas preview usando os valores cacheados.
 - **Notes**: python manage.py check confirmou que o template compila.
+
+## 2026-01-30T02:56:03+00:00Z — Passo 1 placeholder
+- **Request**: Adicionar placeholder de endereço do responsável e reforçar que os pais devem informar nome completo durante o cadastro guiado.
+- **Actions**: Atualizei o campo de endereço para exibir exemplo completo e nova dica, e mudei os rótulos de pai/mãe para 'Nome completo do pai/mãe'.
+- **Notes**: Sem testes automatizados; é apenas texto.
+
+## 2026-01-30T02:59:21+00:00Z — Passo 2: nomes dinâmicos
+- **Request**: Atualizei as abas do cadastro para refletirem os nomes digitados e adicionei cabeçalhos específicos para cada ficha e termo.
+- **Actions**: Inseri spans com data-attributes na label do slot ativo, acrescentei cabeçalhos nos partials com data-slot-heading, e fiz o JS atualizar abas, previews e titles automaticamente enquanto o usuário digita nomes.
+- **Notes**: Rodado python manage.py check após as alterações.
+
+## 2026-01-30T03:02:37+00:00Z — Passo 3: preencher campos
+- **Request**: Automatizar o preenchimento de campos do aventureiro (endereço, WhatsApp dos pais) a partir dos dados já digitados no responsável.
+- **Actions**: Adicionei atributos data-auto-from aos inputs de endereço e WhatsApp dos pais nos partials e escrevi lógica em egister-adventurer.js que replica o valor dos campos esponsavel_whatsapp e esponsavel_endereco para todos os slots enquanto o usuário digita, respeitando edições manuais.
+- **Notes**: Executado python manage.py check.
+
+## 2026-01-30T03:05:35+00:00Z — Passo 4: termo com dados
+- **Request**: Duplicar os dados do responsável (nome completo e telefone) para os campos do termo e garantir que o endereço do responsável se propaga para as fichas
+- **Actions**: Adicionei ids aos inputs do responsável para facilitar a captura via JS, marquei os campos 	erm_responsible e 	erm_contact_phone com novos data-attributers e estendi o mapeamento data-auto-from para as informações de nome, telefone e endereço; o script agora escuta esponsavel_nome e esponsavel_sobrenome para preencher automaticamente o nome completo no termo e continua replicando telefone/WhatsApp/endereços nos outros slots.
+- **Notes**: java??
+
+## 2026-01-30T03:06:27+00:00Z — Passo 5: revisão final
+- **Request**: Confirmar que o backend já grava os dados por slot (ficha médica, termo e assinaturas individuais) e que os campos adicionados no frontend estão no fluxo de registro.
+- **Actions**: Revisitei egister_adventurer e a estrutura de slots para garantir que todas as informações novas (ficha, termo, assinaturas) continuam sendo persistidas por slot e que o preenchimento automático não modifica os nomes dos inputs esperados.
+- **Notes**: Testado com python manage.py check.

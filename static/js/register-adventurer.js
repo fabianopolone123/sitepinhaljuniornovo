@@ -10,8 +10,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const activeSlotInput = document.querySelector("[name='active_adventurer_slot']");
   const adventurerSlotLabel = document.querySelector("#adventurer-slot-label");
   const slotPanels = Array.from(document.querySelectorAll("[data-slot-panel]"));
+  const slotHeadingElements = Array.from(document.querySelectorAll("[data-slot-heading]"));
+  const slotNameInputs = Array.from(document.querySelectorAll("[data-slot-name-input]"));
+  const activeSlotNumber = document.querySelector("[data-active-slot-number]");
+  const activeSlotName = document.querySelector("[data-active-slot-name]");
   const slotOrder = adventurerTabs.map((tab) => tab.dataset.adventurerTab);
   let currentStep = 1;
+  const responsavelNomeInput = document.getElementById("responsavel_nome");
+  const responsavelSobrenomeInput = document.getElementById("responsavel_sobrenome");
+  const responsavelTelefoneInput = document.getElementById("responsavel_telefone");
+  const responsavelWhatsappInput = document.getElementById("responsavel_whatsapp");
+  const responsavelEnderecoInput = document.getElementById("responsavel_endereco");
   let currentAdventurerSlot = activeSlotInput?.value || "01";
 
   const getNormalizedSlotCount = () => {
@@ -99,6 +108,122 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const normalizeSlotValue = (value) => value.toString().padStart(2, "0");
 
+  const autoTargetsBySource = new Map();
+  document
+    .querySelectorAll("[data-auto-from]")
+    .forEach((target) => {
+      const sourceName = target.dataset.autoFrom?.trim();
+      if (!sourceName) {
+        return;
+      }
+      const targets = autoTargetsBySource.get(sourceName) || [];
+      targets.push(target);
+      autoTargetsBySource.set(sourceName, targets);
+    });
+
+  const applyAutoValue = (target, value) => {
+    const normalized = value?.trim() || "";
+    if (!normalized) {
+      return;
+    }
+    const current = target.value?.trim() || "";
+    const lastAuto = target.dataset.autoValue || "";
+    if (!current || current === lastAuto) {
+      target.value = normalized;
+      target.dataset.autoValue = normalized;
+    }
+  };
+
+  const updateAutoTargets = (sourceName, value) => {
+    const targets = autoTargetsBySource.get(sourceName);
+    if (!targets) {
+      return;
+    }
+    targets.forEach((target) => applyAutoValue(target, value));
+  };
+
+  const autoSourceSelector = "[name='responsavel_whatsapp'],[name='responsavel_endereco'],[name='responsavel_telefone']";
+  const autoSourceFields = Array.from(document.querySelectorAll(autoSourceSelector));
+  autoSourceFields.forEach((field) => {
+    field.addEventListener("input", () => updateAutoTargets(field.name, field.value));
+    updateAutoTargets(field.name, field.value);
+  });
+
+  const termResponsibleInputs = Array.from(
+    document.querySelectorAll("[data-auto-responsible-fullname]")
+  );
+  const getResponsibleNames = () => {
+    const first = responsavelNomeInput?.value?.trim() || "";
+    const last = responsavelSobrenomeInput?.value?.trim() || "";
+    return [first, last].filter(Boolean).join(" ");
+  };
+  const syncTermResponsible = () => {
+    const fullName = getResponsibleNames();
+    termResponsibleInputs.forEach((input) => applyAutoValue(input, fullName));
+  };
+  [responsavelNomeInput, responsavelSobrenomeInput].forEach((field) => {
+    field?.addEventListener("input", syncTermResponsible);
+  });
+  syncTermResponsible();
+
+  const getSlotName = (slot) => {
+    const input = document.querySelector(`[data-slot-name-input="${slot}"]`);
+    return input?.value.trim() || "";
+  };
+
+  const formatTabLabel = (slot, name) => {
+    if (!name) {
+      return `Aventureiro ${slot}`;
+    }
+    return `${slot} • ${name}`;
+  };
+
+  const headingTemplates = {
+    adventure: (slot, name) => (name ? `${name}` : `Aventureiro ${slot}`),
+    medical: (slot, name) => (name ? `Ficha médica • ${name}` : `Ficha médica ${slot}`),
+    term: (slot, name) => (name ? `Termo de autorização • ${name}` : `Termo ${slot}`),
+  };
+
+  const refreshSlotHeadings = (slot) => {
+    const name = getSlotName(slot);
+    slotHeadingElements.forEach((element) => {
+      if (element.dataset.slot !== slot) {
+        return;
+      }
+      const template = headingTemplates[element.dataset.slotHeading];
+      if (!template) {
+        return;
+      }
+      element.textContent = template(slot, name);
+    });
+  };
+
+  const refreshTabLabel = (slot) => {
+    const name = getSlotName(slot);
+    const tab = adventurerTabs.find((candidate) => candidate.dataset.adventurerTab === slot);
+    if (tab) {
+      tab.textContent = formatTabLabel(slot, name);
+    }
+  };
+
+  const refreshActiveSlotLabel = (slot) => {
+    const name = getSlotName(slot);
+    if (activeSlotNumber) {
+      activeSlotNumber.textContent = `Aventureiro ${slot}`;
+    }
+    if (activeSlotName) {
+      activeSlotName.textContent = name ? ` • ${name}` : "";
+    }
+  };
+
+  const refreshSlotMetadata = (slot) => {
+    refreshTabLabel(slot);
+    refreshSlotHeadings(slot);
+    if (slot === currentAdventurerSlot) {
+      refreshActiveSlotLabel(slot);
+    }
+  };
+
   const updateTabVisibility = (count) => {
     const normalizedCount = Math.min(Math.max(1, count), slotOrder.length || 1);
     adventurerTabs.forEach((tab, index) => {
@@ -125,9 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
     adventurerTabs.forEach((tab) => {
       tab.classList.toggle("is-active", tab.dataset.adventurerTab === normalized);
     });
-    if (adventurerSlotLabel) {
-      adventurerSlotLabel.textContent = `Aventureiro ${normalized}`;
-    }
+    refreshSlotMetadata(normalized);
     updateSlotPanels();
     loadPhotoPreview(normalized);
   };
@@ -154,6 +277,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const initialCount = getNormalizedSlotCount();
   updateTabVisibility(initialCount);
   setActiveAdventurerSlot(currentAdventurerSlot, false);
+  slotOrder.forEach((slot) => refreshSlotMetadata(slot));
+
+  slotNameInputs.forEach((input) => {
+    const slot = input.dataset.slotNameInput;
+    if (!slot) {
+      return;
+    }
+    input.addEventListener("input", () => refreshSlotMetadata(slot));
+  });
 
   const setError = (element) => {
     element.classList.add("input-error");

@@ -134,6 +134,22 @@ body {
   display: block;
 }
 
+.slot-heading {
+  margin-bottom: 1rem;
+}
+
+.slot-heading__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f3a74;
+}
+
+.adventurer-slot-label [data-active-slot-name] {
+  margin-left: 0.4rem;
+  font-weight: 500;
+  color: #4c587b;
+}
+
 .adventurer-tab {
   font-size: 0.85rem;
   padding: 0.35rem 0.8rem;

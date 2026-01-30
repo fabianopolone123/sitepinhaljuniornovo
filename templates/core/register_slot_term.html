@@ -1,5 +1,10 @@
 {% load form_extras %}
 <div class="slot-panel" data-slot-panel data-slot="{{ slot }}">
+  <div class="slot-heading">
+    <p class="slot-heading__title" data-slot-heading="term" data-slot="{{ slot }}">
+      Termo de autorização do Aventureiro {{ slot }}
+    </p>
+  </div>
   {% slot_value_for form_values 'term_signature' slot as term_signature %}
   {% slot_value_for form_values 'term_data_truth' slot as term_data_truth %}
   {% slot_value_for form_values 'term_confirmation' slot as term_confirmation %}
@@ -10,6 +15,7 @@
     <input
       type="text"
       name="term_responsible_{{ slot }}"
+      data-auto-responsible-fullname="true"
       value="{% slot_value_for form_values 'term_responsible' slot %}"
       placeholder="Nome do responsável"
       required
@@ -107,6 +113,7 @@
         <input
           type="tel"
           name="term_contact_phone_{{ slot }}"
+          data-auto-from="responsavel_telefone"
           value="{% slot_value_for form_values 'term_contact_phone' slot %}"
           required
         />

@@ -80,17 +80,29 @@
 
           <div class="grid two-columns">
             <div class="field-group">
-              <label>
-                Nome
-                <input type="text" name="responsavel_nome" value="{{ form_values.responsavel_nome|default:'' }}" required />
-              </label>
+            <label>
+              Nome
+              <input
+                id="responsavel_nome"
+                type="text"
+                name="responsavel_nome"
+                value="{{ form_values.responsavel_nome|default:'' }}"
+                required
+              />
+            </label>
               <small class="error-message">{{ field_errors.responsavel_nome|default:'' }}</small>
             </div>
             <div class="field-group">
-              <label>
-                Sobrenome
-                <input type="text" name="responsavel_sobrenome" value="{{ form_values.responsavel_sobrenome|default:'' }}" required />
-              </label>
+            <label>
+              Sobrenome
+              <input
+                id="responsavel_sobrenome"
+                type="text"
+                name="responsavel_sobrenome"
+                value="{{ form_values.responsavel_sobrenome|default:'' }}"
+                required
+              />
+            </label>
               <small class="error-message">{{ field_errors.responsavel_sobrenome|default:'' }}</small>
             </div>
           </div>
@@ -119,10 +131,16 @@
               <small class="error-message">{{ field_errors.responsavel_cpf|default:'' }}</small>
             </div>
             <div class="field-group">
-              <label>
-                Telefone
-                <input type="tel" name="responsavel_telefone" value="{{ form_values.responsavel_telefone|default:'' }}" required />
-              </label>
+            <label>
+              Telefone
+              <input
+                id="responsavel_telefone"
+                type="tel"
+                name="responsavel_telefone"
+                value="{{ form_values.responsavel_telefone|default:'' }}"
+                required
+              />
+            </label>
               <small class="error-message">{{ field_errors.responsavel_telefone|default:'' }}</small>
             </div>
           </div>
@@ -130,7 +148,13 @@
           <div class="field-group">
             <label>
               WhatsApp
-              <input type="tel" name="responsavel_whatsapp" value="{{ form_values|dict_get:'responsavel_whatsapp'|default:'' }}" required />
+              <input
+                id="responsavel_whatsapp"
+                type="tel"
+                name="responsavel_whatsapp"
+                value="{{ form_values|dict_get:'responsavel_whatsapp'|default:'' }}"
+                required
+              />
             </label>
             <small class="error-message">{{ field_errors.responsavel_whatsapp|default:'' }}</small>
           </div>
@@ -138,8 +162,18 @@
           <div class="field-group">
             <label>
               Endereço completo
-              <input type="text" name="responsavel_endereco" value="{{ form_values.responsavel_endereco|default:'' }}" required />
+              <input
+                id="responsavel_endereco"
+                type="text"
+                name="responsavel_endereco"
+                placeholder="Ex: Av. das Araucárias, 123 – Centro, Pinhalzinho – SP"
+                value="{{ form_values.responsavel_endereco|default:'' }}"
+                required
+              />
             </label>
+            <small class="field-hint">
+              Informe o endereço compartilhado com o aventureiro (geralmente o mesmo local).
+            </small>
             <small class="error-message">{{ field_errors.responsavel_endereco|default:'' }}</small>
           </div>
           <div class="signature-block">
@@ -187,11 +221,11 @@
           <div class="grid two-columns">
             <fieldset>
               <legend>Pai</legend>
-              <div class="field-group">
-                <label>
-                  Nome
-                  <input type="text" name="pai_nome" value="{{ form_values.pai_nome|default:'' }}" required />
-                </label>
+          <div class="field-group">
+            <label>
+              Nome completo do pai
+              <input type="text" name="pai_nome" value="{{ form_values.pai_nome|default:'' }}" required />
+            </label>
                 <small class="error-message">{{ field_errors.pai_nome|default:'' }}</small>
               </div>
               <div class="field-group">
@@ -227,11 +261,11 @@
             </fieldset>
             <fieldset>
               <legend>Mãe</legend>
-              <div class="field-group">
-                <label>
-                  Nome
-                  <input type="text" name="mae_nome" value="{{ form_values.mae_nome|default:'' }}" required />
-                </label>
+          <div class="field-group">
+            <label>
+              Nome completo da mãe
+              <input type="text" name="mae_nome" value="{{ form_values.mae_nome|default:'' }}" required />
+            </label>
                 <small class="error-message">{{ field_errors.mae_nome|default:'' }}</small>
               </div>
               <div class="field-group">
@@ -331,7 +365,8 @@
             </div>
           </div>
           <p class="adventurer-slot-label" id="adventurer-slot-label">
-            Aventureiro {{ active_adventurer_slot|default:"01" }}
+            <span data-active-slot-number>Aventureiro {{ active_adventurer_slot|default:"01" }}</span>
+            <span data-active-slot-name></span>
           </p>
           <input type="hidden" name="active_adventurer_slot" value="{{ active_adventurer_slot|default:'01' }}" />
           {% for slot in adventurer_slots %}

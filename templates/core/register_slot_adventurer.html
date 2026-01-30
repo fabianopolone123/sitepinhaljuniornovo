@@ -1,11 +1,17 @@
 {% load form_extras %}
 <div class="slot-panel" data-slot-panel data-slot="{{ slot }}">
+  <div class="slot-heading">
+    <p class="slot-heading__title" data-slot-heading="adventure" data-slot="{{ slot }}">
+      Aventureiro {{ slot }}
+    </p>
+  </div>
   <div class="field-group">
     <label>
       Nome completo
       <input
         type="text"
         name="adventure_full_name_{{ slot }}"
+        data-slot-name-input="{{ slot }}"
         value="{% slot_value_for form_values 'adventure_full_name' slot %}"
         required
       />
@@ -124,6 +130,7 @@
         <input
           type="text"
           name="adventure_street_{{ slot }}"
+          data-auto-from="responsavel_endereco"
           value="{% slot_value_for form_values 'adventure_street' slot %}"
           required
         />
@@ -136,6 +143,7 @@
         <input
           type="text"
           name="adventure_number_{{ slot }}"
+          data-auto-from="responsavel_endereco"
           value="{% slot_value_for form_values 'adventure_number' slot %}"
           required
         />
@@ -151,6 +159,7 @@
         <input
           type="text"
           name="adventure_neighborhood_{{ slot }}"
+          data-auto-from="responsavel_endereco"
           value="{% slot_value_for form_values 'adventure_neighborhood' slot %}"
           required
         />
@@ -162,6 +171,7 @@
         <input
           type="text"
           name="adventure_postal_code_{{ slot }}"
+          data-auto-from="responsavel_endereco"
           value="{% slot_value_for form_values 'adventure_postal_code' slot %}"
           required
         />
@@ -176,6 +186,7 @@
         <input
           type="text"
           name="adventure_city_{{ slot }}"
+          data-auto-from="responsavel_endereco"
           value="{% slot_value_for form_values 'adventure_city' slot %}"
           required
         />
@@ -187,6 +198,7 @@
         <input
           type="text"
           name="adventure_state_{{ slot }}"
+          data-auto-from="responsavel_endereco"
           value="{% slot_value_for form_values 'adventure_state' slot %}"
           required
         />
@@ -251,6 +263,7 @@
         <input
           type="tel"
           name="adventure_parent_whatsapp_phone_{{ slot }}"
+          data-auto-from="responsavel_whatsapp"
           value="{% if parent_whatsapp %}{{ parent_whatsapp }}{% else %}{{ form_values|dict_get:'responsavel_whatsapp'|default:'' }}{% endif %}"
           required
         />
