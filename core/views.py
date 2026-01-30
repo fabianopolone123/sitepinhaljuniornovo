@@ -47,7 +47,7 @@ DAY_OPTIONS = [str(day) for day in range(1, 32)]
 MONTHLY_NAMES_PT = {
     1: "Janeiro",
     2: "Fevereiro",
-    3: "Março",
+    3: "MarÃ§o",
     4: "Abril",
     5: "Maio",
     6: "Junho",
@@ -79,7 +79,7 @@ CLASS_OPTIONS = [
     ("abelhinhas", "Abelhinhas"),
     ("luminares", "Luminares"),
     ("edificadores", "Edificadores"),
-    ("maos", "Mãos Ajudadoras"),
+    ("maos", "MÃ£os Ajudadoras"),
 ]
 
 MEDICAL_CONDITIONS = [
@@ -88,12 +88,12 @@ MEDICAL_CONDITIONS = [
     ("hepatite", "Hepatite"),
     ("dengue", "Dengue"),
     ("pneumonia", "Pneumonia"),
-    ("malaria", "Malária"),
+    ("malaria", "MalÃ¡ria"),
     ("febre_amarela", "Febre Amarela"),
-    ("rubeola", "Rubéola"),
+    ("rubeola", "RubÃ©ola"),
     ("sarampo", "Sarampo"),
-    ("tetano", "Tétano"),
-    ("variola", "Varíola"),
+    ("tetano", "TÃ©tano"),
+    ("variola", "VarÃ­ola"),
     ("coqueluche", "Coqueluche"),
     ("difteria", "Difteria"),
     ("caxumba", "Caxumba"),
@@ -101,11 +101,11 @@ MEDICAL_CONDITIONS = [
     ("bronquite", "Bronquite"),
 ]
 
-BLOOD_TYPES = ["A+", "A-", "AB+", "AB-", "B+", "B-", "O+", "O-", "Não sabe"]
+BLOOD_TYPES = ["A+", "A-", "AB+", "AB-", "B+", "B-", "O+", "O-", "NÃ£o sabe"]
 
 EDUCATION_CHOICES = [
     ("fundamental", "Ensino Fundamental"),
-    ("medio", "Ensino Médio"),
+    ("medio", "Ensino MÃ©dio"),
     ("faculdade", "Faculdade"),
 ]
 
@@ -184,7 +184,7 @@ def _clean_phone(phone):
 def _send_whatsapp_code(phone, code):
     payload = {
         "phone": phone,
-        "message": f"Código de recuperação: {code}",
+        "message": f"CÃ³digo de recuperaÃ§Ã£o: {code}",
     }
     headers = {
         "Authorization": f"Bearer {WAPI_TOKEN}",
@@ -196,13 +196,13 @@ def _send_whatsapp_code(phone, code):
     except requests.HTTPError as exc:
         detail = exc.response.text if exc.response is not None else str(exc)
         logger.warning(
-            "Falha HTTP ao enviar código WhatsApp para %s: %s", phone, detail, exc_info=True
+            "Falha HTTP ao enviar cÃ³digo WhatsApp para %s: %s", phone, detail, exc_info=True
         )
         return False, str(detail or "").strip()
     except requests.RequestException as exc:
         detail = str(exc)
         logger.warning(
-            "Erro de requisição ao enviar código WhatsApp para %s: %s",
+            "Erro de requisiÃ§Ã£o ao enviar cÃ³digo WhatsApp para %s: %s",
             phone,
             detail,
             exc_info=True,
@@ -257,14 +257,14 @@ def login_screen(request):
             auth_login(request, user)
             messages.success(request, "Bem-vindo ao painel!")
             return redirect("dashboard")
-        messages.error(request, "Usuário ou senha inválidos.")
+        messages.error(request, "UsuÃ¡rio ou senha invÃ¡lidos.")
 
     return render(request, "core/login.html", context)
 
 
 def logout_view(request):
     auth_logout(request)
-    messages.info(request, "Sessão encerrada. Faça login novamente.")
+    messages.info(request, "SessÃ£o encerrada. FaÃ§a login novamente.")
     return redirect("login")
 
 
@@ -274,7 +274,7 @@ def update_responsible(request):
         return redirect("dashboard")
 
     if not hasattr(request.user, "responsavel"):
-        messages.error(request, "Você precisa ser responsável para editar os dados.")
+        messages.error(request, "VocÃª precisa ser responsÃ¡vel para editar os dados.")
         return redirect("dashboard")
 
     responsible = request.user.responsavel
@@ -290,11 +290,11 @@ def update_responsible(request):
     password2 = request.POST.get("responsavel_password2", "")
 
     if not nome:
-        errors.append("Informe o nome do responsável.")
+        errors.append("Informe o nome do responsÃ¡vel.")
     if not sobrenome:
         errors.append("Informe o sobrenome.")
     if sexo not in dict(SEX_CHOICES):
-        errors.append("Informe o sexo do responsável.")
+        errors.append("Informe o sexo do responsÃ¡vel.")
     if not cpf:
         errors.append("Informe o CPF.")
     if not telefone:
@@ -302,13 +302,13 @@ def update_responsible(request):
     if not whatsapp:
         errors.append("Informe o WhatsApp.")
     if not endereco:
-        errors.append("Informe o endereço.")
+        errors.append("Informe o endereÃ§o.")
 
     if password1 or password2:
         if password1 != password2:
-            errors.append("As senhas não conferem.")
+            errors.append("As senhas nÃ£o conferem.")
         elif len(password1) != 4 or not password1.isdigit():
-            errors.append("A senha precisa ter 4 dígitos numéricos.")
+            errors.append("A senha precisa ter 4 dÃ­gitos numÃ©ricos.")
 
     if errors:
         for err in errors:
@@ -328,7 +328,7 @@ def update_responsible(request):
     responsible.endereco = endereco
     responsible.sexo = sexo
     responsible.save()
-    messages.success(request, "Dados do responsável atualizados com sucesso.")
+    messages.success(request, "Dados do responsÃ¡vel atualizados com sucesso.")
     return redirect("dashboard")
 
 
@@ -338,7 +338,7 @@ def update_adventurer(request, pk):
         return redirect("dashboard")
 
     if not hasattr(request.user, "responsavel"):
-        messages.error(request, "Você precisa ser responsável para editar aventureiros.")
+        messages.error(request, "VocÃª precisa ser responsÃ¡vel para editar aventureiros.")
         return redirect("dashboard")
 
     adventurer = get_object_or_404(Adventurer, pk=pk, responsible=request.user.responsavel)
@@ -362,11 +362,11 @@ def update_adventurer(request, pk):
         ("sobrenome do aventureiro", sobrenome),
         ("documento", documento),
         ("alergias", alergias),
-        ("medicação contínua", medicacao),
-        ("observações", observacao),
-        ("contato de emergência", emergencia_nome),
-        ("telefone de emergência", emergencia_telefone),
-        ("WhatsApp de emergência", emergencia_whatsapp),
+        ("medicaÃ§Ã£o contÃ­nua", medicacao),
+        ("observaÃ§Ãµes", observacao),
+        ("contato de emergÃªncia", emergencia_nome),
+        ("telefone de emergÃªncia", emergencia_telefone),
+        ("WhatsApp de emergÃªncia", emergencia_whatsapp),
         ("sexo do aventureiro", sexo),
     ):
         if not value:
@@ -378,7 +378,7 @@ def update_adventurer(request, pk):
         try:
             birth_date = date(int(ano), int(mes), int(dia))
         except (ValueError, TypeError):
-            errors.append("Informe uma data de nascimento válida.")
+            errors.append("Informe uma data de nascimento vÃ¡lida.")
     if errors:
         for err in errors:
             messages.error(request, err)
@@ -413,7 +413,7 @@ def forgot_password(request):
         try:
             responsible = Responsible.objects.get(cpf=cpf)
         except Responsible.DoesNotExist:
-            error = "CPF não encontrado."
+            error = "CPF nÃ£o encontrado."
         else:
             code = f"{random.randint(0, 9999):04d}"
             recovery = PasswordRecovery.objects.create(
@@ -425,13 +425,13 @@ def forgot_password(request):
             request.session["recovery_id"] = recovery.id
             sent, detail = _send_whatsapp_code(phone, code)
             if sent:
-                messages.success(request, "Código enviado pelo WhatsApp.")
+                messages.success(request, "CÃ³digo enviado pelo WhatsApp.")
                 return redirect("verify_code", recovery_id=recovery.id)
             if settings.DEBUG:
                 request.session["recovery_debug_code"] = {"id": recovery.id, "code": code}
-                messages.success(request, "Código gerado (modo debug).")
+                messages.success(request, "CÃ³digo gerado (modo debug).")
                 return redirect("verify_code", recovery_id=recovery.id)
-            error = "Não foi possível enviar o código via WhatsApp no momento."
+            error = "NÃ£o foi possÃ­vel enviar o cÃ³digo via WhatsApp no momento."
             error_detail = detail
 
     return render(
@@ -444,7 +444,7 @@ def forgot_password(request):
 def verify_code(request, recovery_id):
     recovery = get_object_or_404(PasswordRecovery, pk=recovery_id)
     if recovery.used or recovery.is_expired():
-        messages.error(request, "Este código expirou ou já foi utilizado.")
+        messages.error(request, "Este cÃ³digo expirou ou jÃ¡ foi utilizado.")
         return redirect("forgot_password")
 
     verified = request.session.get("recovery_verified") == recovery.id
@@ -456,16 +456,16 @@ def verify_code(request, recovery_id):
     if request.method == "POST":
         if "new_password1" in request.POST:
             if not verified:
-                messages.error(request, "Confirme o código antes de redefinir.")
+                messages.error(request, "Confirme o cÃ³digo antes de redefinir.")
                 return redirect("verify_code", recovery_id=recovery.id)
             password1 = request.POST.get("new_password1", "")
             password2 = request.POST.get("new_password2", "")
             if not password1 or not password2:
                 messages.error(request, "Informe e confirme a nova senha.")
             elif password1 != password2:
-                messages.error(request, "As senhas não conferem.")
+                messages.error(request, "As senhas nÃ£o conferem.")
             elif len(password1) != 4 or not password1.isdigit():
-                messages.error(request, "A senha precisa ter 4 dígitos numéricos.")
+                messages.error(request, "A senha precisa ter 4 dÃ­gitos numÃ©ricos.")
             else:
                 user = recovery.responsible.user
                 user.set_password(password1)
@@ -474,17 +474,17 @@ def verify_code(request, recovery_id):
                 request.session.pop("recovery_verified", None)
                 messages.success(
                     request,
-                    "Senha redefinida com sucesso. Use o código enviado para entrar.",
+                    "Senha redefinida com sucesso. Use o cÃ³digo enviado para entrar.",
                 )
                 return redirect("login")
         else:
             code = request.POST.get("code", "").strip()
             if code != recovery.code:
-                messages.error(request, "Código inválido.")
+                messages.error(request, "CÃ³digo invÃ¡lido.")
             else:
                 request.session["recovery_verified"] = recovery.id
                 verified = True
-                messages.success(request, "Código confirmado. Agora informe a nova senha.")
+                messages.success(request, "CÃ³digo confirmado. Agora informe a nova senha.")
 
     return render(
         request,
@@ -504,7 +504,7 @@ def pay_monthly_fees(request, year, month):
         return redirect("dashboard")
 
     if not hasattr(request.user, "responsavel"):
-        messages.error(request, "Você precisa ser responsável para pagar mensalidades.")
+        messages.error(request, "VocÃª precisa ser responsÃ¡vel para pagar mensalidades.")
         return redirect("dashboard")
 
     responsible = request.user.responsavel
@@ -512,7 +512,7 @@ def pay_monthly_fees(request, year, month):
         responsible=responsible, year=year, month=month, status=MonthlyFee.PENDING
     )
     if not fees.exists():
-        messages.info(request, "Não há mensalidades pendentes para este período.")
+        messages.info(request, "NÃ£o hÃ¡ mensalidades pendentes para este perÃ­odo.")
         return redirect("dashboard")
 
     for fee in fees:
@@ -543,7 +543,7 @@ def finance_pix(request, year, month):
             }
         )
     if not hasattr(request.user, "responsavel"):
-        messages.error(request, "Você precisa ser responsável para gerar o PIX.")
+        messages.error(request, "VocÃª precisa ser responsÃ¡vel para gerar o PIX.")
         return redirect("dashboard")
 
     responsible = request.user.responsavel
@@ -553,7 +553,7 @@ def finance_pix(request, year, month):
         )
     )
     if not pending_fees:
-        messages.info(request, "Não há mensalidades pendentes nesse período.")
+        messages.info(request, "NÃ£o hÃ¡ mensalidades pendentes nesse perÃ­odo.")
         return redirect("dashboard")
 
     random_amount = Decimal(random.randint(100, 300)) / Decimal("100")
@@ -586,7 +586,7 @@ def finance_pix(request, year, month):
             tel=responsible.whatsapp,
         )
         if not ok:
-            error_message = f"Não foi possível gerar o PIX: {info}"
+            error_message = f"NÃ£o foi possÃ­vel gerar o PIX: {info}"
         else:
             transaction_data = (
                 (data or {}).get("point_of_interaction") or {}
@@ -632,7 +632,7 @@ def mp_webhook(request):
             payload = {key: value for key, value in request.GET.items()}
 
     if not payload:
-        return HttpResponseBadRequest("payload inválido")
+        return HttpResponseBadRequest("payload invÃ¡lido")
 
     resource = payload.get("data") or payload.get("transaction") or {}
     fallback_ids = (
@@ -652,7 +652,7 @@ def mp_webhook(request):
     if not charge:
         charge = PixCharge.objects.filter(mp_payment_id=payment_id).first()
     if not charge:
-        logger.warning("Webhook MP sem cobrança conhecida (%s)", external_reference)
+        logger.warning("Webhook MP sem cobranÃ§a conhecida (%s)", external_reference)
         return JsonResponse({"status": "charge_not_found"}, status=404)
 
     charge.raw_response = payment_data
@@ -854,52 +854,52 @@ def register_adventurer(request):
                 ("adventure_cpf", adventure_cpf),
             ):
                 if not value:
-                    field_errors[f"{key}_{slot}"] = "Campo obrigat�rio."
+                    field_errors[f"{key}_{slot}"] = "Campo obrigatório."
 
             if not adventure_parent_whatsapp_phone:
-                field_errors[f"adventure_parent_whatsapp_phone_{slot}"] = "Informe o WhatsApp do respons�vel."
+                field_errors[f"adventure_parent_whatsapp_phone_{slot}"] = "Informe o WhatsApp do responsável."
             if not adventure_shirt_size:
                 field_errors[f"adventure_shirt_size_{slot}"] = "Informe o tamanho da camiseta."
             if not adventure_data_signature:
                 field_errors[f"adventure_data_signature_{slot}"] = "Assine os dados do aventureiro."
             if not adventure_data_truth:
-                field_errors[f"adventure_data_truth_{slot}"] = "Confirme que os dados do aventureiro s�o verdadeiros."
+                field_errors[f"adventure_data_truth_{slot}"] = "Confirme que os dados do aventureiro são verdadeiros."
             if not adventure_photo:
                 field_errors[f"adventure_photo_{slot}"] = "Anexe a foto 3x4 do aventureiro."
 
             if not medical_plan:
-                field_errors[f"medical_plan_{slot}"] = "Informe se possui plano de sa�de."
+                field_errors[f"medical_plan_{slot}"] = "Informe se possui plano de saúde."
             if medical_plan == "sim" and not medical_plan_number:
-                field_errors[f"medical_plan_number_{slot}"] = "Informe o n�mero da carteirinha do plano de sa�de."
+                field_errors[f"medical_plan_number_{slot}"] = "Informe o número da carteirinha do plano de saúde."
             if not medical_sus:
-                field_errors[f"medical_sus_{slot}"] = "Informe o n�mero da Carteira Nacional de Sa�de (SUS)."
+                field_errors[f"medical_sus_{slot}"] = "Informe o número da Carteira Nacional de Saúde (SUS)."
             if not medical_blood_type:
-                field_errors[f"medical_blood_type_{slot}"] = "Informe o tipo sangu�neo."
+                field_errors[f"medical_blood_type_{slot}"] = "Informe o tipo sanguíneo."
             if not medical_signature:
-                field_errors[f"medical_signature_{slot}"] = "Assine a ficha m�dica."
+                field_errors[f"medical_signature_{slot}"] = "Assine a ficha médica."
             if not medical_confirmation:
-                field_errors[f"medical_confirmation_{slot}"] = "Confirme que as informa��es m�dicas acima s�o verdadeiras."
+                field_errors[f"medical_confirmation_{slot}"] = "Confirme que as informações médicas acima são verdadeiras."
             if not medical_data_truth:
-                field_errors[f"medical_data_truth_{slot}"] = "Confirme que os dados m�dicos s�o verdadeiros."
+                field_errors[f"medical_data_truth_{slot}"] = "Confirme que os dados médicos são verdadeiros."
 
             if not term_responsible:
-                field_errors[f"term_responsible_{slot}"] = "Informe o nome do respons�vel."
+                field_errors[f"term_responsible_{slot}"] = "Informe o nome do responsável."
             if not term_nationality:
                 field_errors[f"term_nationality_{slot}"] = "Informe sua nacionalidade."
             if not term_child:
-                field_errors[f"term_child_{slot}"] = "Informe o nome da crian�a."
+                field_errors[f"term_child_{slot}"] = "Informe o nome da criança."
             if not term_local:
                 field_errors[f"term_local_{slot}"] = "Informe local e data."
             if not term_child_name:
-                field_errors[f"term_child_name_{slot}"] = "Informe o nome da crian�a."
+                field_errors[f"term_child_name_{slot}"] = "Informe o nome da criança."
             if not term_contact_phone:
                 field_errors[f"term_contact_phone_{slot}"] = "Informe o telefone para contato."
             if not term_signature:
                 field_errors[f"term_signature_{slot}"] = "Informe a assinatura do termo."
             if not term_confirmation:
-                field_errors[f"term_confirmation_{slot}"] = "Confirme que os dados do termo est�o corretos."
+                field_errors[f"term_confirmation_{slot}"] = "Confirme que os dados do termo estão corretos."
             if not term_data_truth:
-                field_errors[f"term_data_truth_{slot}"] = "Confirme que os dados do termo s�o verdadeiros."
+                field_errors[f"term_data_truth_{slot}"] = "Confirme que os dados do termo são verdadeiros."
 
             if not (adventure_birth_day and adventure_birth_month and adventure_birth_year):
                 field_errors[f"adventure_birth_date_{slot}"] = "Informe a data de nascimento completa."
@@ -910,7 +910,7 @@ def register_adventurer(request):
                         int(adventure_birth_year), int(adventure_birth_month), int(adventure_birth_day)
                     )
                 except (ValueError, TypeError):
-                    field_errors[f"adventure_birth_date_{slot}"] = "Informe uma data de nascimento v�lida."
+                    field_errors[f"adventure_birth_date_{slot}"] = "Informe uma data de nascimento válida."
                     birth_date = None
 
             slot_contexts.append(
@@ -995,22 +995,22 @@ def register_adventurer(request):
         if not parent_signature:
             field_errors["parent_signature"] = "Assine os dados dos pais."
         if not parent_data_truth:
-            field_errors["parent_data_truth"] = "Confirme que os dados dos pais s�o verdadeiros."
+            field_errors["parent_data_truth"] = "Confirme que os dados dos pais são verdadeiros."
 
         if not responsible_username:
-            field_errors["responsavel_username"] = "Informe um nome de usu�rio."
+            field_errors["responsavel_username"] = "Informe um nome de usuário."
         if not password1 or not password2:
             field_errors["responsavel_password1"] = "Informe e confirme a senha."
         elif password1 != password2:
-            field_errors["responsavel_password2"] = "As senhas n�o conferem."
+            field_errors["responsavel_password2"] = "As senhas não conferem."
         elif len(password1) != 4 or not password1.isdigit():
-            field_errors["responsavel_password1"] = "A senha precisa ter 4 d�gitos."
+            field_errors["responsavel_password1"] = "A senha precisa ter 4 dígitos."
         if not responsavel_nome:
-            field_errors["responsavel_nome"] = "Informe o nome do respons�vel."
+            field_errors["responsavel_nome"] = "Informe o nome do responsável."
         if not responsavel_sobrenome:
             field_errors["responsavel_sobrenome"] = "Informe o sobrenome."
         if not responsavel_sexo:
-            field_errors["responsavel_sexo"] = "Informe o sexo do respons�vel."
+            field_errors["responsavel_sexo"] = "Informe o sexo do responsável."
         if not cpf:
             field_errors["responsavel_cpf"] = "Informe o CPF."
         if not telefone:
@@ -1018,12 +1018,12 @@ def register_adventurer(request):
         if not whatsapp:
             field_errors["responsavel_whatsapp"] = "Informe o WhatsApp."
         if not endereco:
-            field_errors["responsavel_endereco"] = "Informe o endere�o."
+            field_errors["responsavel_endereco"] = "Informe o endereço."
 
         if User.objects.filter(username=responsible_username).exists():
-            field_errors["responsavel_username"] = "Nome de usu�rio indispon�vel."
+            field_errors["responsavel_username"] = "Nome de usuário indisponível."
         if Responsible.objects.filter(cpf=cpf).exists():
-            field_errors["responsavel_cpf"] = "Esse CPF j� est� cadastrado."
+            field_errors["responsavel_cpf"] = "Esse CPF já está cadastrado."
 
         if not field_errors:
             try:
@@ -1048,14 +1048,14 @@ def register_adventurer(request):
                         last_name = " ".join(names[1:]) if len(names) > 1 else first_name
                         allergies_summary = []
                         if slot_data["medical_allergy_skin"] == "sim":
-                            allergies_summary.append("Alergia cut�nea")
+                            allergies_summary.append("Alergia cutânea")
                         if slot_data["medical_allergy_food"] == "sim":
                             allergies_summary.append(
                                 f"Alergia alimentar: {slot_data['medical_allergy_food_detail']}"
                             )
                         if slot_data["medical_allergy_med"] == "sim":
                             allergies_summary.append(
-                                f"Alergia a rem�dios: {slot_data['medical_allergy_med_detail']}"
+                                f"Alergia a remédios: {slot_data['medical_allergy_med_detail']}"
                             )
                         medication_text = slot_data["medical_other"] or ""
                         observation_text = slot_data["medical_recent_medicines"] or ""
@@ -1142,10 +1142,10 @@ def register_adventurer(request):
                             },
                         )
                         _create_monthly_fees(responsible, adventurer)
-                messages.success(request, "Cadastro enviado! Fa�a login para acessar o painel.")
+                messages.success(request, "Cadastro enviado! Faça login para acessar o painel.")
                 return redirect("login")
             except IntegrityError:
-                field_errors["responsavel_username"] = "Erro ao criar usu�rio; tente um nome diferente."
+                field_errors["responsavel_username"] = "Erro ao criar usuário; tente um nome diferente."
 
     if request.method != "POST":
         selected_adventurer_count = 1
@@ -1171,7 +1171,7 @@ def register_adventurer(request):
     return render(request, "core/register.html", context)
 
 def registration_choice(request):
-    """Tela intermediária para escolher o tipo de cadastro desejado."""
+    """Tela intermediÃ¡ria para escolher o tipo de cadastro desejado."""
 
     return render(request, "core/register_choice.html")
 
@@ -1206,16 +1206,16 @@ def register_director(request):
         form_values["responsavel_data_truth"] = responsavel_data_truth
 
         for field_key, error_label in (
-            ("responsavel_username", "Informe um nome de usuário."),
+            ("responsavel_username", "Informe um nome de usuÃ¡rio."),
             ("responsavel_password1", "Informe e confirme a senha."),
-            ("responsavel_nome", "Informe o nome do responsável."),
+            ("responsavel_nome", "Informe o nome do responsÃ¡vel."),
             ("responsavel_sobrenome", "Informe o sobrenome."),
-            ("responsavel_sexo", "Informe o sexo do responsável."),
+            ("responsavel_sexo", "Informe o sexo do responsÃ¡vel."),
             ("responsavel_cpf", "Informe o CPF."),
             ("responsavel_telefone", "Informe o telefone."),
             ("responsavel_whatsapp", "Informe o WhatsApp."),
             ("responsavel_street", "Informe a Av/Rua."),
-            ("responsavel_house_number", "Informe o número."),
+            ("responsavel_house_number", "Informe o nÃºmero."),
             ("responsavel_neighborhood", "Informe o bairro."),
             ("responsavel_postal_code", "Informe o CEP."),
             ("responsavel_city", "Informe a cidade."),
@@ -1227,20 +1227,20 @@ def register_director(request):
         if not responsavel_signature:
             field_errors["responsavel_signature"] = "Assine os dados iniciais."
         if not responsavel_data_truth:
-            field_errors["responsavel_data_truth"] = "Confirme que os dados iniciais são verdadeiros."
+            field_errors["responsavel_data_truth"] = "Confirme que os dados iniciais sÃ£o verdadeiros."
 
         if password1 or password2:
             if password1 != password2:
-                field_errors["responsavel_password2"] = "As senhas não conferem."
+                field_errors["responsavel_password2"] = "As senhas nÃ£o conferem."
             elif len(password1) != 4 or not password1.isdigit():
-                field_errors["responsavel_password1"] = "A senha precisa ter 4 dígitos."
+                field_errors["responsavel_password1"] = "A senha precisa ter 4 dÃ­gitos."
         else:
             field_errors["responsavel_password1"] = "Informe e confirme a senha."
 
         if User.objects.filter(username=responsible_username).exists():
-            field_errors["responsavel_username"] = "Nome de usuário indisponível."
+            field_errors["responsavel_username"] = "Nome de usuÃ¡rio indisponÃ­vel."
         if Responsible.objects.filter(cpf=cpf).exists():
-            field_errors["responsavel_cpf"] = "Esse CPF já está cadastrado."
+            field_errors["responsavel_cpf"] = "Esse CPF jÃ¡ estÃ¡ cadastrado."
 
         term_nationality = form_values.get("term_nationality", "").strip()
         term_marital_status = form_values.get("term_marital_status", "").strip()
@@ -1267,12 +1267,12 @@ def register_director(request):
         for field_key, message in (
             ("term_nationality", "Informe sua nacionalidade."),
             ("term_marital_status", "Informe o estado civil."),
-            ("term_rg_number", "Informe o número do RG."),
+            ("term_rg_number", "Informe o nÃºmero do RG."),
             ("term_residence", "Informe a Av/Rua."),
-            ("term_number", "Informe o número."),
+            ("term_number", "Informe o nÃºmero."),
             ("term_neighborhood", "Informe o bairro."),
             ("term_postal_code", "Informe o CEP."),
-            ("term_municipality", "Informe o município."),
+            ("term_municipality", "Informe o municÃ­pio."),
             ("term_state", "Informe o estado."),
             ("term_cpf", "Informe o CPF."),
         ):
@@ -1280,23 +1280,23 @@ def register_director(request):
                 field_errors[field_key] = message
 
         if not term_accept:
-            field_errors["term_accept"] = "Você precisa aceitar o termo de autorização."
+            field_errors["term_accept"] = "VocÃª precisa aceitar o termo de autorizaÃ§Ã£o."
         if not term_signature:
-            field_errors["term_signature"] = "Informe a assinatura do responsável."
+            field_errors["term_signature"] = "Informe a assinatura do responsÃ¡vel."
         if not director_photo:
-            field_errors["director_photo"] = "Anexe a foto 3x4 do voluntário."
+            field_errors["director_photo"] = "Anexe a foto 3x4 do voluntÃ¡rio."
         if not volunteer_acceptance:
-            field_errors["volunteer_acceptance"] = "Você precisa aceitar o compromisso."
+            field_errors["volunteer_acceptance"] = "VocÃª precisa aceitar o compromisso."
         if not director_data_truth:
-            field_errors["director_data_truth"] = "Confirme que todas as informações fornecidas são verdadeiras."
+            field_errors["director_data_truth"] = "Confirme que todas as informaÃ§Ãµes fornecidas sÃ£o verdadeiras."
         if not director_initial_signature:
             field_errors["director_initial_signature"] = "Assine os dados iniciais."
         if not director_initial_data_truth:
-            field_errors["director_initial_data_truth"] = "Confirme que os dados iniciais são verdadeiros."
+            field_errors["director_initial_data_truth"] = "Confirme que os dados iniciais sÃ£o verdadeiros."
         if not director_volunteer_signature:
-            field_errors["director_volunteer_signature"] = "Assine o compromisso voluntário."
+            field_errors["director_volunteer_signature"] = "Assine o compromisso voluntÃ¡rio."
         if not director_volunteer_data_truth:
-            field_errors["director_volunteer_data_truth"] = "Confirme que os dados do compromisso são verdadeiros."
+            field_errors["director_volunteer_data_truth"] = "Confirme que os dados do compromisso sÃ£o verdadeiros."
 
         director_full_name = form_values.get("director_full_name", "").strip()
         director_church = form_values.get("director_church", "").strip()
@@ -1329,7 +1329,7 @@ def register_director(request):
             ("director_full_name", "Informe o nome completo."),
             ("director_church", "Informe o nome da igreja."),
             ("director_district", "Informe o distrito."),
-            ("director_street_address", "Informe o endereço completo."),
+            ("director_street_address", "Informe o endereÃ§o completo."),
             ("director_city", "Informe a cidade."),
             ("director_state", "Informe o estado."),
             ("director_email", "Informe o e-mail."),
@@ -1349,12 +1349,12 @@ def register_director(request):
                     int(director_birth_year), int(director_birth_month), int(director_birth_day)
                 )
             except (ValueError, TypeError):
-                field_errors["director_birth_date"] = "Informe uma data de nascimento válida."
+                field_errors["director_birth_date"] = "Informe uma data de nascimento vÃ¡lida."
         else:
             field_errors["director_birth_date"] = "Informe a data de nascimento completa."
 
         if education_level not in dict(EDUCATION_CHOICES):
-            field_errors["director_education_level"] = "Escolha um nível de escolaridade."
+            field_errors["director_education_level"] = "Escolha um nÃ­vel de escolaridade."
 
         if not field_errors:
             try:
@@ -1424,11 +1424,11 @@ def register_director(request):
                     )
                 messages.success(
                     request,
-                    "Cadastro da diretoria enviado! Um membro da coordenação entrará em contato.",
+                    "Cadastro da diretoria enviado! Um membro da coordenaÃ§Ã£o entrarÃ¡ em contato.",
                 )
                 return redirect("login")
             except IntegrityError:
-                field_errors["responsavel_username"] = "Erro ao criar usuário; tente um nome diferente."
+                field_errors["responsavel_username"] = "Erro ao criar usuÃ¡rio; tente um nome diferente."
 
     context = {
         "form_values": form_values,
