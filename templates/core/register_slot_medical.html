@@ -57,12 +57,13 @@
     <div class="checkbox-grid">
       {% for slug,label in medical_conditions %}
       {% with base="medical_condition_"|add:slug %}
+      {% slot_value_for form_values base slot as condition_selected %}
       <label>
         <input
           type="checkbox"
           name="{{ base }}_{{ slot }}"
           value="on"
-          {% if slot_value_for form_values base slot %}checked{% endif %}
+          {% if condition_selected %}checked{% endif %}
         />
         {{ label }}
       </label>
@@ -313,8 +314,9 @@
       </label>
     </div>
     <div class="field-group checkbox-field">
-      <label>
-        <input type="checkbox" name="medical_confirmation_{{ slot }}" {% if slot_value_for form_values 'medical_confirmation' slot %}checked{% endif %} required />
+      {% slot_value_for form_values 'medical_confirmation' slot as medical_confirmation %}
+        <label>
+        <input type="checkbox" name="medical_confirmation_{{ slot }}" {% if medical_confirmation %}checked{% endif %} required />
         Declaro serem verdadeiras todas as informações médicas acima.
       </label>
     </div>
@@ -334,9 +336,10 @@
         Assinar a ficha médica
       </button>
     </div>
+    {% slot_value_for form_values 'medical_signature' slot as medical_signature %}
     <div class="signature-preview" id="medical-signature-preview-{{ slot }}">
-      {% if slot_value_for form_values 'medical_signature' slot %}
-      <img src="{% slot_value_for form_values 'medical_signature' slot %}" alt="Assinatura registrada" />
+      {% if medical_signature %}
+      <img src="{{ medical_signature }}" alt="Assinatura registrada" />
       {% else %}
       <span>Nenhum registro ainda</span>
       {% endif %}
@@ -345,17 +348,18 @@
       type="hidden"
       name="medical_signature_{{ slot }}"
       id="medical-signature-input-{{ slot }}"
-      value="{% slot_value_for form_values 'medical_signature' slot %}"
+      value="{{ medical_signature }}"
       required
     />
     <small class="error-message">{% slot_error_for field_errors 'medical_signature' slot %}</small>
   </div>
 
+  {% slot_value_for form_values 'medical_data_truth' slot as medical_data_truth %}
   <label class="checkbox-field">
     <input
       type="checkbox"
       name="medical_data_truth_{{ slot }}"
-      {% if slot_value_for form_values 'medical_data_truth' slot %}checked{% endif %}
+      {% if medical_data_truth %}checked{% endif %}
       required
     />
     Declaro que os dados médicos fornecidos são verdadeiros.

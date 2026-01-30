@@ -102,12 +102,13 @@
     <div class="checkbox-grid">
       {% for slug, label in class_options %}
       {% with base="adventure_class_"|add:slug %}
+      {% slot_value_for form_values base slot as class_selection %}
       <label>
         <input
           type="checkbox"
           name="{{ base }}_{{ slot }}"
           value="on"
-          {% if slot_value_for form_values base slot %}checked{% endif %}
+          {% if class_selection %}checked{% endif %}
         />
         {{ label }}
       </label>
@@ -291,6 +292,8 @@
     <small class="error-message">{% slot_error_for field_errors 'adventure_photo' slot %}</small>
   </div>
 
+  {% slot_value_for form_values 'adventure_data_signature' slot as adventure_data_signature %}
+  {% slot_value_for form_values 'adventure_data_truth' slot as adventure_data_truth %}
   <div class="signature-block">
     <div class="signature-block__header">
       <p>Assinatura dos dados do aventureiro</p>
@@ -306,8 +309,8 @@
       </button>
     </div>
     <div class="signature-preview" id="adventure-data-signature-preview-{{ slot }}">
-      {% if slot_value_for form_values 'adventure_data_signature' slot %}
-      <img src="{% slot_value_for form_values 'adventure_data_signature' slot %}" alt="Assinatura registrada" />
+      {% if adventure_data_signature %}
+      <img src="{{ adventure_data_signature }}" alt="Assinatura registrada" />
       {% else %}
       <span>Nenhum registro ainda</span>
       {% endif %}
@@ -316,7 +319,7 @@
       type="hidden"
       name="adventure_data_signature_{{ slot }}"
       id="adventure-data-signature-input-{{ slot }}"
-      value="{% slot_value_for form_values 'adventure_data_signature' slot %}"
+      value="{{ adventure_data_signature }}"
       required
     />
     <small class="error-message">{% slot_error_for field_errors 'adventure_data_signature' slot %}</small>
@@ -325,7 +328,7 @@
     <input
       type="checkbox"
       name="adventure_data_truth_{{ slot }}"
-      {% if slot_value_for form_values 'adventure_data_truth' slot %}checked{% endif %}
+      {% if adventure_data_truth %}checked{% endif %}
       required
     />
     Declaro que os dados do aventureiro estão corretos.

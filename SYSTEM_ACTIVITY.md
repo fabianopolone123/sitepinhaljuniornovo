@@ -446,3 +446,8 @@ tira o quadrado do funcoi
 - **Request**: O cadastro de aventureiros quebrava em /cadastro/aventureiro/ porque restava um {% endwith %} sem {% with %}.
 - **Actions**: Reescrevi a data de nascimento para usar slot_value_for ... as ... isoladamente e removi o bloco inválido.
 - **Notes**: python manage.py check confirma os templates
+
+## 2026-01-30T02:38:25+00:00Z — Refina uso de slot_value_for
+- **Request**: O template de cadastro de aventureiros falhava depois dos ajustes por causa de ifs com slot_value_for gerando erro 'Unused form_values' e ainda restavam with/endwith sem pares.
+- **Actions**: Passei os valores do helper para variáveis (s ...) antes de usar em if/checked, garantindo que os slot_value_for não apareçam diretamente dentro da condição. Também limpei o checkbox do loop de classes/condições para usar a variável atribuída e mantive as assinaturas preview usando os valores cacheados.
+- **Notes**: python manage.py check confirmou que o template compila.

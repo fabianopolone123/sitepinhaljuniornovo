@@ -1,5 +1,8 @@
 {% load form_extras %}
 <div class="slot-panel" data-slot-panel data-slot="{{ slot }}">
+  {% slot_value_for form_values 'term_signature' slot as term_signature %}
+  {% slot_value_for form_values 'term_data_truth' slot as term_data_truth %}
+  {% slot_value_for form_values 'term_confirmation' slot as term_confirmation %}
   <p class="termino-note">
     TERMO DE AUTORIZAÇÃO DE USO DE IMAGEM
     <br />
@@ -48,8 +51,8 @@
       </button>
     </div>
     <div class="signature-preview" id="adventurer-signature-preview-{{ slot }}">
-      {% if slot_value_for form_values 'term_signature' slot %}
-      <img src="{% slot_value_for form_values 'term_signature' slot %}" alt="Assinatura registrada" />
+      {% if term_signature %}
+      <img src="{{ term_signature }}" alt="Assinatura registrada" />
       {% else %}
       <span>Nenhum registro ainda</span>
       {% endif %}
@@ -58,7 +61,7 @@
       type="hidden"
       name="term_signature_{{ slot }}"
       id="adventurer-signature-input-{{ slot }}"
-      value="{% slot_value_for form_values 'term_signature' slot %}"
+      value="{{ term_signature }}"
       required
     />
     <small class="error-message">{% slot_error_for field_errors 'term_signature' slot %}</small>
@@ -68,7 +71,7 @@
     <input
       type="checkbox"
       name="term_data_truth_{{ slot }}"
-      {% if slot_value_for form_values 'term_data_truth' slot %}checked{% endif %}
+      {% if term_data_truth %}checked{% endif %}
       required
     />
     Declaro que os dados do termo são verdadeiros.
@@ -115,7 +118,7 @@
     <input
       type="checkbox"
       name="term_confirmation_{{ slot }}"
-      {% if slot_value_for form_values 'term_confirmation' slot %}checked{% endif %}
+      {% if term_confirmation %}checked{% endif %}
       required
     />
     Declaro que os dados acima estão corretos e autorizo a utilização da imagem do menor.
