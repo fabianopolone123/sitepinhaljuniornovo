@@ -665,9 +665,6 @@ document.addEventListener("DOMContentLoaded", () => {
         goToStep(issue.step);
         issue.field?.focus();
         closeSignatureWarning();
-        if (issue.guidance?.trigger) {
-          setTimeout(() => openSignatureModalFor(issue.guidance.trigger, targetSlot, issue.guidance.needsSlot), 150);
-        }
       });
       li.appendChild(text);
       li.appendChild(button);
