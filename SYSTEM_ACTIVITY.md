@@ -586,3 +586,8 @@ tira o quadrado do funcoi
 - **Request**: continua o mesmo erro, como vejo os logs
 - **Actions**: Altereio o warning para mostrar quais chaves estão inválidas diretamente na mensagem para que o journalctl exiba os campos (sem depender de extra).
 - **Notes**: python manage.py check
+
+## 2026-01-31T22:44:37+00:00Z — Manual update
+- **Request**: Forbidden CSRF verification failed, export/import deixou concluir sem assinaturas
+- **Actions**: Ignorei o CSRF hidden token e os campos de assinatura na exportação e limpei os campos de assinatura após a importação para evitar reutilizar tokens ou assinaturas que não valem mais.
+- **Notes**: python manage.py check

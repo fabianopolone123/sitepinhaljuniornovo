@@ -45,6 +45,9 @@ document.addEventListener("DOMContentLoaded", () => {
     window.CSS?.escape ??
     ((value) => value.replace(/([\\\"'!#%&()*+,./:;<=>?@[\\]^`{|}~-])/g, "\\$1"));
 
+  const ignoredExportFields = new Set(["csrfmiddlewaretoken"]);
+  const signatureFieldPattern = /_signature_/;
+
   const collectFormSnapshot = () => {
     const snapshot = {};
     form
@@ -52,6 +55,8 @@ document.addEventListener("DOMContentLoaded", () => {
       .forEach((field) => {
         if (!field.name) return;
         if (field.type === "file") return;
+        if (ignoredExportFields.has(field.name)) return;
+        if (signatureFieldPattern.test(field.name)) return;
         if (field.type === "radio" && !field.checked) {
           return;
         }
@@ -113,6 +118,15 @@ document.addEventListener("DOMContentLoaded", () => {
     field.dispatchEvent(new Event("change", { bubbles: true }));
   };
 
+  const resetSignatureFields = () => {
+    form
+      ?.querySelectorAll("input[name*='_signature']")
+      .forEach((field) => {
+        field.value = "";
+        field.dispatchEvent(new Event("input", { bubbles: true }));
+      });
+  };
+
   const applyImportedSnapshot = (snapshot) => {
     if (!snapshot || typeof snapshot !== "object") {
       return;
@@ -137,6 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     updateSlotPanels();
     alert("Dados importados. Reenvie fotos e assinaturas antes de concluir.");
+    resetSignatureFields();
   };
 
   const handleImportFile = (file) => {
