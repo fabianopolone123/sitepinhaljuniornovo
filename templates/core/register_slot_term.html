@@ -8,6 +8,10 @@
   {% slot_value_for form_values 'term_signature' slot as term_signature %}
   {% slot_value_for form_values 'term_data_truth' slot as term_data_truth %}
   {% slot_value_for form_values 'term_confirmation' slot as term_confirmation %}
+  {% slot_value_for form_values 'term_local' slot as term_local %}
+  {% slot_value_for form_values 'term_child' slot as term_child %}
+  {% slot_value_for form_values 'term_child_name' slot as term_child_name %}
+  {% slot_value_for form_values 'term_nationality' slot as term_nationality %}
   <p class="termino-note">
     TERMO DE AUTORIZAÇÃO DE USO DE IMAGEM
     <br />
@@ -21,26 +25,87 @@
       required
     />,
     nacionalidade
-    <input
-      type="text"
-      name="term_nationality_{{ slot }}"
-      value="{% slot_value_for form_values 'term_nationality' slot %}"
-      required
-    />,
+      <input
+        type="text"
+        name="term_nationality_{{ slot }}"
+        value="{{ term_nationality|default:default_term_nationality }}"
+        required
+      />,
     responsável legal pelo menor
-    <input
-      type="text"
-      name="term_child_{{ slot }}"
-      value="{% slot_value_for form_values 'term_child' slot %}"
-      placeholder="Nome da criança"
-      required
-    />,
+      <input
+        type="text"
+        name="term_child_{{ slot }}"
+        value="{{ term_child }}"
+        data-slot-term-child="{{ slot }}"
+        placeholder="Nome da criança"
+        required
+      />,
     AUTORIZO o uso de imagem em todo e qualquer material do CLUBE DE AVENTUREIROS,
     incluindo campanhas promocionais, institucionais e educacionais, em mídias impressas,
     digitais, redes sociais, vídeos e transmissões.
     <br />
     Declaro que não haverá reivindicação futura de direitos de imagem.
   </p>
+
+  <label class="checkbox-field">
+    <input
+      type="checkbox"
+      name="term_data_truth_{{ slot }}"
+      {% if term_data_truth %}checked{% endif %}
+      required
+    />
+    Declaro que os dados do termo são verdadeiros.
+  </label>
+  <small class="error-message">{% slot_error_for field_errors 'term_data_truth' slot %}</small>
+
+  <div class="termino-inline-inputs">
+    <div class="field-group">
+      <label>
+        Local e data
+      <input
+        type="text"
+        name="term_local_{{ slot }}"
+        value="{{ term_local|default:default_term_local }}"
+        required
+      />
+      </label>
+    </div>
+    <div class="field-group">
+      <label>
+        Nome da criança
+        <input
+          type="text"
+          name="term_child_name_{{ slot }}"
+          value="{{ term_child_name }}"
+          data-slot-term-child-name="{{ slot }}"
+          required
+        />
+      </label>
+    </div>
+    <div class="field-group">
+      <label>
+        Telefone para contato
+        <input
+          type="tel"
+          name="term_contact_phone_{{ slot }}"
+          data-auto-from="responsavel_telefone"
+          value="{% slot_value_for form_values 'term_contact_phone' slot %}"
+          required
+        />
+      </label>
+    </div>
+  </div>
+
+  <label class="checkbox-field">
+    <input
+      type="checkbox"
+      name="term_confirmation_{{ slot }}"
+      {% if term_confirmation %}checked{% endif %}
+      required
+    />
+    Declaro que os dados acima estão corretos e autorizo a utilização da imagem do menor.
+  </label>
+  <small class="error-message">{% slot_error_for field_errors 'term_confirmation' slot %}</small>
 
   <div class="signature-block">
     <div class="signature-block__header">
@@ -72,63 +137,4 @@
     />
     <small class="error-message">{% slot_error_for field_errors 'term_signature' slot %}</small>
   </div>
-
-  <label class="checkbox-field">
-    <input
-      type="checkbox"
-      name="term_data_truth_{{ slot }}"
-      {% if term_data_truth %}checked{% endif %}
-      required
-    />
-    Declaro que os dados do termo são verdadeiros.
-  </label>
-  <small class="error-message">{% slot_error_for field_errors 'term_data_truth' slot %}</small>
-
-  <div class="termino-inline-inputs">
-    <div class="field-group">
-      <label>
-        Local e data
-        <input
-          type="text"
-          name="term_local_{{ slot }}"
-          value="{% slot_value_for form_values 'term_local' slot %}"
-          required
-        />
-      </label>
-    </div>
-    <div class="field-group">
-      <label>
-        Nome da criança
-        <input
-          type="text"
-          name="term_child_name_{{ slot }}"
-          value="{% slot_value_for form_values 'term_child_name' slot %}"
-          required
-        />
-      </label>
-    </div>
-    <div class="field-group">
-      <label>
-        Telefone para contato
-        <input
-          type="tel"
-          name="term_contact_phone_{{ slot }}"
-          data-auto-from="responsavel_telefone"
-          value="{% slot_value_for form_values 'term_contact_phone' slot %}"
-          required
-        />
-      </label>
-    </div>
-  </div>
-
-  <label class="checkbox-field">
-    <input
-      type="checkbox"
-      name="term_confirmation_{{ slot }}"
-      {% if term_confirmation %}checked{% endif %}
-      required
-    />
-    Declaro que os dados acima estão corretos e autorizo a utilização da imagem do menor.
-  </label>
-  <small class="error-message">{% slot_error_for field_errors 'term_confirmation' slot %}</small>
 </div>

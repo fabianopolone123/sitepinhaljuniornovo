@@ -155,6 +155,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const termResponsibleInputs = Array.from(
     document.querySelectorAll("[data-auto-responsible-fullname]")
   );
+  const termChildInputs = Array.from(document.querySelectorAll("[data-slot-term-child]"));
+  const termChildNameInputs = Array.from(
+    document.querySelectorAll("[data-slot-term-child-name]")
+  );
   const getResponsibleNames = () => {
     const first = responsavelNomeInput?.value?.trim() || "";
     const last = responsavelSobrenomeInput?.value?.trim() || "";
@@ -172,6 +176,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const getSlotName = (slot) => {
     const input = document.querySelector(`[data-slot-name-input="${slot}"]`);
     return input?.value.trim() || "";
+  };
+
+  const updateTermChildFieldsForSlot = (slot) => {
+    const name = getSlotName(slot);
+    termChildInputs.forEach((input) => {
+      if (input.dataset.slotTermChild === slot) {
+        applyAutoValue(input, name);
+      }
+    });
+    termChildNameInputs.forEach((input) => {
+      if (input.dataset.slotTermChildName === slot) {
+        applyAutoValue(input, name);
+      }
+    });
   };
 
   const formatTabLabel = (slot, name) => {
@@ -225,6 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (slot === currentAdventurerSlot) {
       refreshActiveSlotLabel(slot);
     }
+    updateTermChildFieldsForSlot(slot);
   };
 
   const updateTabVisibility = (count) => {

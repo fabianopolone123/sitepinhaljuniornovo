@@ -501,3 +501,8 @@ tira o quadrado do funcoi
 - **Request**: Ficha médica: condicionar questionários de remédios e detalhar alergias
 - **Actions**: Adicionei campo para detalhar alergia cutânea e tornei o bloco de 'Utiliza remédios?' dependente do 'sim' para problemas cardíacos, diabetes, rins e psicológicos, tanto no template quanto no backend (captura/validação e persistência no JSON médico).
 - **Notes**: Rodado python manage.py check.
+
+## 2026-01-31T19:23:23+00:00Z — Manual update
+- **Request**: Aprimora termo de autorização
+- **Actions**: Pré-preenchi Local e data com São Carlos e a data de hoje, mantive Brasileiro como nacionalidade padrão, mudei o nome da criança no termo para puxar o slot ativo e movi a assinatura digital para o fim do bloco; o JS agora sincroniza os nomes automaticamente ao trocar de aventuriro.
+- **Notes**: Rodado python manage.py check.

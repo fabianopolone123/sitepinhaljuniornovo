@@ -1294,6 +1294,12 @@ def register_adventurer(request):
         form_values["active_adventurer_slot"] = "01"
 
     active_adventurer_slot = form_values.get("active_adventurer_slot", "01")
+    today = timezone.localdate()
+    default_term_local = f"São Carlos, {today.day:02d}/{today.month:02d}/{today.year}"
+    context_defaults = {
+        "default_term_local": default_term_local,
+        "default_term_nationality": "Brasileiro",
+    }
     context = {
         "form_values": form_values,
         "field_errors": field_errors,
@@ -1308,6 +1314,7 @@ def register_adventurer(request):
         "adventurer_slots": ADVENTURER_SLOTS,
         "selected_adventurer_count": selected_adventurer_count,
         "active_adventurer_slot": active_adventurer_slot,
+        **context_defaults,
     }
     return render(request, "core/register.html", context)
 
