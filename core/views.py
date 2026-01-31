@@ -1174,6 +1174,12 @@ def register_adventurer(request):
         if Responsible.objects.filter(cpf=cpf).exists():
             field_errors["responsavel_cpf"] = "Esse CPF já está cadastrado."
 
+        if field_errors:
+            logger.warning(
+                "Cadastro guiado falhou com %d campos inválidos",
+                len(field_errors),
+                extra={"errors": list(field_errors.keys())},
+            )
         if not field_errors:
             try:
                 with transaction.atomic():

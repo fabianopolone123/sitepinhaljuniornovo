@@ -59,6 +59,13 @@ body {
   flex-wrap: wrap;
 }
 
+.form-data-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
 .step-btn {
   flex: 1;
   min-width: 120px;

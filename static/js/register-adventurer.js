@@ -9,6 +9,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const adventurerCountSelect = document.querySelector("[name='adventure_count']");
   const activeSlotInput = document.querySelector("[name='active_adventurer_slot']");
   const adventurerSlotLabel = document.querySelector("#adventurer-slot-label");
+
+  const exportFormButton = document.querySelector("[data-export-form]");
+  const importFormButton = document.querySelector("[data-open-import]");
+  const importFormInput = document.querySelector("[data-import-file]");
   const slotPanels = Array.from(document.querySelectorAll("[data-slot-panel]"));
   const slotHeadingElements = Array.from(document.querySelectorAll("[data-slot-heading]"));
   const slotNameInputs = Array.from(document.querySelectorAll("[data-slot-name-input]"));
@@ -36,6 +40,134 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const getAllowedSlots = () => slotOrder.slice(0, getNormalizedSlotCount());
+
+  const cssEscape =
+    window.CSS?.escape ??
+    ((value) => value.replace(/([\\\"'!#%&()*+,./:;<=>?@[\\]^`{|}~-])/g, "\\$1"));
+
+  const collectFormSnapshot = () => {
+    const snapshot = {};
+    form
+      ?.querySelectorAll("input[name], select[name], textarea[name]")
+      .forEach((field) => {
+        if (!field.name) return;
+        if (field.type === "file") return;
+        if (field.type === "radio" && !field.checked) {
+          return;
+        }
+        const rawValue =
+          field.type === "checkbox" ? field.checked : field.value ?? "";
+        const value = Array.isArray(rawValue) ? rawValue[0] : rawValue;
+        if (snapshot[field.name]) {
+          if (!Array.isArray(snapshot[field.name])) {
+            snapshot[field.name] = [snapshot[field.name]];
+          }
+          snapshot[field.name].push(value);
+        } else {
+          snapshot[field.name] = value;
+        }
+      });
+    return snapshot;
+  };
+
+  const downloadSnapshot = (payload) => {
+    if (!payload || !Object.keys(payload).length) {
+      alert("Não há dados para exportar.");
+      return;
+    }
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {
+      type: "application/json",
+    });
+    const href = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = href;
+    anchor.download = `cadastro-${Date.now()}.json`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(href);
+  };
+
+  const downloadCurrentState = () => downloadSnapshot(collectFormSnapshot());
+
+  const setFieldValueFromSnapshot = (field, storedValue) => {
+    if (!field) {
+      return;
+    }
+    const value = Array.isArray(storedValue) ? storedValue[0] : storedValue;
+    if (field.type === "checkbox") {
+      field.checked =
+        value === true || value === "true" || value === "on" || value === "1";
+      field.dispatchEvent(new Event("change", { bubbles: true }));
+      return;
+    }
+    if (field.type === "radio") {
+      if (field.value === value) {
+        field.checked = true;
+      }
+      field.dispatchEvent(new Event("change", { bubbles: true }));
+      return;
+    }
+    field.value = value ?? "";
+    field.dispatchEvent(new Event("input", { bubbles: true }));
+    field.dispatchEvent(new Event("change", { bubbles: true }));
+  };
+
+  const applyImportedSnapshot = (snapshot) => {
+    if (!snapshot || typeof snapshot !== "object") {
+      return;
+    }
+    Object.keys(snapshot).forEach((name) => {
+      const selector = `[name="${cssEscape(name)}"]`;
+      const fields = form?.querySelectorAll(selector);
+      if (!fields || fields.length === 0) {
+        return;
+      }
+      fields.forEach((field) => setFieldValueFromSnapshot(field, snapshot[name]));
+    });
+    const importedCount = snapshot["adventure_count"];
+    if (importedCount && adventurerCountSelect) {
+      adventurerCountSelect.value = `${importedCount}`.padStart(2, "0");
+      const normalized = getNormalizedSlotCount();
+      updateTabVisibility(normalized);
+    }
+    const importedSlot = snapshot["active_adventurer_slot"];
+    if (importedSlot) {
+      setActiveAdventurerSlot(importedSlot);
+    }
+    updateSlotPanels();
+    alert("Dados importados. Reenvie fotos e assinaturas antes de concluir.");
+  };
+
+  const handleImportFile = (file) => {
+    if (!file) {
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(reader.result);
+        applyImportedSnapshot(parsed);
+      } catch (error) {
+        alert("Arquivo inválido.");
+      }
+    };
+    reader.onerror = () => {
+      alert("Não foi possível ler o arquivo.");
+    };
+    reader.readAsText(file, "utf-8");
+  };
+
+  exportFormButton?.addEventListener("click", () => downloadCurrentState());
+  importFormButton?.addEventListener("click", () => importFormInput?.click());
+  importFormInput?.addEventListener("change", () => {
+    const file = importFormInput?.files?.[0];
+    if (!file) {
+      return;
+    }
+    handleImportFile(file);
+    importFormInput.value = "";
+  });
 
   const togglePanelFields = (panel, enabled) => {
     panel.querySelectorAll("input, select, textarea").forEach((field) => {

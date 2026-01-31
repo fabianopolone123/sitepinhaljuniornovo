@@ -571,3 +571,13 @@ tira o quadrado do funcoi
 - **Request**: mas sabe o que e estranho, tem hora que nem esta todos os campos preenchidos, tento clicar em concluir e da isso, arruma pra mim
 - **Actions**: Especifiquei explicitamente a action de cada formulário (login, recuperar senha, cadastro de aventureiros e diretoria e verificação de código) usando {% url %} para garantir que as requisições sempre atinjam a URL com barra final e evitem o RuntimeError de APPEND_SLASH.
 - **Notes**: python manage.py check
+
+## 2026-01-31T22:14:34+00:00Z — Manual update
+- **Request**: Você também pode instrumentar o view adicionando, por exemplo, um logger.warning(...) antes do redirecionamento.
+- **Actions**: Adicionei um aviso no view register_adventurer para registrar os campos inválidos (extra errors) quando o cadastro retornar com erros, facilitando a inspeção via journalctl.
+- **Notes**: python manage.py check
+
+## 2026-01-31T22:26:00+00:00Z — Manual update
+- **Request**: adiciona tambem um botao importar e outro para exportar
+- **Actions**: Incluí botões de exportar/importar na etapa do cadastro de aventureiros e um script JS que serializa os campos, baixa um JSON e reaplica o conteúdo ao importar, preservando o contador de slots e mantendo a validação do formulário.
+- **Notes**: python manage.py check
