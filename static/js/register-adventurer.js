@@ -558,13 +558,20 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
     const describeField = (field) => {
+      const deriveSlotFromName = (name) => {
+        const match = name?.match(/_(\d{2})(?:_|$)/);
+        return match ? match[1] : null;
+      };
       const label =
         field.closest("label")?.textContent?.trim().replace(/\s+/g, " ") ||
         field.dataset.placeholder ||
         field.name;
       const stepNumber = Number(field.closest(".adventurer-step")?.dataset.step) || 1;
       const slotPanel = field.closest("[data-slot]");
-      const slot = slotPanel?.dataset.slot;
+      let slot = slotPanel?.dataset.slot;
+      if (!slot) {
+        slot = deriveSlotFromName(field.name) || currentAdventurerSlot;
+      }
       const guidance =
         signatureGuidance.find((entry) => entry.pattern.test(field.name)) || null;
       return {
