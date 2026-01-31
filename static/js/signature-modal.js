@@ -45,11 +45,40 @@
     const saveBtn = modal.querySelector("[data-save-signature]");
     const clearBtn = modal.querySelector("[data-clear-signature]");
     const closeBtns = modal.querySelectorAll("[data-close-signature],[data-cancel-signature]");
+    const warningMessage =
+      modal.querySelector("[data-signature-warning]") ||
+      (() => {
+        const element = document.createElement("p");
+        element.className = "signature-modal__warning";
+        element.dataset.signatureWarning = "";
+        element.textContent = "";
+        canvas?.insertAdjacentElement("afterend", element);
+        return element;
+      })();
+
+    let minX = null;
+    let minY = null;
+    let maxX = null;
+    let maxY = null;
+    const padding = 12;
+
+    const resetBounds = () => {
+      minX = null;
+      minY = null;
+      maxX = null;
+      maxY = null;
+    };
 
     const clearCanvas = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = "#fff";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+      resetBounds();
+      canvas.classList.remove("signature-error");
+      if (warningMessage) {
+        warningMessage.textContent = "";
+        warningMessage.classList.remove("is-visible");
+      }
     };
 
     const resizeCanvas = () => {
@@ -74,6 +103,14 @@
       }
     };
 
+    const showWarning = (message) => {
+      if (!warningMessage) {
+        return;
+      }
+      warningMessage.textContent = message;
+      warningMessage.classList.toggle("is-visible", Boolean(message));
+    };
+
     let isDrawing = false;
     let lastX = 0;
     let lastY = 0;
@@ -86,6 +123,21 @@
       };
     };
 
+    const recordPoint = (x, y) => {
+      if (minX === null || x < minX) {
+        minX = x;
+      }
+      if (maxX === null || x > maxX) {
+        maxX = x;
+      }
+      if (minY === null || y < minY) {
+        minY = y;
+      }
+      if (maxY === null || y > maxY) {
+        maxY = y;
+      }
+    };
+
     const startDrawing = (event) => {
       event.preventDefault();
       isDrawing = true;
@@ -93,6 +145,7 @@
       lastX = coords.x;
       lastY = coords.y;
       canvas.setPointerCapture(event.pointerId);
+      recordPoint(lastX, lastY);
     };
 
     const draw = (event) => {
@@ -107,6 +160,7 @@
       ctx.stroke();
       lastX = coords.x;
       lastY = coords.y;
+      recordPoint(coords.x, coords.y);
     };
 
     const stopDrawing = (event) => {
@@ -133,6 +187,24 @@
       updatePreview(currentInput?.value || "");
     };
 
+    const validateSignature = () => {
+      if (minX === null) {
+        return { valid: false, message: "Desenhe sua assinatura dentro da área." };
+      }
+      if (
+        minX < padding ||
+        minY < padding ||
+        maxX > canvas.width - padding ||
+        maxY > canvas.height - padding
+      ) {
+        return {
+          valid: false,
+          message: "Evite assinar na borda para que nada saia cortado.",
+        };
+      }
+      return { valid: true };
+    };
+
     const openModal = () => {
       resizeCanvas();
       clearCanvas();
@@ -151,6 +223,14 @@
         closeModal();
         return;
       }
+      const validation = validateSignature();
+      if (!validation.valid) {
+        showWarning(validation.message);
+        canvas.classList.add("signature-error");
+        return;
+      }
+      showWarning("");
+      canvas.classList.remove("signature-error");
       const dataUrl = canvas.toDataURL("image/png");
       currentInput.value = dataUrl;
       updatePreview(dataUrl);

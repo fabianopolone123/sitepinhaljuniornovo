@@ -506,3 +506,8 @@ tira o quadrado do funcoi
 - **Request**: Aprimora termo de autorização
 - **Actions**: Pré-preenchi Local e data com São Carlos e a data de hoje, mantive Brasileiro como nacionalidade padrão, mudei o nome da criança no termo para puxar o slot ativo e movi a assinatura digital para o fim do bloco; o JS agora sincroniza os nomes automaticamente ao trocar de aventuriro.
 - **Notes**: Rodado python manage.py check.
+
+## 2026-01-31T19:37:08+00:00Z — Manual update
+- **Request**: Validação de assinatura na modal
+- **Actions**: A modal agora valida se há traço dentro da área e destaca borda vermelha com aviso sempre que a assinatura toca a margem; o canvas e a mensagem de instrução foram tratados via JS/CSS para reforçar a área segura.
+- **Notes**: Rodado python manage.py check.
