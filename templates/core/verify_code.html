@@ -19,7 +19,7 @@
       </div>
       {% endif %}
       {% if not verified %}
-      <form class="verify-form" method="post">
+      <form class="verify-form" method="post" action="{% url 'verify_code' recovery_id %}">
         {% csrf_token %}
         <label>
           Código (4 dígitos)
@@ -36,7 +36,7 @@
         <button type="submit" class="primary-btn">Verificar código</button>
       </form>
       {% else %}
-      <form class="verify-form" method="post">
+      <form class="verify-form" method="post" action="{% url 'verify_code' recovery_id %}">
         {% csrf_token %}
         <label>
           Nova senha (4 dígitos)

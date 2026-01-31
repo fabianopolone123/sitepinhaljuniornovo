@@ -38,24 +38,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const getAllowedSlots = () => slotOrder.slice(0, getNormalizedSlotCount());
 
   const togglePanelFields = (panel, enabled) => {
-    panel
-      .querySelectorAll("input, select, textarea")
-      .forEach((field) => {
-        if (field.type === "hidden") {
-          field.disabled = !enabled;
-          return;
-        }
-        field.disabled = !enabled;
-      });
+    panel.querySelectorAll("input, select, textarea").forEach((field) => {
+      field.disabled = !enabled;
+    });
   };
 
   const updateSlotPanels = () => {
     const allowedSlots = getAllowedSlots();
     slotPanels.forEach((panel) => {
       const slot = panel.dataset.slot;
-      const shouldShow = allowedSlots.includes(slot) && slot === currentAdventurerSlot;
+      const isAllowed = allowedSlots.includes(slot);
+      const shouldShow = isAllowed && slot === currentAdventurerSlot;
       panel.classList.toggle("is-hidden", !shouldShow);
-      togglePanelFields(panel, shouldShow);
+      togglePanelFields(panel, isAllowed);
     });
   };
 
@@ -301,10 +296,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const rgCheckbox = panel.querySelector(`[name="adventure_rg_missing_${slot}"]`);
     const cpfCheckbox = panel.querySelector(`[name="adventure_cpf_missing_${slot}"]`);
     const rgField = panel.querySelector(`[name="adventure_rg_${slot}"]`);
+    const rgIssuerField = panel.querySelector(`[name="adventure_rg_issuer_${slot}"]`);
     const cpfField = panel.querySelector(`[name="adventure_cpf_${slot}"]`);
     const certidaoField = panel.querySelector(`[name="adventure_certidao_${slot}"]`);
     if (rgField) {
       rgField.required = !(rgCheckbox?.checked);
+    }
+    if (rgIssuerField) {
+      rgIssuerField.required = !(rgCheckbox?.checked);
     }
     if (cpfField) {
       cpfField.required = !(cpfCheckbox?.checked);

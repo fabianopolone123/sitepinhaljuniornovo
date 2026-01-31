@@ -561,3 +561,13 @@ tira o quadrado do funcoi
 - **Request**: abri o cadastro e ja cliquei em concluir e continua aparecendo pra preencher dados do Aventureiro 04 3 2 1 e 5 porque nao tinha cadastrado nada ainda ne. deixa setado quando começa o cadastro como 01 aventureiro
 - **Actions**: Padronizei o slot ativo inicial para o 01, limitei os slots considerados validos na validação do modal e ajustei o estado das abas para que as pendencias so sejam mostradas para os aventureiros habilitados.
 - **Notes**: python manage.py check
+
+## 2026-01-31T21:28:23+00:00Z — Manual update
+- **Request**: coloca grau de parentesco obritagorio no cadastro aventureiro em resaposnavel e Órgão expedidor no cadastro aventureiro em vebnturero obrigatorio caso nao esteja marcado como nao posui rg, e aconteceu alguma coisa, ao preencher ficar apagando campos ja preenchidos pra teste e ficar clicando em concluir pra ver os campos e testar deu algum bug que apagou os aventreros que eu tinha ja opreenchido, no caso tinha 3 ai voltou pra 01 sem nada preenchido, pai e mae e responsavel continuou preechido
+- **Actions**: tornei o campo Grau de parentesco obrigatório, passei a exigir o órgão expedidor quando o RG estiver presente e mantive os campos de slots ocultos habilitados para evitar que só o slot ativo fosse enviado (as abas continuam ocultas mas as entradas permanecem habilitadas).
+- **Notes**: python manage.py check
+
+## 2026-01-31T21:45:10+00:00Z — Manual update
+- **Request**: mas sabe o que e estranho, tem hora que nem esta todos os campos preenchidos, tento clicar em concluir e da isso, arruma pra mim
+- **Actions**: Especifiquei explicitamente a action de cada formulário (login, recuperar senha, cadastro de aventureiros e diretoria e verificação de código) usando {% url %} para garantir que as requisições sempre atinjam a URL com barra final e evitem o RuntimeError de APPEND_SLASH.
+- **Notes**: python manage.py check

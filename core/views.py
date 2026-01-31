@@ -974,6 +974,8 @@ def register_adventurer(request):
 
             if not adventure_rg and not adventure_rg_missing:
                 field_errors[f"adventure_rg_{slot}"] = "Informe o RG ou marque que não possui."
+            if not adventure_rg_issuer and not adventure_rg_missing:
+                field_errors[f"adventure_rg_issuer_{slot}"] = "Informe o órgão expedidor do RG."
             if not adventure_cpf and not adventure_cpf_missing:
                 field_errors[f"adventure_cpf_{slot}"] = "Informe o CPF ou marque que não possui."
 
@@ -1164,6 +1166,8 @@ def register_adventurer(request):
             field_errors["responsavel_city"] = "Informe a cidade."
         if not responsavel_state:
             field_errors["responsavel_state"] = "Informe o estado."
+        if not responsavel_relationship_degree:
+            field_errors["responsavel_relationship_degree"] = "Informe o grau de parentesco."
 
         if User.objects.filter(username__iexact=responsible_username).exists():
             field_errors["responsavel_username"] = "Nome de usuário indisponível."

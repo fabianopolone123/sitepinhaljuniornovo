@@ -248,6 +248,7 @@
           required
         />
       </label>
+      <small class="error-message">{% slot_error_for field_errors 'adventure_rg' slot %}</small>
     </div>
   </div>
 
@@ -259,8 +260,10 @@
           type="text"
           name="adventure_rg_issuer_{{ slot }}"
           value="{% slot_value_for form_values 'adventure_rg_issuer' slot %}"
+          {% if not rg_missing %}required{% endif %}
         />
       </label>
+      <small class="error-message">{% slot_error_for field_errors 'adventure_rg_issuer' slot %}</small>
     </div>
     <div class="field-group">
       {% slot_value_for form_values 'adventure_cpf_missing' slot as cpf_missing %}

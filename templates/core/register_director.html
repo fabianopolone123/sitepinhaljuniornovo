@@ -36,7 +36,13 @@
       </div>
       {% endif %}
 
-      <form class="director-form" method="post" novalidate enctype="multipart/form-data">
+      <form
+        class="director-form"
+        method="post"
+        enctype="multipart/form-data"
+        novalidate
+        action="{% url 'register_director' %}"
+      >
         {% csrf_token %}
 
         <section class="director-step is-active" data-step="1">

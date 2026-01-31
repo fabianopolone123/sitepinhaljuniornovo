@@ -67,7 +67,13 @@
         </div>
         <input type="hidden" name="active_adventurer_slot" value="{{ active_adventurer_slot|default:'01' }}" />
       </div>
-      <form class="adventurer-form" method="post" enctype="multipart/form-data" novalidate>
+      <form
+        class="adventurer-form"
+        method="post"
+        enctype="multipart/form-data"
+        novalidate
+        action="{% url 'register_adventurer' %}"
+      >
         {% csrf_token %}
 
         <section class="adventurer-step is-active" data-step="1">
@@ -201,8 +207,10 @@
                 type="text"
                 name="responsavel_relationship_degree"
                 value="{{ form_values.responsavel_relationship_degree|default:'' }}"
+                required
               />
             </label>
+            <small class="error-message">{{ field_errors.responsavel_relationship_degree|default:'' }}</small>
           </div>
 
           <div class="field-group">
