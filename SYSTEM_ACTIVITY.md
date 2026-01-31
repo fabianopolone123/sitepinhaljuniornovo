@@ -606,3 +606,8 @@ tira o quadrado do funcoi
 - **Request**: ainda nao da pra clicar em nenhum botao
 - **Actions**: Simplifiquei o helper getCookie para evitar regex complexa e potenciais erros; agora ele varre document.cookie e retorna o valor do csrftoken, garantindo que o script continue funcionando e os botões respondam após importar.
 - **Notes**: python manage.py check
+
+## 2026-01-31T23:03:29+00:00Z — Manual update
+- **Request**: conseguie incluir as assinaturas na janela de confirmação com o botao corrigir
+- **Actions**: Adicionei diretrizes de assinatura e um botão 'Assinar' no modal de erros para focar os campos *_signature_* e abrir o modal correspondente após ajustar o slot.
+- **Notes**: python manage.py check

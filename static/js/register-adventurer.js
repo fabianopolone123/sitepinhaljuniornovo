@@ -46,6 +46,37 @@ document.addEventListener("DOMContentLoaded", () => {
     window.CSS?.escape ??
     ((value) => value.replace(/([\\\"'!#%&()*+,./:;<=>?@[\\]^`{|}~-])/g, "\\$1"));
 
+  const signatureGuidance = [
+    {
+      pattern: /^parent_signature$/,
+      label: "Assinatura dos pais",
+      trigger: "[data-signature-trigger='parent']",
+      step: 2,
+      needsSlot: false,
+    },
+    {
+      pattern: /^adventure_data_signature_/,
+      label: "Assinatura dos dados do aventureiro",
+      trigger: "[data-signature-trigger='adventure-data']",
+      step: 3,
+      needsSlot: true,
+    },
+    {
+      pattern: /^medical_signature_/,
+      label: "Assinatura da ficha médica",
+      trigger: "[data-signature-trigger='medical']",
+      step: 4,
+      needsSlot: true,
+    },
+    {
+      pattern: /^term_signature_/,
+      label: "Assinatura do termo",
+      trigger: "[data-signature-trigger='adventurer']",
+      step: 5,
+      needsSlot: true,
+    },
+  ];
+
   const getCookie = (name) => {
     const cookieString = document.cookie || "";
     const cookies = cookieString.split(";");
@@ -133,6 +164,20 @@ document.addEventListener("DOMContentLoaded", () => {
     field.value = value ?? "";
     field.dispatchEvent(new Event("input", { bubbles: true }));
     field.dispatchEvent(new Event("change", { bubbles: true }));
+  };
+
+  const openSignatureModalFor = (triggerSelector, slot, needsSlot) => {
+    if (!triggerSelector) {
+      return;
+    }
+    let selector = triggerSelector;
+    if (needsSlot && slot) {
+      selector += `[data-slot='${slot}']`;
+    }
+    const trigger = document.querySelector(selector);
+    if (trigger) {
+      trigger.click();
+    }
   };
 
   const resetSignatureFields = () => {
@@ -406,16 +451,20 @@ document.addEventListener("DOMContentLoaded", () => {
       const stepNumber = Number(field.closest(".adventurer-step")?.dataset.step) || 1;
       const slotPanel = field.closest("[data-slot]");
       const slot = slotPanel?.dataset.slot;
+      const guidance =
+        signatureGuidance.find((entry) => entry.pattern.test(field.name)) || null;
       return {
         field,
-        label,
-        step: stepNumber,
+        label: guidance?.label || label,
+        step: guidance?.step || stepNumber,
         slot,
+        guidance,
       };
   };
 
   const buildErrorMarkup = (error) => {
     const li = document.createElement("li");
+    const guidance = error.guidance;
     const text = document.createElement("span");
     text.textContent = `${error.label} — passo ${error.step}`;
     const button = document.createElement("button");
@@ -431,6 +480,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     li.appendChild(text);
     li.appendChild(button);
+    if (guidance?.trigger) {
+      const signBtn = document.createElement("button");
+      signBtn.type = "button";
+      signBtn.className = "ghost-btn";
+      signBtn.textContent = "Assinar";
+      signBtn.addEventListener("click", () => {
+        const targetSlot = error.slot || currentAdventurerSlot;
+        setActiveAdventurerSlot(targetSlot);
+        goToStep(error.step);
+        setTimeout(() => openSignatureModalFor(guidance.trigger, targetSlot, guidance.needsSlot), 150);
+        closeErrorModal();
+      });
+      li.appendChild(signBtn);
+    }
     return li;
   };
 
