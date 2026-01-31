@@ -1229,7 +1229,7 @@ def register_adventurer(request):
                 extra={"errors": error_keys},
             )
             summary = {
-                key: f\"{info.get('len', 0)}|{info.get('hash', '')}\"
+                key: f"{info.get('len', 0)}|{info.get('hash', '')}"
                 for key, info in signature_debug.items()
             }
             logger.warning("State das assinaturas (len|hash): %s", summary)
