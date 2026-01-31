@@ -511,3 +511,8 @@ tira o quadrado do funcoi
 - **Request**: Validação de assinatura na modal
 - **Actions**: A modal agora valida se há traço dentro da área e destaca borda vermelha com aviso sempre que a assinatura toca a margem; o canvas e a mensagem de instrução foram tratados via JS/CSS para reforçar a área segura.
 - **Notes**: Rodado python manage.py check.
+
+## 2026-01-31T19:41:08+00:00Z — Manual update
+- **Request**: Resumo de validação visual ao concluir o cadastro
+- **Actions**: Adicionei uma modal de alertas que reúne todos os campos inválidos e inclui um botão 'Arrumar' que leva direto ao passo correto, e destaquei visualmente os campos dentro da área segura das assinaturas quando o canvas detecta envio na borda.
+- **Notes**: Rodado python manage.py check.

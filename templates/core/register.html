@@ -551,6 +551,14 @@
         </div>
       </div>
     </div>
+    <div class="form-error-modal" id="form-error-modal" aria-hidden="true">
+      <div class="form-error-modal__content" role="alertdialog" aria-modal="true">
+        <h3>Campos pendentes</h3>
+        <p>Veja onde estão os campos pendentes e clique em “Arrumar” para ir direto até eles.</p>
+        <ul data-error-list></ul>
+        <button type="button" class="primary-btn" data-error-modal-close>Fechar</button>
+      </div>
+    </div>
     <script src="{% static 'js/signature-modal.js' %}" defer></script>
     <script src="{% static 'js/register-adventurer.js' %}" defer></script>
   </body>

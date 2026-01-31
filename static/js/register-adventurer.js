@@ -16,6 +16,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const activeSlotName = document.querySelector("[data-active-slot-name]");
   const slotControl = document.querySelector("[data-slot-control]");
   const slotOrder = adventurerTabs.map((tab) => tab.dataset.adventurerTab);
+  const errorModal = document.getElementById("form-error-modal");
+  const errorList = errorModal?.querySelector("[data-error-list]");
+  const closeErrorModalBtn = errorModal?.querySelector("[data-error-modal-close]");
   let currentStep = 1;
   const responsavelNomeInput = document.getElementById("responsavel_nome");
   const responsavelSobrenomeInput = document.getElementById("responsavel_sobrenome");
@@ -178,6 +181,58 @@ document.addEventListener("DOMContentLoaded", () => {
     return input?.value.trim() || "";
   };
 
+  const describeField = (field) => {
+    const label =
+      field.closest("label")?.textContent?.trim().replace(/\s+/g, " ") ||
+      field.dataset.placeholder ||
+      field.name;
+    const stepNumber = Number(field.closest(".adventurer-step")?.dataset.step) || 1;
+    const slotPanel = field.closest("[data-slot]");
+    const slot = slotPanel?.dataset.slot;
+    return {
+      field,
+      label,
+      step: stepNumber,
+      slot,
+    };
+  };
+
+  const buildErrorMarkup = (error) => {
+    const li = document.createElement("li");
+    const text = document.createElement("span");
+    text.textContent = `${error.label} — passo ${error.step}`;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "ghost-btn";
+    button.textContent = "Arrumar";
+    button.addEventListener("click", () => {
+      setActiveAdventurerSlot(error.slot);
+      goToStep(error.step);
+      error.field.focus();
+      closeErrorModal();
+    });
+    li.appendChild(text);
+    li.appendChild(button);
+    return li;
+  };
+
+  const openErrorModal = (errors) => {
+    if (!errorModal || !errorList) {
+      return;
+    }
+    errorList.innerHTML = "";
+    errors.forEach((error) => errorList.appendChild(buildErrorMarkup(error)));
+    errorModal.classList.add("is-open");
+  };
+
+  const closeErrorModal = () => {
+    if (!errorModal) {
+      return;
+    }
+    errorModal.classList.remove("is-open");
+  };
+
+  closeErrorModalBtn?.addEventListener("click", closeErrorModal);
   const updateTermChildFieldsForSlot = (slot) => {
     const name = getSlotName(slot);
     termChildInputs.forEach((input) => {
@@ -397,6 +452,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       firstInvalid?.focus();
       goToStep(Number(firstInvalid?.closest(".adventurer-step")?.dataset.step) || 1);
+      const errors = highlightedFields.map(describeField);
+      openErrorModal(errors);
     }
   });
 

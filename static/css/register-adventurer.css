@@ -556,6 +556,62 @@ body {
   flex-wrap: wrap;
 }
 
+.form-error-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 37, 94, 0.65);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+}
+
+.form-error-modal.is-open {
+  display: flex;
+}
+
+.form-error-modal__content {
+  width: min(520px, 90vw);
+  background: #fff;
+  border-radius: 24px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.form-error-modal__content h3 {
+  margin: 0;
+  color: #0f3a74;
+}
+
+.form-error-modal__content p {
+  margin: 0;
+  color: #4c587b;
+}
+
+.form-error-modal__content ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.form-error-modal__content li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid rgba(15, 61, 103, 0.15);
+  border-radius: 14px;
+  background: #f7f9ff;
+  color: #223057;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
