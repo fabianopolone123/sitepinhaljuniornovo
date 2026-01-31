@@ -1,6 +1,7 @@
 from calendar import month_name, monthrange
 from datetime import date, timedelta
 from decimal import Decimal, ROUND_HALF_UP
+import hashlib
 import json
 import logging
 import os
@@ -136,6 +137,14 @@ def _is_signature_field(field_name: str) -> bool:
         if field_name == pattern or field_name.startswith(pattern):
             return True
     return False
+
+
+def _signature_snapshot(value: str) -> dict[str, object]:
+    normalized = (value or "").strip()
+    if not normalized:
+        return {"len": 0, "hash": ""}
+    digest = hashlib.sha256(normalized.encode("utf-8")).hexdigest()[:8]
+    return {"len": len(normalized), "hash": digest}
 
 
 def _create_monthly_fees(responsible, adventurer, start_date=None):
@@ -861,6 +870,11 @@ def register_adventurer(request):
         responsavel_data_truth = request.POST.get("responsavel_data_truth") == "on"
         form_values["responsavel_data_truth"] = responsavel_data_truth
 
+        signature_debug = {
+            "parent_signature": _signature_snapshot(parent_signature),
+            "responsavel_signature": _signature_snapshot(responsavel_signature),
+        }
+
         deficiency_slugs = [
             ("cadeirante", "Cadeirante"),
             ("visual", "Visual"),
@@ -910,6 +924,7 @@ def register_adventurer(request):
             adventure_shirt_size = slot_value("adventure_shirt_size", slot)
             adventure_data_signature = slot_value("adventure_data_signature", slot, trim=False)
             adventure_data_truth = request.POST.get(slot_key("adventure_data_truth", slot)) == "on"
+            signature_debug[f"adventure_data_signature_{slot}"] = _signature_snapshot(adventure_data_signature)
 
             class_selected = [
                 label
@@ -948,6 +963,7 @@ def register_adventurer(request):
             medical_signature = slot_value("medical_signature", slot, trim=False)
             medical_data_truth = request.POST.get(slot_key("medical_data_truth", slot)) == "on"
             medical_confirmation = request.POST.get(slot_key("medical_confirmation", slot)) == "on"
+            signature_debug[f"medical_signature_{slot}"] = _signature_snapshot(medical_signature)
 
             term_responsible = slot_value("term_responsible", slot)
             term_nationality = slot_value("term_nationality", slot)
@@ -958,6 +974,7 @@ def register_adventurer(request):
             term_contact_phone = slot_value("term_contact_phone", slot)
             term_confirmation = request.POST.get(slot_key("term_confirmation", slot)) == "on"
             term_data_truth = request.POST.get(slot_key("term_data_truth", slot)) == "on"
+            signature_debug[f"term_signature_{slot}"] = _signature_snapshot(term_signature)
 
             adventure_photo = request.FILES.get(slot_key("adventure_photo", slot))
 
@@ -1211,6 +1228,12 @@ def register_adventurer(request):
                 ", ".join(error_keys),
                 extra={"errors": error_keys},
             )
+            summary = {
+                key: f\"{info.get('len', 0)}|{info.get('hash', '')}\"
+                for key, info in signature_debug.items()
+            }
+            logger.warning("State das assinaturas (len|hash): %s", summary)
+            logger.warning("State das assinaturas (comprimento): %s", signature_debug)
         if not field_errors:
             try:
                 with transaction.atomic():
