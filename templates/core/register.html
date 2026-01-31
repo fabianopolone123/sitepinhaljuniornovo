@@ -31,6 +31,42 @@
         <button type="button" class="step-btn" data-step-target="4">04. Ficha médica</button>
         <button type="button" class="step-btn" data-step-target="5">05. Termo</button>
       </div>
+      <div class="adventurer-slot-control">
+        <div class="adventurer-count-control">
+          <label class="field-group">
+            Quantos aventureiros quer cadastrar?
+            <select name="adventure_count">
+              {% for slot in adventurer_slots %}
+              <option value="{{ slot }}" {% if form_values.adventure_count == slot %}selected{% endif %}>
+                {{ slot }}
+              </option>
+              {% endfor %}
+            </select>
+          </label>
+          <div class="adventurer-tabs" data-adventurer-tabs>
+            {% for slot in adventurer_slots %}
+            <button
+              type="button"
+              class="ghost-btn adventurer-tab"
+              data-slot-role="primary"
+              data-adventurer-tab="{{ slot }}"
+            >
+              Aventureiro {{ slot }}
+            </button>
+            {% endfor %}
+          </div>
+        </div>
+        <p class="adventurer-slot-label" id="adventurer-slot-label">
+          <span data-active-slot-number>Aventureiro {{ active_adventurer_slot|default:"01" }}</span>
+          <span data-active-slot-name></span>
+        </p>
+        <div class="slot-guidance">
+          <span>1 • Dados do aventureiro</span>
+          <span>2 • Ficha médica</span>
+          <span>3 • Termo</span>
+        </div>
+        <input type="hidden" name="active_adventurer_slot" value="{{ active_adventurer_slot|default:'01' }}" />
+      </div>
       <form class="adventurer-form" method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
 

@@ -88,12 +88,12 @@ MEDICAL_CONDITIONS = [
     ("hepatite", "Hepatite"),
     ("dengue", "Dengue"),
     ("pneumonia", "Pneumonia"),
-    ("malaria", "MalÃ¡ria"),
+    ("malaria", "Malária"),
     ("febre_amarela", "Febre Amarela"),
-    ("rubeola", "RubÃ©ola"),
+    ("rubeola", "Rubéola"),
     ("sarampo", "Sarampo"),
-    ("tetano", "TÃ©tano"),
-    ("variola", "VarÃ­ola"),
+    ("tetano", "Tétano"),
+    ("variola", "Varíola"),
     ("coqueluche", "Coqueluche"),
     ("difteria", "Difteria"),
     ("caxumba", "Caxumba"),
@@ -101,11 +101,11 @@ MEDICAL_CONDITIONS = [
     ("bronquite", "Bronquite"),
 ]
 
-BLOOD_TYPES = ["A+", "A-", "AB+", "AB-", "B+", "B-", "O+", "O-", "NÃ£o sabe"]
+BLOOD_TYPES = ["A+", "A-", "AB+", "AB-", "B+", "B-", "O+", "O-", "Não sabe"]
 
 EDUCATION_CHOICES = [
     ("fundamental", "Ensino Fundamental"),
-    ("medio", "Ensino MÃ©dio"),
+    ("medio", "Ensino Médio"),
     ("faculdade", "Faculdade"),
 ]
 
