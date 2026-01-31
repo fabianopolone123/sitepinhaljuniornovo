@@ -596,3 +596,8 @@ tira o quadrado do funcoi
 - **Request**: sim faz algo pra evitar erro dos improts
 - **Actions**: Sincronizei o campo csrfmiddlewaretoken com o cookie antes/depois da importação e mantive o hidden token intacto, além de expor uma função que reseta as assinaturas, para prevenir o 403 CSRF e garantir que o servidor aceite o post.
 - **Notes**: python manage.py check
+
+## 2026-01-31T22:52:10+00:00Z — Manual update
+- **Request**: deu algum erro no ta dando pra clicar em nehum botao
+- **Actions**: Corrigi o getCookie usado para atualizar o CSRF ao importar/exportar, escapando corretamente os colchetes para evitar uma exceção JS que impedia o restante do script de rodar e bloquava os botões.
+- **Notes**: python manage.py check
