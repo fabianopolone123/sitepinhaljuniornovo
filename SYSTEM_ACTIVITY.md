@@ -536,3 +536,8 @@ tira o quadrado do funcoi
 - **Request**: Opção 'não possui' para RG/CPF
 - **Actions**: Adicionei checkboxes ao lado de RG/CPF no template, ajustei o JS para atualizar os campos obrigatórios e a certidão quando ambas estiverem marcadas, e o backend agora ignora os campos marcados como ausentes enquanto exige a certidão nesses casos.
 - **Notes**: Rodado python manage.py check.
+
+## 2026-01-31T20:17:50+00:00Z — Manual update
+- **Request**: WhatsApp do responsável pré preenchido
+- **Actions**: Adicionei data-auto-from='responsavel_whatsapp' ao campo WhatsApp dos slots para que o valor seja copiado automaticamente do responsável.
+- **Notes**: Rodado python manage.py check.

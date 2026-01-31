@@ -294,6 +294,7 @@
         <input
           type="tel"
           name="adventure_parent_whatsapp_phone_{{ slot }}"
+          data-auto-from="responsavel_whatsapp"
           value="{% if parent_whatsapp %}{{ parent_whatsapp }}{% else %}{{ form_values|dict_get:'responsavel_whatsapp'|default:'' }}{% endif %}"
         />
       </label>
