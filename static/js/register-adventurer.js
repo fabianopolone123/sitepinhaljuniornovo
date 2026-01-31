@@ -34,12 +34,25 @@ document.addEventListener("DOMContentLoaded", () => {
     return Math.min(Math.max(1, rawValue), slotOrder.length || 1);
   };
 
+  const togglePanelFields = (panel, enabled) => {
+    panel
+      .querySelectorAll("input, select, textarea")
+      .forEach((field) => {
+        if (field.type === "hidden") {
+          field.disabled = !enabled;
+          return;
+        }
+        field.disabled = !enabled;
+      });
+  };
+
   const updateSlotPanels = () => {
     const allowedSlots = slotOrder.slice(0, getNormalizedSlotCount());
     slotPanels.forEach((panel) => {
       const slot = panel.dataset.slot;
       const shouldShow = allowedSlots.includes(slot) && slot === currentAdventurerSlot;
       panel.classList.toggle("is-hidden", !shouldShow);
+      togglePanelFields(panel, shouldShow);
     });
   };
 

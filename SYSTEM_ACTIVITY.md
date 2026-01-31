@@ -551,3 +551,8 @@ tira o quadrado do funcoi
 - **Request**: Arrumar navega para slot certo
 - **Actions**: Fiz os botões da modal de erros usarem o slot ativo como fallback e passei esse valor ao setActiveAdventurerSlot/goToStep, assim o clique sempre abre a aba correta mesmo quando o campo inválido não tem data-slot.
 - **Notes**: Rodado python manage.py check.
+
+## 2026-01-31T20:57:07+00:00Z — Manual update
+- **Request**: Desabilita campos de slots inativos
+- **Actions**: Quando o slot não estiver ativo ou não foi habilitado pela quantidade selecionada, passo a inputs/selects/textarea para disabled antes de esconder o painel, evitando que o browser marque o slot como inválido e exibindo só os slots permitidos na modal de erros.
+- **Notes**: Rodado python manage.py check.
