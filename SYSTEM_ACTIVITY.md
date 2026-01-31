@@ -496,3 +496,8 @@ tira o quadrado do funcoi
 - **Request**: Padroniza campos do bloco dos pais / mãe para reagir ao WhatsApp e Celular
 - **Actions**: No template de cadastro guiado atualizei o label do campo da mãe para WhatsApp e corrigi o feedback de erro; no backend o dicionário de dados do pai/mãe agora usa os campos existentes (pai_whatsapp / mae_whatsapp) para alimentar o campo 'telefone', eliminando erros falsos.
 - **Notes**: Rodado python manage.py check.
+
+## 2026-01-31T19:09:31+00:00Z — Manual update
+- **Request**: Ficha médica: condicionar questionários de remédios e detalhar alergias
+- **Actions**: Adicionei campo para detalhar alergia cutânea e tornei o bloco de 'Utiliza remédios?' dependente do 'sim' para problemas cardíacos, diabetes, rins e psicológicos, tanto no template quanto no backend (captura/validação e persistência no JSON médico).
+- **Notes**: Rodado python manage.py check.

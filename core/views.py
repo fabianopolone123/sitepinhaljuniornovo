@@ -892,6 +892,7 @@ def register_adventurer(request):
             medical_plan_number = slot_value("medical_plan_number", slot)
             medical_sus = slot_value("medical_sus", slot)
             medical_allergy_skin = slot_value("medical_allergy_skin", slot)
+            medical_allergy_skin_detail = slot_value("medical_allergy_skin_detail", slot)
             medical_allergy_food = slot_value("medical_allergy_food", slot)
             medical_allergy_food_detail = slot_value("medical_allergy_food_detail", slot)
             medical_allergy_med = slot_value("medical_allergy_med", slot)
@@ -911,6 +912,8 @@ def register_adventurer(request):
             medical_kidney_meds = slot_value("medical_kidney_meds", slot)
             medical_kidney_meds_detail = slot_value("medical_kidney_meds_detail", slot)
             medical_psychological = slot_value("medical_psychological", slot)
+            medical_psychological_meds = slot_value("medical_psychological_meds", slot)
+            medical_psychological_meds_detail = slot_value("medical_psychological_meds_detail", slot)
             medical_blood_type = slot_value("medical_blood_type", slot)
             medical_signature = slot_value("medical_signature", slot, trim=False)
             medical_data_truth = request.POST.get(slot_key("medical_data_truth", slot)) == "on"
@@ -974,8 +977,26 @@ def register_adventurer(request):
                 field_errors[f"medical_plan_number_{slot}"] = "Informe o número da carteirinha do plano de saúde."
             if not medical_sus:
                 field_errors[f"medical_sus_{slot}"] = "Informe o número da Carteira Nacional de Saúde (SUS)."
+            if medical_allergy_skin == "sim" and not medical_allergy_skin_detail:
+                field_errors[f"medical_allergy_skin_detail_{slot}"] = "Informe qual alergia cutânea."
             if not medical_blood_type:
                 field_errors[f"medical_blood_type_{slot}"] = "Informe o tipo sanguíneo."
+            if medical_heart == "sim" and not medical_heart_meds:
+                field_errors[f"medical_heart_meds_{slot}"] = "Especifique se utiliza remédios para o coração."
+            if medical_heart_meds == "sim" and not medical_heart_meds_detail:
+                field_errors[f"medical_heart_meds_detail_{slot}"] = "Informe o nome do remédio."
+            if medical_diabetic == "sim" and not medical_diabetic_meds:
+                field_errors[f"medical_diabetic_meds_{slot}"] = "Especifique se utiliza remédios para diabetes."
+            if medical_diabetic_meds == "sim" and not medical_diabetic_meds_detail:
+                field_errors[f"medical_diabetic_meds_detail_{slot}"] = "Informe o nome do remédio."
+            if medical_kidney == "sim" and not medical_kidney_meds:
+                field_errors[f"medical_kidney_meds_{slot}"] = "Especifique se utiliza remédios para o rim."
+            if medical_kidney_meds == "sim" and not medical_kidney_meds_detail:
+                field_errors[f"medical_kidney_meds_detail_{slot}"] = "Informe o nome do remédio."
+            if medical_psychological == "sim" and not medical_psychological_meds:
+                field_errors[f"medical_psychological_meds_{slot}"] = "Especifique se utiliza remédios para questões psicológicas."
+            if medical_psychological_meds == "sim" and not medical_psychological_meds_detail:
+                field_errors[f"medical_psychological_meds_detail_{slot}"] = "Informe o nome do remédio."
             if not medical_signature:
                 field_errors[f"medical_signature_{slot}"] = "Assine a ficha médica."
             if not medical_confirmation:
@@ -1045,6 +1066,7 @@ def register_adventurer(request):
                     "medical_plan_number": medical_plan_number,
                     "medical_sus": medical_sus,
                     "medical_allergy_skin": medical_allergy_skin,
+                    "medical_allergy_skin_detail": medical_allergy_skin_detail,
                     "medical_allergy_food": medical_allergy_food,
                     "medical_allergy_food_detail": medical_allergy_food_detail,
                     "medical_allergy_med": medical_allergy_med,
@@ -1064,6 +1086,8 @@ def register_adventurer(request):
                     "medical_kidney_meds": medical_kidney_meds,
                     "medical_kidney_meds_detail": medical_kidney_meds_detail,
                     "medical_psychological": medical_psychological,
+                    "medical_psychological_meds": medical_psychological_meds,
+                    "medical_psychological_meds_detail": medical_psychological_meds_detail,
                     "medical_blood_type": medical_blood_type,
                     "medical_signature": medical_signature,
                     "medical_data_truth": medical_data_truth,
@@ -1218,13 +1242,14 @@ def register_adventurer(request):
                                 "plano_nome": slot_data["medical_plan_name"],
                                 "plano_numero": slot_data["medical_plan_number"],
                                 "sus": slot_data["medical_sus"],
-                                "alergia_cutanea": slot_data["medical_allergy_skin"],
-                                "alergia_alimentar": slot_data["medical_allergy_food"],
-                                "alergia_alimento": slot_data["medical_allergy_food_detail"],
-                                "alergia_medicamento": slot_data["medical_allergy_med"],
-                                "alergia_remedio": slot_data["medical_allergy_med_detail"],
-                                "condicoes": slot_data["conditions_list"],
-                                "deficientes": slot_data["deficiencies"],
+                            "alergia_cutanea": slot_data["medical_allergy_skin"],
+                            "alergia_cutanea_det": slot_data["medical_allergy_skin_detail"],
+                            "alergia_alimentar": slot_data["medical_allergy_food"],
+                            "alergia_alimento": slot_data["medical_allergy_food_detail"],
+                            "alergia_medicamento": slot_data["medical_allergy_med"],
+                            "alergia_remedio": slot_data["medical_allergy_med_detail"],
+                            "condicoes": slot_data["conditions_list"],
+                            "deficientes": slot_data["deficiencies"],
                                 "problema_cardiaco": slot_data["medical_heart"],
                                 "medicacao_cardiaca": slot_data["medical_heart_meds"],
                                 "medicacao_cardiaca_det": slot_data["medical_heart_meds_detail"],
@@ -1234,8 +1259,10 @@ def register_adventurer(request):
                                 "problema_renal": slot_data["medical_kidney"],
                                 "medicacao_renal": slot_data["medical_kidney_meds"],
                                 "medicacao_renal_det": slot_data["medical_kidney_meds_detail"],
-                                "psicologico": slot_data["medical_psychological"],
-                                "medicamentos_recentes": slot_data["medical_recent_medicines"],
+                            "psicologico": slot_data["medical_psychological"],
+                            "psicologico_remedios": slot_data["medical_psychological_meds"],
+                            "psicologico_remedios_det": slot_data["medical_psychological_meds_detail"],
+                            "medicamentos_recentes": slot_data["medical_recent_medicines"],
                                 "fraturas_recentes": slot_data["medical_recent_fractures"],
                                 "cirurgias": slot_data["medical_surgeries"],
                                 "internacao": slot_data["medical_hospitalization"],
