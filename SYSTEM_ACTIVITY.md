@@ -591,3 +591,8 @@ tira o quadrado do funcoi
 - **Request**: Forbidden CSRF verification failed, export/import deixou concluir sem assinaturas
 - **Actions**: Ignorei o CSRF hidden token e os campos de assinatura na exportação e limpei os campos de assinatura após a importação para evitar reutilizar tokens ou assinaturas que não valem mais.
 - **Notes**: python manage.py check
+
+## 2026-01-31T22:49:26+00:00Z — Manual update
+- **Request**: sim faz algo pra evitar erro dos improts
+- **Actions**: Sincronizei o campo csrfmiddlewaretoken com o cookie antes/depois da importação e mantive o hidden token intacto, além de expor uma função que reseta as assinaturas, para prevenir o 403 CSRF e garantir que o servidor aceite o post.
+- **Notes**: python manage.py check

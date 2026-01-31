@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const activeSlotName = document.querySelector("[data-active-slot-name]");
   const slotControl = document.querySelector("[data-slot-control]");
   const slotOrder = adventurerTabs.map((tab) => tab.dataset.adventurerTab);
+  const csrfTokenInput = form?.querySelector("[name='csrfmiddlewaretoken']");
   const errorModal = document.getElementById("form-error-modal");
   const errorList = errorModal?.querySelector("[data-error-list]");
   const closeErrorModalBtn = errorModal?.querySelector("[data-error-modal-close]");
@@ -44,6 +45,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const cssEscape =
     window.CSS?.escape ??
     ((value) => value.replace(/([\\\"'!#%&()*+,./:;<=>?@[\\]^`{|}~-])/g, "\\$1"));
+
+  const getCookie = (name) => {
+    const matches = document.cookie.match(
+      new RegExp("(^|; )" + name.replace(/([.$?*|{}()[]\\/+^])/g, "\\$1") + "=([^;]*)")
+    );
+    return matches ? decodeURIComponent(matches[2]) : "";
+  };
 
   const ignoredExportFields = new Set(["csrfmiddlewaretoken"]);
   const signatureFieldPattern = /_signature_/;
@@ -152,6 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateSlotPanels();
     alert("Dados importados. Reenvie fotos e assinaturas antes de concluir.");
     resetSignatureFields();
+    syncCsrfFromCookie();
   };
 
   const handleImportFile = (file) => {
@@ -173,6 +182,16 @@ document.addEventListener("DOMContentLoaded", () => {
     reader.readAsText(file, "utf-8");
   };
 
+  const syncCsrfFromCookie = () => {
+    if (!csrfTokenInput) {
+      return;
+    }
+    const cookieToken = getCookie("csrftoken");
+    if (cookieToken) {
+      csrfTokenInput.value = cookieToken;
+    }
+  };
+
   exportFormButton?.addEventListener("click", () => downloadCurrentState());
   importFormButton?.addEventListener("click", () => importFormInput?.click());
   importFormInput?.addEventListener("change", () => {
@@ -183,6 +202,8 @@ document.addEventListener("DOMContentLoaded", () => {
     handleImportFile(file);
     importFormInput.value = "";
   });
+
+  syncCsrfFromCookie();
 
   const togglePanelFields = (panel, enabled) => {
     panel.querySelectorAll("input, select, textarea").forEach((field) => {
