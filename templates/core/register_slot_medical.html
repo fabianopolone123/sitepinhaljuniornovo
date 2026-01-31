@@ -318,13 +318,6 @@
         </select>
       </label>
     </div>
-    <div class="field-group checkbox-field">
-      {% slot_value_for form_values 'medical_confirmation' slot as medical_confirmation %}
-        <label>
-        <input type="checkbox" name="medical_confirmation_{{ slot }}" {% if medical_confirmation %}checked{% endif %} required />
-        Declaro serem verdadeiras todas as informações médicas acima.
-      </label>
-    </div>
   </div>
 
   <div class="signature-block">
