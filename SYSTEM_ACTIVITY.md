@@ -581,3 +581,8 @@ tira o quadrado do funcoi
 - **Request**: adiciona tambem um botao importar e outro para exportar
 - **Actions**: Incluí botões de exportar/importar na etapa do cadastro de aventureiros e um script JS que serializa os campos, baixa um JSON e reaplica o conteúdo ao importar, preservando o contador de slots e mantendo a validação do formulário.
 - **Notes**: python manage.py check
+
+## 2026-01-31T22:40:46+00:00Z — Manual update
+- **Request**: continua o mesmo erro, como vejo os logs
+- **Actions**: Altereio o warning para mostrar quais chaves estão inválidas diretamente na mensagem para que o journalctl exiba os campos (sem depender de extra).
+- **Notes**: python manage.py check

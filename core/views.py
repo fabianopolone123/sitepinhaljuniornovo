@@ -1176,9 +1176,9 @@ def register_adventurer(request):
 
         if field_errors:
             logger.warning(
-                "Cadastro guiado falhou com %d campos inválidos",
+                "Cadastro guiado falhou com %d campos inválidos (%s)",
                 len(field_errors),
-                extra={"errors": list(field_errors.keys())},
+                ", ".join(sorted(field_errors.keys())),
             )
         if not field_errors:
             try:
