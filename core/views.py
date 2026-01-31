@@ -876,6 +876,10 @@ def register_adventurer(request):
             adventure_rg = slot_value("adventure_rg", slot)
             adventure_rg_issuer = slot_value("adventure_rg_issuer", slot)
             adventure_cpf = slot_value("adventure_cpf", slot)
+            adventure_rg_missing = request.POST.get(slot_key("adventure_rg_missing", slot)) == "on"
+            adventure_cpf_missing = request.POST.get(slot_key("adventure_cpf_missing", slot)) == "on"
+            form_values[slot_key("adventure_rg_missing", slot)] = "on" if adventure_rg_missing else ""
+            form_values[slot_key("adventure_cpf_missing", slot)] = "on" if adventure_cpf_missing else ""
             adventure_parent_whatsapp_phone = slot_value("adventure_parent_whatsapp_phone", slot)
             adventure_shirt_size = slot_value("adventure_shirt_size", slot)
             adventure_data_signature = slot_value("adventure_data_signature", slot, trim=False)
@@ -953,9 +957,6 @@ def register_adventurer(request):
                 ("adventure_postal_code", adventure_postal_code),
                 ("adventure_city", adventure_city),
                 ("adventure_state", adventure_state),
-                ("adventure_certidao", adventure_certidao),
-                ("adventure_rg", adventure_rg),
-                ("adventure_cpf", adventure_cpf),
             ):
                 if not value:
                     field_errors[f"{key}_{slot}"] = "Campo obrigatório."
@@ -971,12 +972,18 @@ def register_adventurer(request):
             if not adventure_photo:
                 field_errors[f"adventure_photo_{slot}"] = "Anexe a foto 3x4 do aventureiro."
 
+            if not adventure_rg and not adventure_rg_missing:
+                field_errors[f"adventure_rg_{slot}"] = "Informe o RG ou marque que não possui."
+            if not adventure_cpf and not adventure_cpf_missing:
+                field_errors[f"adventure_cpf_{slot}"] = "Informe o CPF ou marque que não possui."
+
+            if adventure_rg_missing and adventure_cpf_missing and not adventure_certidao:
+                field_errors[f"adventure_certidao_{slot}"] = "Informe a certidão quando não houver RG nem CPF."
+
             if not medical_plan:
                 field_errors[f"medical_plan_{slot}"] = "Informe se possui plano de saúde."
             if medical_plan == "sim" and not medical_plan_number:
                 field_errors[f"medical_plan_number_{slot}"] = "Informe o número da carteirinha do plano de saúde."
-            if not medical_sus:
-                field_errors[f"medical_sus_{slot}"] = "Informe o número da Carteira Nacional de Saúde (SUS)."
             if medical_allergy_skin == "sim" and not medical_allergy_skin_detail:
                 field_errors[f"medical_allergy_skin_detail_{slot}"] = "Informe qual alergia cutânea."
             if not medical_blood_type:
@@ -1054,6 +1061,8 @@ def register_adventurer(request):
                     "rg": adventure_rg,
                     "rg_issuer": adventure_rg_issuer,
                     "cpf": adventure_cpf,
+                    "rg_missing": adventure_rg_missing,
+                    "cpf_missing": adventure_cpf_missing,
                     "parent_whatsapp_phone": adventure_parent_whatsapp_phone,
                     "shirt_size": adventure_shirt_size,
                     "religion": adventure_religion,

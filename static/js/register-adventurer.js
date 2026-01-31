@@ -247,6 +247,38 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  const getSlotPanel = (slot) => document.querySelector(`[data-slot="${slot}"]`);
+
+  const refreshDocumentRequirements = (slot) => {
+    const panel = getSlotPanel(slot);
+    if (!panel) return;
+    const rgCheckbox = panel.querySelector(`[name="adventure_rg_missing_${slot}"]`);
+    const cpfCheckbox = panel.querySelector(`[name="adventure_cpf_missing_${slot}"]`);
+    const rgField = panel.querySelector(`[name="adventure_rg_${slot}"]`);
+    const cpfField = panel.querySelector(`[name="adventure_cpf_${slot}"]`);
+    const certidaoField = panel.querySelector(`[name="adventure_certidao_${slot}"]`);
+    if (rgField) {
+      rgField.required = !(rgCheckbox?.checked);
+    }
+    if (cpfField) {
+      cpfField.required = !(cpfCheckbox?.checked);
+    }
+    if (certidaoField) {
+      certidaoField.required = Boolean(rgCheckbox?.checked && cpfCheckbox?.checked);
+    }
+  };
+
+  const missingCheckboxes = Array.from(document.querySelectorAll("[data-missing-checkbox]"));
+  missingCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
+      const slot = checkbox.dataset.slotFlag;
+      if (!slot) {
+        return;
+      }
+      refreshDocumentRequirements(slot);
+    });
+  });
+
   const formatTabLabel = (slot, name) => {
     if (!name) {
       return `Aventureiro ${slot}`;
@@ -354,7 +386,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const initialCount = getNormalizedSlotCount();
   updateTabVisibility(initialCount);
   setActiveAdventurerSlot(currentAdventurerSlot, false);
-  slotOrder.forEach((slot) => refreshSlotMetadata(slot));
+  slotOrder.forEach((slot) => {
+    refreshSlotMetadata(slot);
+    refreshDocumentRequirements(slot);
+  });
 
   slotNameInputs.forEach((input) => {
     const slot = input.dataset.slotNameInput;

@@ -229,6 +229,15 @@ body {
   gap: 0.35rem;
 }
 
+.missing-flag {
+  font-size: 0.8rem;
+  color: #4c587b;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.2rem;
+}
+
 .field-group input,
 .field-group select,
 .field-group textarea {

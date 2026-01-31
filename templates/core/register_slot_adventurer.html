@@ -216,21 +216,31 @@
     </div>
   </div>
 
-  <div class="grid two-columns">
+    <div class="grid two-columns">
+      <div class="field-group">
+        <label>
+          Certidão de nascimento
+          <input
+            type="text"
+            name="adventure_certidao_{{ slot }}"
+            value="{% slot_value_for form_values 'adventure_certidao' slot %}"
+          />
+        </label>
+      </div>
     <div class="field-group">
-      <label>
-        Certidão de nascimento
-        <input
-          type="text"
-          name="adventure_certidao_{{ slot }}"
-          value="{% slot_value_for form_values 'adventure_certidao' slot %}"
-          required
-        />
-      </label>
-    </div>
-    <div class="field-group">
+      {% slot_value_for form_values 'adventure_rg_missing' slot as rg_missing %}
       <label>
         RG
+        <span class="missing-flag">
+          <input
+            type="checkbox"
+            name="adventure_rg_missing_{{ slot }}"
+            data-missing-checkbox="rg"
+            data-slot-flag="{{ slot }}"
+            {% if rg_missing %}checked{% endif %}
+          />
+          não possui
+        </span>
         <input
           type="text"
           name="adventure_rg_{{ slot }}"
@@ -253,8 +263,19 @@
       </label>
     </div>
     <div class="field-group">
+      {% slot_value_for form_values 'adventure_cpf_missing' slot as cpf_missing %}
       <label>
         CPF do aventureiro
+        <span class="missing-flag">
+          <input
+            type="checkbox"
+            name="adventure_cpf_missing_{{ slot }}"
+            data-missing-checkbox="cpf"
+            data-slot-flag="{{ slot }}"
+            {% if cpf_missing %}checked{% endif %}
+          />
+          não possui
+        </span>
         <input
           type="text"
           name="adventure_cpf_{{ slot }}"
@@ -274,11 +295,7 @@
           type="tel"
           name="adventure_parent_whatsapp_phone_{{ slot }}"
           value="{% if parent_whatsapp %}{{ parent_whatsapp }}{% else %}{{ form_values|dict_get:'responsavel_whatsapp'|default:'' }}{% endif %}"
-          required
         />
-        <small class="field-hint">
-          Use o mesmo número registrado no responsável ({{ form_values|dict_get:'responsavel_whatsapp'|default:'-' }}).
-        </small>
       </label>
       <small class="error-message">{% slot_error_for field_errors 'adventure_parent_whatsapp_phone' slot %}</small>
     </div>

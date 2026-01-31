@@ -521,3 +521,18 @@ tira o quadrado do funcoi
 - **Request**: Ajusta validação condicional da ficha
 - **Actions**: Removi o atributo required dos selects dependentes de ‘Utiliza remédios?’ (coração, diabetes, rins e psicológico) e foquei na validação personalizada para que o formulário não trave quando o campo estiver oculto; também deixei a modal de erros com barra de rolagem fixa para muitas mensagens.
 - **Notes**: Rodado python manage.py check.
+
+## 2026-01-31T20:03:06+00:00Z — Manual update
+- **Request**: Campo não obrigatório
+- **Actions**: Removi a exigência de Certidão de nascimento e SUS no formulário/JS e ajustei a validação do backend para não travar o envio quando esses campos estão vazios.
+- **Notes**: Rodado python manage.py check.
+
+## 2026-01-31T20:05:56+00:00Z — Manual update
+- **Request**: WhatsApp dos pais pré preenchido
+- **Actions**: Removi o atributo required no campo 'WhatsApp do responsável' (ficando sempre preenchido com o WhatsApp do responsável se ainda vazio) e retirei a nota 'Use o mesmo número...' para evitar mensagens desnecessárias.
+- **Notes**: Rodado python manage.py check.
+
+## 2026-01-31T20:10:47+00:00Z — Manual update
+- **Request**: Opção 'não possui' para RG/CPF
+- **Actions**: Adicionei checkboxes ao lado de RG/CPF no template, ajustei o JS para atualizar os campos obrigatórios e a certidão quando ambas estiverem marcadas, e o backend agora ignora os campos marcados como ausentes enquanto exige a certidão nesses casos.
+- **Notes**: Rodado python manage.py check.
