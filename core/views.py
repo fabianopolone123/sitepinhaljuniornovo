@@ -113,6 +113,29 @@ MONTHLY_FEE_DUE_DAY = 10
 
 logger = logging.getLogger(__name__)
 
+SIGNATURE_FIELD_PATTERNS = (
+    "parent_signature",
+    "parent_data_truth",
+    "responsavel_signature",
+    "responsavel_data_truth",
+    "adventure_data_signature_",
+    "adventure_data_truth_",
+    "medical_signature_",
+    "medical_confirmation_",
+    "medical_data_truth_",
+    "term_signature_",
+    "term_confirmation_",
+    "term_data_truth_",
+)
+
+
+def _is_signature_field(field_name: str) -> bool:
+    if not field_name:
+        return False
+    for pattern in SIGNATURE_FIELD_PATTERNS:
+        if field_name == pattern or field_name.startswith(pattern):
+            return True
+    return False
 
 
 def _create_monthly_fees(responsible, adventurer, start_date=None):
@@ -776,6 +799,9 @@ def register_adventurer(request):
     field_errors = {}
     form_values = {}
     success_message = ""
+    signature_error_keys = []
+    signature_warning_active = False
+    signature_warning_only = False
 
     if request.method == "POST":
         form_values = request.POST.dict()
@@ -1175,10 +1201,15 @@ def register_adventurer(request):
             field_errors["responsavel_cpf"] = "Esse CPF já está cadastrado."
 
         if field_errors:
+            error_keys = sorted(field_errors.keys())
+            signature_error_keys = [key for key in error_keys if _is_signature_field(key)]
+            signature_warning_active = bool(signature_error_keys)
+            signature_warning_only = signature_warning_active and len(signature_error_keys) == len(error_keys)
             logger.warning(
                 "Cadastro guiado falhou com %d campos inválidos (%s)",
-                len(field_errors),
-                ", ".join(sorted(field_errors.keys())),
+                len(error_keys),
+                ", ".join(error_keys),
+                extra={"errors": error_keys},
             )
         if not field_errors:
             try:
@@ -1322,6 +1353,9 @@ def register_adventurer(request):
     context = {
         "form_values": form_values,
         "field_errors": field_errors,
+        "server_field_errors": field_errors,
+        "server_signature_warning": signature_warning_active,
+        "server_signature_only": signature_warning_only,
         "success_message": success_message,
         "days": DAY_OPTIONS,
         "months": MONTH_OPTIONS,

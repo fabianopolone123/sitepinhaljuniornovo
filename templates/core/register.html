@@ -1,4 +1,4 @@
-{% load static form_extras %}
+{% load static form_extras json_script %}
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
@@ -572,6 +572,21 @@
         <button type="button" class="primary-btn" data-error-modal-close>Fechar</button>
       </div>
     </div>
+    <div class="form-error-modal signature-warning-modal" id="signature-warning-modal" aria-hidden="true">
+      <div class="form-error-modal__content" role="alertdialog" aria-modal="true">
+        <h3>Assinaturas pendentes</h3>
+        <p>Você precisa completar as assinaturas antes de concluir.</p>
+        <ul data-signature-warning-list></ul>
+        <div class="form-error-modal__actions">
+          <button type="button" class="ghost-btn" data-signature-warning-cancel>Cancelar</button>
+        </div>
+      </div>
+    </div>
+    {{ server_field_errors|json_script:"serverFieldErrors" }}
+    <script>
+      window.SERVER_SIGNATURE_WARNING = {{ server_signature_warning|yesno:"true,false" }};
+      window.SERVER_SIGNATURE_ONLY = {{ server_signature_only|yesno:"true,false" }};
+    </script>
     <script src="{% static 'js/signature-modal.js' %}" defer></script>
     <script src="{% static 'js/register-adventurer.js' %}" defer></script>
   </body>
