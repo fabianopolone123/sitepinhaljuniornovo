@@ -699,9 +699,20 @@ document.addEventListener("DOMContentLoaded", () => {
         return described;
       })
       .filter(Boolean);
+    const isSignatureEntry = (error) => {
+      const name = error?.field?.name || "";
+      return (
+        name === "parent_signature" ||
+        name === "responsavel_signature" ||
+        /_signature_/.test(name) ||
+        /data_truth/.test(name) ||
+        /confirmation/.test(name)
+      );
+    };
     if (!errors.length) {
       return;
     }
+    errors.sort((a, b) => Number(isSignatureEntry(b)) - Number(isSignatureEntry(a)));
     errors.forEach((entry) => {
       if (entry.field) {
         setError(entry.field);
@@ -716,11 +727,10 @@ document.addEventListener("DOMContentLoaded", () => {
       goToStep(firstIssue.step);
       firstIssue.field.focus();
     }
-    if (serverSignatureOnly && serverSignatureWarning) {
+    if (serverSignatureWarning) {
       const signatureIssues = collectSignatureIssues();
       if (signatureIssues.length) {
         openSignatureWarning(signatureIssues);
-        return;
       }
     }
     openErrorModal(errors);
