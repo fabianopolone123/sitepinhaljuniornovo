@@ -541,3 +541,13 @@ tira o quadrado do funcoi
 - **Request**: WhatsApp do responsável pré preenchido
 - **Actions**: Adicionei data-auto-from='responsavel_whatsapp' ao campo WhatsApp dos slots para que o valor seja copiado automaticamente do responsável.
 - **Notes**: Rodado python manage.py check.
+
+## 2026-01-31T20:23:39+00:00Z — Manual update
+- **Request**: Atualiza termo
+- **Actions**: Atualizei o texto do termo para mencionar 'CLUBE DE AVENTUREIROS PINHAL JÚNIOR' deixando o restante do parágrafo intacto.
+- **Notes**: Rodado python manage.py check.
+
+## 2026-01-31T20:43:51+00:00Z — Manual update
+- **Request**: Arrumar navega para slot certo
+- **Actions**: Fiz os botões da modal de erros usarem o slot ativo como fallback e passei esse valor ao setActiveAdventurerSlot/goToStep, assim o clique sempre abre a aba correta mesmo quando o campo inválido não tem data-slot.
+- **Notes**: Rodado python manage.py check.

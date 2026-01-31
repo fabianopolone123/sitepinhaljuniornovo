@@ -181,20 +181,20 @@ document.addEventListener("DOMContentLoaded", () => {
     return input?.value.trim() || "";
   };
 
-  const describeField = (field) => {
-    const label =
-      field.closest("label")?.textContent?.trim().replace(/\s+/g, " ") ||
-      field.dataset.placeholder ||
-      field.name;
-    const stepNumber = Number(field.closest(".adventurer-step")?.dataset.step) || 1;
-    const slotPanel = field.closest("[data-slot]");
-    const slot = slotPanel?.dataset.slot;
-    return {
-      field,
-      label,
-      step: stepNumber,
-      slot,
-    };
+    const describeField = (field) => {
+      const label =
+        field.closest("label")?.textContent?.trim().replace(/\s+/g, " ") ||
+        field.dataset.placeholder ||
+        field.name;
+      const stepNumber = Number(field.closest(".adventurer-step")?.dataset.step) || 1;
+      const slotPanel = field.closest("[data-slot]");
+      const slot = slotPanel?.dataset.slot;
+      return {
+        field,
+        label,
+        step: stepNumber,
+        slot,
+      };
   };
 
   const buildErrorMarkup = (error) => {
@@ -206,7 +206,8 @@ document.addEventListener("DOMContentLoaded", () => {
     button.className = "ghost-btn";
     button.textContent = "Arrumar";
     button.addEventListener("click", () => {
-      setActiveAdventurerSlot(error.slot);
+      const targetSlot = error.slot || currentAdventurerSlot;
+      setActiveAdventurerSlot(targetSlot);
       goToStep(error.step);
       error.field.focus();
       closeErrorModal();
