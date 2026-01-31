@@ -31,15 +31,6 @@
         <button type="button" class="step-btn" data-step-target="4">04. Ficha médica</button>
         <button type="button" class="step-btn" data-step-target="5">05. Termo</button>
       </div>
-      <div class="flow-helper">
-        <p>Guia completo: preencha os dados na ordem indicada e finalize cada etapa antes de seguir para a próxima.</p>
-        <ul>
-          <li><strong>Responsável e pais:</strong> insira o nome completo, contato e assinatura inicial.</li>
-          <li><strong>Aventureiro:</strong> escolha o número desejado, clique na aba correspondente e confirme os documentos e a foto.</li>
-          <li><strong>Ficha médica e termo:</strong> cada slot possui campos próprios — basta seguir o passo a passo e assinar.</li>
-        </ul>
-      </div>
-
       <form class="adventurer-form" method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
 
