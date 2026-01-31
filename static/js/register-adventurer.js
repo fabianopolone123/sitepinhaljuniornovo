@@ -291,10 +291,32 @@ document.addEventListener("DOMContentLoaded", () => {
     input.addEventListener("input", () => refreshSlotMetadata(slot));
   });
 
+  const getErrorMessageElement = (element) => {
+    const group = element.closest(".field-group");
+    if (group) {
+      return group.querySelector(".error-message");
+    }
+    const checkboxField = element.closest(".checkbox-field");
+    if (checkboxField) {
+      const nextMessage = checkboxField.nextElementSibling;
+      if (nextMessage?.classList.contains("error-message")) {
+        return nextMessage;
+      }
+      const parentMessage = checkboxField.parentElement?.querySelector(".error-message");
+      if (parentMessage?.classList.contains("error-message")) {
+        return parentMessage;
+      }
+    }
+    return null;
+  };
+
   const setError = (element) => {
     element.classList.add("input-error");
     const group = element.closest(".field-group");
-    const message = group?.querySelector(".error-message");
+    const checkboxField = element.closest(".checkbox-field");
+    group?.classList.add("input-error");
+    checkboxField?.classList.add("input-error");
+    const message = getErrorMessageElement(element);
     if (message && !message.textContent.trim()) {
       message.textContent = "Campo obrigatório";
     }
@@ -303,7 +325,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const clearError = (element) => {
     element.classList.remove("input-error");
     const group = element.closest(".field-group");
-    const message = group?.querySelector(".error-message");
+    const checkboxField = element.closest(".checkbox-field");
+    group?.classList.remove("input-error");
+    checkboxField?.classList.remove("input-error");
+    const message = getErrorMessageElement(element);
     if (message && message.textContent === "Campo obrigatório") {
       message.textContent = "";
     }
@@ -336,13 +361,24 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleDependentDetail(select);
   });
 
+  const findSlotForField = (field) => field?.closest("[data-slot-panel]")?.dataset.slot;
+
   form?.addEventListener("submit", (event) => {
     const invalidFields = Array.from(form.querySelectorAll(":invalid"));
-    if (invalidFields.length) {
+    const requiredCheckboxes = Array.from(
+      form.querySelectorAll("input[type='checkbox'][required]")
+    ).filter((checkbox) => !checkbox.checked);
+    const highlightedFields = [...invalidFields, ...requiredCheckboxes];
+    if (highlightedFields.length) {
       event.preventDefault();
-      invalidFields.forEach(setError);
-      invalidFields[0]?.focus();
-      goToStep(Number(invalidFields[0]?.closest(".adventurer-step")?.dataset.step) || 1);
+      highlightedFields.forEach(setError);
+      const firstInvalid = highlightedFields[0];
+      const slot = findSlotForField(firstInvalid);
+      if (slot) {
+        setActiveAdventurerSlot(slot);
+      }
+      firstInvalid?.focus();
+      goToStep(Number(firstInvalid?.closest(".adventurer-step")?.dataset.step) || 1);
     }
   });
 
