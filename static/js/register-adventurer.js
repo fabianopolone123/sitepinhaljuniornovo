@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const slotNameInputs = Array.from(document.querySelectorAll("[data-slot-name-input]"));
   const activeSlotNumber = document.querySelector("[data-active-slot-number]");
   const activeSlotName = document.querySelector("[data-active-slot-name]");
+  const slotControl = document.querySelector("[data-slot-control]");
   const slotOrder = adventurerTabs.map((tab) => tab.dataset.adventurerTab);
   let currentStep = 1;
   const responsavelNomeInput = document.getElementById("responsavel_nome");
@@ -88,6 +89,9 @@ document.addEventListener("DOMContentLoaded", () => {
       submitBtn.classList.toggle("is-hidden", step !== steps.length);
     }
     updateSlotPanels();
+    if (slotControl) {
+      slotControl.classList.toggle("is-hidden", step < 3);
+    }
   };
 
   const goToStep = (step) => {
