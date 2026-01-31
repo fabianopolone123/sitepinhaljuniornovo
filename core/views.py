@@ -250,9 +250,11 @@ def login_screen(request):
     context = {"already_authenticated": request.user.is_authenticated}
 
     if request.method == "POST":
-        username = request.POST.get("username", "").strip()
+        username_raw = request.POST.get("username", "").strip()
         password = request.POST.get("password", "")
-        user = authenticate(username=username, password=password)
+        username_lookup = User.objects.filter(username__iexact=username_raw).first()
+        username_for_auth = username_lookup.username if username_lookup else username_raw
+        user = authenticate(username=username_for_auth, password=password)
         if user:
             auth_login(request, user)
             messages.success(request, "Bem-vindo ao painel!")
@@ -1020,7 +1022,7 @@ def register_adventurer(request):
         if not endereco:
             field_errors["responsavel_endereco"] = "Informe o endereço."
 
-        if User.objects.filter(username=responsible_username).exists():
+        if User.objects.filter(username__iexact=responsible_username).exists():
             field_errors["responsavel_username"] = "Nome de usuário indisponível."
         if Responsible.objects.filter(cpf=cpf).exists():
             field_errors["responsavel_cpf"] = "Esse CPF já está cadastrado."
