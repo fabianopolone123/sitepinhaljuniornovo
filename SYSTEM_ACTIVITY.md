@@ -516,3 +516,8 @@ tira o quadrado do funcoi
 - **Request**: Resumo de validação visual ao concluir o cadastro
 - **Actions**: Adicionei uma modal de alertas que reúne todos os campos inválidos e inclui um botão 'Arrumar' que leva direto ao passo correto, e destaquei visualmente os campos dentro da área segura das assinaturas quando o canvas detecta envio na borda.
 - **Notes**: Rodado python manage.py check.
+
+## 2026-01-31T19:51:37+00:00Z — Manual update
+- **Request**: Ajusta validação condicional da ficha
+- **Actions**: Removi o atributo required dos selects dependentes de ‘Utiliza remédios?’ (coração, diabetes, rins e psicológico) e foquei na validação personalizada para que o formulário não trave quando o campo estiver oculto; também deixei a modal de erros com barra de rolagem fixa para muitas mensagens.
+- **Notes**: Rodado python manage.py check.

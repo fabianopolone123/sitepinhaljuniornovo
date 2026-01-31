@@ -598,6 +598,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
+  max-height: 250px;
+  overflow-y: auto;
 }
 
 .form-error-modal__content li {

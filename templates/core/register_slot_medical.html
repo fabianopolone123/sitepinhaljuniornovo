@@ -176,11 +176,10 @@
     <label>
       Utiliza remédios?
       {% slot_value_for form_values 'medical_heart_meds' slot as medical_heart_meds %}
-      <select
-        name="medical_heart_meds_{{ slot }}"
-        data-detail-target="medical-heart-meds-detail-{{ slot }}"
-        required
-      >
+        <select
+          name="medical_heart_meds_{{ slot }}"
+          data-detail-target="medical-heart-meds-detail-{{ slot }}"
+        >
         <option value="">Selecione</option>
         <option value="sim" {% if medical_heart_meds == 'sim' %}selected{% endif %}>Sim</option>
         <option value="nao" {% if medical_heart_meds == 'nao' %}selected{% endif %}>Não</option>
@@ -222,11 +221,10 @@
     <label>
       Utiliza remédios?
       {% slot_value_for form_values 'medical_diabetic_meds' slot as medical_diabetic_meds %}
-      <select
-        name="medical_diabetic_meds_{{ slot }}"
-        data-detail-target="medical-diabetic-meds-detail-{{ slot }}"
-        required
-      >
+        <select
+          name="medical_diabetic_meds_{{ slot }}"
+          data-detail-target="medical-diabetic-meds-detail-{{ slot }}"
+        >
         <option value="">Selecione</option>
         <option value="sim" {% if medical_diabetic_meds == 'sim' %}selected{% endif %}>Sim</option>
         <option value="nao" {% if medical_diabetic_meds == 'nao' %}selected{% endif %}>Não</option>
@@ -268,11 +266,10 @@
     <label>
       Utiliza remédios?
       {% slot_value_for form_values 'medical_kidney_meds' slot as medical_kidney_meds %}
-      <select
-        name="medical_kidney_meds_{{ slot }}"
-        data-detail-target="medical-kidney-meds-detail-{{ slot }}"
-        required
-      >
+        <select
+          name="medical_kidney_meds_{{ slot }}"
+          data-detail-target="medical-kidney-meds-detail-{{ slot }}"
+        >
         <option value="">Selecione</option>
         <option value="sim" {% if medical_kidney_meds == 'sim' %}selected{% endif %}>Sim</option>
         <option value="nao" {% if medical_kidney_meds == 'nao' %}selected{% endif %}>Não</option>
@@ -312,11 +309,10 @@
     <label>
       Utiliza remédios?
       {% slot_value_for form_values 'medical_psychological_meds' slot as medical_psychological_meds %}
-      <select
-        name="medical_psychological_meds_{{ slot }}"
-        data-detail-target="medical-psychological-meds-detail-{{ slot }}"
-        required
-      >
+        <select
+          name="medical_psychological_meds_{{ slot }}"
+          data-detail-target="medical-psychological-meds-detail-{{ slot }}"
+        >
         <option value="">Selecione</option>
         <option value="sim" {% if medical_psychological_meds == 'sim' %}selected{% endif %}>Sim</option>
         <option value="nao" {% if medical_psychological_meds == 'nao' %}selected{% endif %}>Não</option>
