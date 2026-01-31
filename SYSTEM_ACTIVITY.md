@@ -491,3 +491,8 @@ tira o quadrado do funcoi
 - **Request**: No cadastro guiado de aventureiros adiciona campo Grau de parentesco no bloco do responsável e Religião dentro do bloco do aventureiro.
 - **Actions**: Incluí os campos HTML nos templates, capturei os valores no backend, passei para o modelo responsável (com manual de relacionamento) e para o modelo Adventurer (campo religião), e gerei migração 0016 para persistir as colunas.
 - **Notes**: Rodado python manage.py check.
+
+## 2026-01-31T18:55:29+00:00Z — Manual update
+- **Request**: Padroniza campos do bloco dos pais / mãe para reagir ao WhatsApp e Celular
+- **Actions**: No template de cadastro guiado atualizei o label do campo da mãe para WhatsApp e corrigi o feedback de erro; no backend o dicionário de dados do pai/mãe agora usa os campos existentes (pai_whatsapp / mae_whatsapp) para alimentar o campo 'telefone', eliminando erros falsos.
+- **Notes**: Rodado python manage.py check.

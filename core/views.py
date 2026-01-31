@@ -817,14 +817,14 @@ def register_adventurer(request):
             "nome": form_values.get("pai_nome", "").strip(),
             "email": form_values.get("pai_email", "").strip(),
             "cpf": form_values.get("pai_cpf", "").strip(),
-            "telefone": form_values.get("pai_telefone", "").strip(),
+            "telefone": form_values.get("pai_whatsapp", "").strip(),
             "celular": form_values.get("pai_celular", "").strip(),
         }
         mae_data = {
             "nome": form_values.get("mae_nome", "").strip(),
             "email": form_values.get("mae_email", "").strip(),
             "cpf": form_values.get("mae_cpf", "").strip(),
-            "telefone": form_values.get("mae_telefone", "").strip(),
+            "telefone": form_values.get("mae_whatsapp", "").strip(),
             "celular": form_values.get("mae_celular", "").strip(),
         }
         parent_signature = form_values.get("parent_signature", "").strip()
