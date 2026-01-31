@@ -556,3 +556,8 @@ tira o quadrado do funcoi
 - **Request**: Desabilita campos de slots inativos
 - **Actions**: Quando o slot não estiver ativo ou não foi habilitado pela quantidade selecionada, passo a inputs/selects/textarea para disabled antes de esconder o painel, evitando que o browser marque o slot como inválido e exibindo só os slots permitidos na modal de erros.
 - **Notes**: Rodado python manage.py check.
+
+## 2026-01-31T21:06:57+00:00Z — Manual update
+- **Request**: abri o cadastro e ja cliquei em concluir e continua aparecendo pra preencher dados do Aventureiro 04 3 2 1 e 5 porque nao tinha cadastrado nada ainda ne. deixa setado quando começa o cadastro como 01 aventureiro
+- **Actions**: Padronizei o slot ativo inicial para o 01, limitei os slots considerados validos na validação do modal e ajustei o estado das abas para que as pendencias so sejam mostradas para os aventureiros habilitados.
+- **Notes**: python manage.py check

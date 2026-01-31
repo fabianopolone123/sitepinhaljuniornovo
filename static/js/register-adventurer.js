@@ -24,7 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const responsavelSobrenomeInput = document.getElementById("responsavel_sobrenome");
   const responsavelTelefoneInput = document.getElementById("responsavel_telefone");
   const responsavelWhatsappInput = document.getElementById("responsavel_whatsapp");
-  let currentAdventurerSlot = activeSlotInput?.value || "01";
+  const defaultSlot = slotOrder[0] || "01";
+  let currentAdventurerSlot = activeSlotInput?.value || defaultSlot;
 
   const getNormalizedSlotCount = () => {
     const rawValue = parseInt(adventurerCountSelect?.value || "1", 10);
@@ -33,6 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     return Math.min(Math.max(1, rawValue), slotOrder.length || 1);
   };
+
+  const getAllowedSlots = () => slotOrder.slice(0, getNormalizedSlotCount());
 
   const togglePanelFields = (panel, enabled) => {
     panel
@@ -47,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const updateSlotPanels = () => {
-    const allowedSlots = slotOrder.slice(0, getNormalizedSlotCount());
+    const allowedSlots = getAllowedSlots();
     slotPanels.forEach((panel) => {
       const slot = panel.dataset.slot;
       const shouldShow = allowedSlots.includes(slot) && slot === currentAdventurerSlot;
@@ -114,6 +117,30 @@ document.addEventListener("DOMContentLoaded", () => {
     renderStep(currentStep);
   };
 
+  if (adventurerCountSelect) {
+    const markUserChange = () => {
+      adventurerCountSelect.dataset.userChanged = "true";
+    };
+    if (!adventurerCountSelect.dataset.userChanged) {
+      adventurerCountSelect.value = "01";
+    }
+    adventurerCountSelect.addEventListener("change", () => {
+      markUserChange();
+      const normalizedCount = getNormalizedSlotCount();
+      updateTabVisibility(normalizedCount);
+      const activeTab = adventurerTabs.find(
+        (tab) => !tab.classList.contains("is-hidden") && tab.dataset.adventurerTab === currentAdventurerSlot
+      );
+      if (!activeTab) {
+        const firstVisible = adventurerTabs.find((tab) => !tab.classList.contains("is-hidden"));
+        if (firstVisible) {
+          setActiveAdventurerSlot(firstVisible.dataset.adventurerTab);
+        }
+      }
+      updateSlotPanels();
+    });
+  }
+
   if (nextBtn) {
     nextBtn.addEventListener("click", () => goToStep(currentStep + 1));
   }
@@ -125,7 +152,12 @@ document.addEventListener("DOMContentLoaded", () => {
     button.addEventListener("click", () => goToStep(target));
   });
 
-  const normalizeSlotValue = (value) => value.toString().padStart(2, "0");
+  const normalizeSlotValue = (value) => {
+    if (!value) {
+      return defaultSlot;
+    }
+    return value.toString().padStart(2, "0");
+  };
 
   const autoTargetsBySource = new Map();
   document
@@ -365,36 +397,24 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const setActiveAdventurerSlot = (slot, syncInput = true) => {
-    const normalized = normalizeSlotValue(slot || "01");
-    currentAdventurerSlot = normalized;
+    const normalized = normalizeSlotValue(slot || defaultSlot);
+    const allowedSlots = getAllowedSlots();
+    const fallbackSlot = allowedSlots[0] || defaultSlot;
+    const finalSlot = allowedSlots.includes(normalized) ? normalized : fallbackSlot;
+    currentAdventurerSlot = finalSlot;
     if (syncInput && activeSlotInput) {
-      activeSlotInput.value = normalized;
+      activeSlotInput.value = finalSlot;
     }
     adventurerTabs.forEach((tab) => {
-      tab.classList.toggle("is-active", tab.dataset.adventurerTab === normalized);
+      tab.classList.toggle("is-active", tab.dataset.adventurerTab === finalSlot);
     });
-    refreshSlotMetadata(normalized);
+    refreshSlotMetadata(finalSlot);
     updateSlotPanels();
-    loadPhotoPreview(normalized);
+    loadPhotoPreview(finalSlot);
   };
 
   adventurerTabs.forEach((tab) => {
     tab.addEventListener("click", () => setActiveAdventurerSlot(tab.dataset.adventurerTab));
-  });
-
-  adventurerCountSelect?.addEventListener("change", () => {
-    const normalizedCount = getNormalizedSlotCount();
-    updateTabVisibility(normalizedCount);
-    const activeTab = adventurerTabs.find(
-      (tab) => !tab.classList.contains("is-hidden") && tab.dataset.adventurerTab === currentAdventurerSlot
-    );
-    if (!activeTab) {
-      const firstVisible = adventurerTabs.find((tab) => !tab.classList.contains("is-hidden"));
-      if (firstVisible) {
-        setActiveAdventurerSlot(firstVisible.dataset.adventurerTab);
-      }
-    }
-    updateSlotPanels();
   });
 
   const initialCount = getNormalizedSlotCount();
@@ -484,12 +504,24 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const findSlotForField = (field) => field?.closest("[data-slot-panel]")?.dataset.slot;
+  const isSlotFieldAllowed = (field, allowedSlotSet) => {
+    const slot = findSlotForField(field);
+    if (!slot) {
+      return true;
+    }
+    return allowedSlotSet.has(slot);
+  };
 
   form?.addEventListener("submit", (event) => {
-    const invalidFields = Array.from(form.querySelectorAll(":invalid"));
+    const allowedSlots = new Set(getAllowedSlots());
+    const invalidFields = Array.from(form.querySelectorAll(":invalid")).filter((field) =>
+      isSlotFieldAllowed(field, allowedSlots)
+    );
     const requiredCheckboxes = Array.from(
       form.querySelectorAll("input[type='checkbox'][required]")
-    ).filter((checkbox) => !checkbox.checked);
+    )
+      .filter((checkbox) => !checkbox.checked)
+      .filter((checkbox) => isSlotFieldAllowed(checkbox, allowedSlots));
     const highlightedFields = [...invalidFields, ...requiredCheckboxes];
     if (highlightedFields.length) {
       event.preventDefault();
