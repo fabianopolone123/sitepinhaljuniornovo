@@ -143,16 +143,72 @@
                       disabled
                     />
                   </label>
-                  <label>
-                    Endereço
-                    <input
-                      type="text"
-                      name="responsavel_endereco"
-                      value="{{ responsible.endereco }}"
-                      required
-                      disabled
-                    />
-                  </label>
+                  <p class="field-hint" role="note">
+                    Informe o endereço completo (os aventureiros puxam os dados pelo responsável).
+                  </p>
+                  <div class="address-grid">
+                    <label>
+                      Av / Rua
+                      <input
+                        type="text"
+                        name="responsavel_street"
+                        value="{{ responsavel_address.street|default:'' }}"
+                        required
+                        disabled
+                      />
+                    </label>
+                    <label>
+                      Número
+                      <input
+                        type="text"
+                        name="responsavel_house_number"
+                        value="{{ responsavel_address.house_number|default:'' }}"
+                        required
+                        disabled
+                      />
+                    </label>
+                    <label>
+                      Bairro
+                      <input
+                        type="text"
+                        name="responsavel_neighborhood"
+                        value="{{ responsavel_address.neighborhood|default:'' }}"
+                        required
+                        disabled
+                      />
+                    </label>
+                    <label>
+                      CEP
+                      <input
+                        type="text"
+                        name="responsavel_postal_code"
+                        value="{{ responsavel_address.postal_code|default:'' }}"
+                        placeholder="00000-000"
+                        required
+                        disabled
+                      />
+                    </label>
+                    <label>
+                      Cidade
+                      <input
+                        type="text"
+                        name="responsavel_city"
+                        value="{{ responsavel_address.city|default:'' }}"
+                        required
+                        disabled
+                      />
+                    </label>
+                    <label>
+                      Estado
+                      <input
+                        type="text"
+                        name="responsavel_state"
+                        value="{{ responsavel_address.state|default:'' }}"
+                        required
+                        disabled
+                      />
+                    </label>
+                  </div>
                   <label>
                     Nova senha (4 dígitos)
                     <input type="password" name="responsavel_password1" maxlength="4" disabled />

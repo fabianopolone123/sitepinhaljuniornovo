@@ -446,19 +446,25 @@ body {
  .cadastro-panel form {
    display: flex;
    flex-direction: column;
-   gap: 0.9rem;
- }
+ gap: 0.9rem;
+}
 
- .cadastro-panel form label {
-   display: flex;
-   flex-direction: column;
-   font-weight: 600;
-   color: #21304d;
-   font-size: 0.95rem;
-   gap: 0.35rem;
- }
+.cadastro-panel form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  color: #21304d;
+  font-size: 0.95rem;
+  gap: 0.35rem;
+}
 
- .cadastro-panel input,
+.cadastro-panel .address-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+.cadastro-panel input,
  .cadastro-panel textarea,
  .cadastro-panel select {
    border-radius: 14px;

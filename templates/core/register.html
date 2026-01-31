@@ -195,21 +195,88 @@
           </div>
 
           <div class="field-group">
-            <label>
-              Endereço completo
-              <input
-                id="responsavel_endereco"
-                type="text"
-                name="responsavel_endereco"
-                placeholder="Ex: Av. das Araucárias, 123 – Centro, Pinhalzinho – SP"
-                value="{{ form_values.responsavel_endereco|default:'' }}"
-                required
-              />
-            </label>
-            <small class="field-hint">
-              Informe o endereço compartilhado com o aventureiro (geralmente o mesmo local).
-            </small>
-            <small class="error-message">{{ field_errors.responsavel_endereco|default:'' }}</small>
+            <p class="field-hint" role="note">
+              Informe o endereço completo (os aventureiros puxam automaticamente os campos abaixo).
+            </p>
+          </div>
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                Av / Rua
+                <input
+                  id="responsavel_street"
+                  type="text"
+                  name="responsavel_street"
+                  value="{{ form_values.responsavel_street|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_street|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Número
+                <input
+                  type="text"
+                  name="responsavel_house_number"
+                  value="{{ form_values.responsavel_house_number|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_house_number|default:'' }}</small>
+            </div>
+          </div>
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                Bairro
+                <input
+                  type="text"
+                  name="responsavel_neighborhood"
+                  value="{{ form_values.responsavel_neighborhood|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_neighborhood|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                CEP
+                <input
+                  type="text"
+                  name="responsavel_postal_code"
+                  value="{{ form_values.responsavel_postal_code|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_postal_code|default:'' }}</small>
+            </div>
+          </div>
+          <div class="grid two-columns">
+            <div class="field-group">
+              <label>
+                Cidade
+                <input
+                  type="text"
+                  name="responsavel_city"
+                  value="{{ form_values.responsavel_city|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_city|default:'' }}</small>
+            </div>
+            <div class="field-group">
+              <label>
+                Estado
+                <input
+                  type="text"
+                  name="responsavel_state"
+                  value="{{ form_values.responsavel_state|default:'' }}"
+                  required
+                />
+              </label>
+              <small class="error-message">{{ field_errors.responsavel_state|default:'' }}</small>
+            </div>
           </div>
           <div class="signature-block">
             <div class="signature-block__header">

@@ -181,6 +181,66 @@ def _clean_phone(phone):
     return digits
 
 
+def _build_full_address(
+    street: str,
+    house_number: str,
+    neighborhood: str,
+    city: str,
+    state: str,
+    postal_code: str,
+) -> str:
+    address_parts = []
+    street_part = ", ".join(part for part in (street, house_number) if part)
+    if street_part:
+        address_parts.append(street_part)
+    if neighborhood:
+        address_parts.append(neighborhood)
+    city_state = ", ".join(part for part in (city, state) if part)
+    if city_state:
+        address_parts.append(city_state)
+    if postal_code:
+        address_parts.append(f"CEP {postal_code}")
+    return " - ".join(address_parts)
+
+
+def _split_full_address(address: str) -> dict:
+    components = {
+        "street": "",
+        "house_number": "",
+        "neighborhood": "",
+        "city": "",
+        "state": "",
+        "postal_code": "",
+    }
+    if not address:
+        return components
+    segments = [part.strip() for part in address.split(" - ") if part.strip()]
+    if not segments:
+        return components
+    street_segment = segments[0]
+    if "," in street_segment:
+        parts = [part.strip() for part in street_segment.split(",", 1)]
+        components["street"] = parts[0]
+        if len(parts) > 1:
+            components["house_number"] = parts[1]
+    else:
+        components["street"] = street_segment
+    if len(segments) > 1:
+        components["neighborhood"] = segments[1]
+    if len(segments) > 2:
+        city_state = [part.strip() for part in segments[2].split(",") if part.strip()]
+        if city_state:
+            components["city"] = city_state[0]
+            if len(city_state) > 1:
+                components["state"] = city_state[1]
+    if len(segments) > 3:
+        postal = segments[3]
+        if postal.upper().startswith("CEP"):
+            postal = postal[3:].strip()
+        components["postal_code"] = postal
+    return components
+
+
 def _send_whatsapp_code(phone, code):
     payload = {
         "phone": phone,
@@ -287,7 +347,12 @@ def update_responsible(request):
     cpf = request.POST.get("responsavel_cpf", "").strip()
     telefone = request.POST.get("responsavel_telefone", "").strip()
     whatsapp = request.POST.get("responsavel_whatsapp", "").strip()
-    endereco = request.POST.get("responsavel_endereco", "").strip()
+    responsavel_street = request.POST.get("responsavel_street", "").strip()
+    responsavel_house_number = request.POST.get("responsavel_house_number", "").strip()
+    responsavel_neighborhood = request.POST.get("responsavel_neighborhood", "").strip()
+    responsavel_postal_code = request.POST.get("responsavel_postal_code", "").strip()
+    responsavel_city = request.POST.get("responsavel_city", "").strip()
+    responsavel_state = request.POST.get("responsavel_state", "").strip()
     password1 = request.POST.get("responsavel_password1", "")
     password2 = request.POST.get("responsavel_password2", "")
 
@@ -303,8 +368,18 @@ def update_responsible(request):
         errors.append("Informe o telefone.")
     if not whatsapp:
         errors.append("Informe o WhatsApp.")
-    if not endereco:
-        errors.append("Informe o endereÃ§o.")
+    if not responsavel_street:
+        errors.append("Informe a Av/Rua.")
+    if not responsavel_house_number:
+        errors.append("Informe o nÃºmero.")
+    if not responsavel_neighborhood:
+        errors.append("Informe o bairro.")
+    if not responsavel_postal_code:
+        errors.append("Informe o CEP.")
+    if not responsavel_city:
+        errors.append("Informe a cidade.")
+    if not responsavel_state:
+        errors.append("Informe o estado.")
 
     if password1 or password2:
         if password1 != password2:
@@ -327,7 +402,14 @@ def update_responsible(request):
     responsible.cpf = cpf
     responsible.telefone = telefone
     responsible.whatsapp = whatsapp
-    responsible.endereco = endereco
+    responsible.endereco = _build_full_address(
+        responsavel_street,
+        responsavel_house_number,
+        responsavel_neighborhood,
+        responsavel_city,
+        responsavel_state,
+        responsavel_postal_code,
+    )
     responsible.sexo = sexo
     responsible.save()
     messages.success(request, "Dados do responsÃ¡vel atualizados com sucesso.")
@@ -713,7 +795,20 @@ def register_adventurer(request):
         cpf = form_values.get("responsavel_cpf", "").strip()
         telefone = form_values.get("responsavel_telefone", "").strip()
         whatsapp = form_values.get("responsavel_whatsapp", "").strip()
-        endereco = form_values.get("responsavel_endereco", "").strip()
+        responsavel_street = form_values.get("responsavel_street", "").strip()
+        responsavel_house_number = form_values.get("responsavel_house_number", "").strip()
+        responsavel_neighborhood = form_values.get("responsavel_neighborhood", "").strip()
+        responsavel_postal_code = form_values.get("responsavel_postal_code", "").strip()
+        responsavel_city = form_values.get("responsavel_city", "").strip()
+        responsavel_state = form_values.get("responsavel_state", "").strip()
+        endereco = _build_full_address(
+            responsavel_street,
+            responsavel_house_number,
+            responsavel_neighborhood,
+            responsavel_city,
+            responsavel_state,
+            responsavel_postal_code,
+        )
 
         pai_data = {
             "nome": form_values.get("pai_nome", "").strip(),
@@ -1019,8 +1114,18 @@ def register_adventurer(request):
             field_errors["responsavel_telefone"] = "Informe o telefone."
         if not whatsapp:
             field_errors["responsavel_whatsapp"] = "Informe o WhatsApp."
-        if not endereco:
-            field_errors["responsavel_endereco"] = "Informe o endereço."
+        if not responsavel_street:
+            field_errors["responsavel_street"] = "Informe a Av/Rua."
+        if not responsavel_house_number:
+            field_errors["responsavel_house_number"] = "Informe o número."
+        if not responsavel_neighborhood:
+            field_errors["responsavel_neighborhood"] = "Informe o bairro."
+        if not responsavel_postal_code:
+            field_errors["responsavel_postal_code"] = "Informe o CEP."
+        if not responsavel_city:
+            field_errors["responsavel_city"] = "Informe a cidade."
+        if not responsavel_state:
+            field_errors["responsavel_state"] = "Informe o estado."
 
         if User.objects.filter(username__iexact=responsible_username).exists():
             field_errors["responsavel_username"] = "Nome de usuário indisponível."
@@ -1478,6 +1583,8 @@ def dashboard(request):
         responsible = None
         finance_periods = []
 
+    address_snapshot = _split_full_address(responsible.endereco if responsible else "")
+
     menu_items = [
         {"key": "initial", "label": "Inicial"},
         {
@@ -1506,5 +1613,6 @@ def dashboard(request):
         "months": MONTH_OPTIONS,
         "years": YEAR_OPTIONS,
         "finance_periods": finance_periods,
+        "responsavel_address": address_snapshot,
         },
     )

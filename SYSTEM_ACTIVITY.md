@@ -481,3 +481,8 @@ tira o quadrado do funcoi
 - **Request**: Deixar claro para quem está cadastrando qual slot está ativo e em que sequência deve preencher dados/ ficha médica/ termo.
 - **Actions**: Adicionei uma explicação visual logo após o stepper (callout com instruções de fluxo), desenhei balões indicando cada etapa abaixo do rótulo do slot ativo e ajustei o CSS/JS das abas para deixar o botão atual preenchido e o restante tracejado, reforçando o destaque para o nome digitado de cada aventureiro.
 - **Notes**: rodado python manage.py check
+
+## 2026-01-31T17:36:58+00:00Z — Manual update
+- **Request**: Faz os passos pendentes
+- **Actions**: Padronizei a montagem/parse do endereço do responsável, atualizei a tela de dashboard para expor os campos individuais de logradouro/número/bairro/CEP/cidade/estado e fiz update_responsible gravar essas partes, mantendo os campos do formulário sincronizados.
+- **Notes**: Rodado python manage.py check.

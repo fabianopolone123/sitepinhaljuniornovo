@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const responsavelSobrenomeInput = document.getElementById("responsavel_sobrenome");
   const responsavelTelefoneInput = document.getElementById("responsavel_telefone");
   const responsavelWhatsappInput = document.getElementById("responsavel_whatsapp");
-  const responsavelEnderecoInput = document.getElementById("responsavel_endereco");
   let currentAdventurerSlot = activeSlotInput?.value || "01";
 
   const getNormalizedSlotCount = () => {
@@ -146,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
     targets.forEach((target) => applyAutoValue(target, value));
   };
 
-  const autoSourceSelector = "[name='responsavel_whatsapp'],[name='responsavel_endereco'],[name='responsavel_telefone']";
+  const autoSourceSelector = "[name='responsavel_whatsapp'],[name='responsavel_telefone'],[name='responsavel_street'],[name='responsavel_house_number'],[name='responsavel_neighborhood'],[name='responsavel_postal_code'],[name='responsavel_city'],[name='responsavel_state']";
   const autoSourceFields = Array.from(document.querySelectorAll(autoSourceSelector));
   autoSourceFields.forEach((field) => {
     field.addEventListener("input", () => updateAutoTargets(field.name, field.value));

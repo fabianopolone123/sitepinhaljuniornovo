@@ -130,6 +130,7 @@
         <input
           type="text"
           name="adventure_street_{{ slot }}"
+          data-auto-from="responsavel_street"
           value="{% slot_value_for form_values 'adventure_street' slot %}"
           required
         />
@@ -142,6 +143,7 @@
         <input
           type="text"
           name="adventure_number_{{ slot }}"
+          data-auto-from="responsavel_house_number"
           value="{% slot_value_for form_values 'adventure_number' slot %}"
           required
         />
@@ -157,6 +159,7 @@
         <input
           type="text"
           name="adventure_neighborhood_{{ slot }}"
+          data-auto-from="responsavel_neighborhood"
           value="{% slot_value_for form_values 'adventure_neighborhood' slot %}"
           required
         />
@@ -168,6 +171,7 @@
         <input
           type="text"
           name="adventure_postal_code_{{ slot }}"
+          data-auto-from="responsavel_postal_code"
           value="{% slot_value_for form_values 'adventure_postal_code' slot %}"
           required
         />
@@ -182,6 +186,7 @@
         <input
           type="text"
           name="adventure_city_{{ slot }}"
+          data-auto-from="responsavel_city"
           value="{% slot_value_for form_values 'adventure_city' slot %}"
           required
         />
@@ -193,6 +198,7 @@
         <input
           type="text"
           name="adventure_state_{{ slot }}"
+          data-auto-from="responsavel_state"
           value="{% slot_value_for form_values 'adventure_state' slot %}"
           required
         />
