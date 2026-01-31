@@ -89,6 +89,16 @@
       <small class="error-message">{% slot_error_for field_errors 'adventure_grade' slot %}</small>
     </div>
   </div>
+  <div class="field-group">
+    <label>
+      Religião
+      <input
+        type="text"
+        name="adventure_religion_{{ slot }}"
+        value="{% slot_value_for form_values 'adventure_religion' slot %}"
+      />
+    </label>
+  </div>
 
   <div class="field-group">
       <label>

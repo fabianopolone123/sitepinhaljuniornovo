@@ -347,6 +347,7 @@ def update_responsible(request):
     cpf = request.POST.get("responsavel_cpf", "").strip()
     telefone = request.POST.get("responsavel_telefone", "").strip()
     whatsapp = request.POST.get("responsavel_whatsapp", "").strip()
+    relationship_degree = request.POST.get("responsavel_relationship_degree", "").strip()
     responsavel_street = request.POST.get("responsavel_street", "").strip()
     responsavel_house_number = request.POST.get("responsavel_house_number", "").strip()
     responsavel_neighborhood = request.POST.get("responsavel_neighborhood", "").strip()
@@ -402,6 +403,7 @@ def update_responsible(request):
     responsible.cpf = cpf
     responsible.telefone = telefone
     responsible.whatsapp = whatsapp
+    responsible.relationship_degree = relationship_degree
     responsible.endereco = _build_full_address(
         responsavel_street,
         responsavel_house_number,
@@ -801,6 +803,7 @@ def register_adventurer(request):
         responsavel_postal_code = form_values.get("responsavel_postal_code", "").strip()
         responsavel_city = form_values.get("responsavel_city", "").strip()
         responsavel_state = form_values.get("responsavel_state", "").strip()
+        responsavel_relationship_degree = form_values.get("responsavel_relationship_degree", "").strip()
         endereco = _build_full_address(
             responsavel_street,
             responsavel_house_number,
@@ -861,6 +864,7 @@ def register_adventurer(request):
             adventure_birth_year = slot_value("adventure_birth_year", slot)
             adventure_school = slot_value("adventure_school", slot)
             adventure_grade = slot_value("adventure_grade", slot)
+            adventure_religion = slot_value("adventure_religion", slot)
             adventure_bolsa = slot_value("adventure_bolsa", slot)
             adventure_street = slot_value("adventure_street", slot)
             adventure_number = slot_value("adventure_number", slot)
@@ -1031,6 +1035,7 @@ def register_adventurer(request):
                     "cpf": adventure_cpf,
                     "parent_whatsapp_phone": adventure_parent_whatsapp_phone,
                     "shirt_size": adventure_shirt_size,
+                    "religion": adventure_religion,
                     "adventure_data_signature": adventure_data_signature,
                     "adventure_data_truth": adventure_data_truth,
                     "photo": adventure_photo,
@@ -1147,6 +1152,7 @@ def register_adventurer(request):
                         telefone=telefone,
                         whatsapp=whatsapp,
                         endereco=endereco,
+                        relationship_degree=responsavel_relationship_degree,
                         sexo=responsavel_sexo,
                     )
                     for slot_data in slot_contexts:
@@ -1195,6 +1201,7 @@ def register_adventurer(request):
                             cpf_number=slot_data["cpf"],
                             parent_whatsapp=bool(slot_data["parent_whatsapp_phone"]),
                             shirt_size=slot_data["shirt_size"],
+                            religion=slot_data["religion"],
                             blood_type=slot_data["medical_blood_type"],
                             family_data={
                                 "pai": pai_data,

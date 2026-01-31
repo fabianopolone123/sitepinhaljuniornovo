@@ -17,6 +17,7 @@ class Responsible(models.Model):
     telefone = models.CharField(max_length=20)
     whatsapp = models.CharField(max_length=20)
     endereco = models.CharField(max_length=255)
+    relationship_degree = models.CharField(max_length=120, blank=True)
     sexo = models.CharField(max_length=1, choices=SEX_CHOICES, default="M")
 
     def __str__(self):
@@ -52,6 +53,7 @@ class Adventurer(models.Model):
     cpf_number = models.CharField(max_length=30, blank=True)
     parent_whatsapp = models.BooleanField(default=False)
     shirt_size = models.CharField(max_length=20, blank=True)
+    religion = models.CharField(max_length=120, blank=True)
     blood_type = models.CharField(max_length=3, blank=True)
     family_data = models.JSONField(blank=True, null=True)
     medical_data = models.JSONField(blank=True, null=True)

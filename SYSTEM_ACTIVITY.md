@@ -486,3 +486,8 @@ tira o quadrado do funcoi
 - **Request**: Faz os passos pendentes
 - **Actions**: Padronizei a montagem/parse do endereço do responsável, atualizei a tela de dashboard para expor os campos individuais de logradouro/número/bairro/CEP/cidade/estado e fiz update_responsible gravar essas partes, mantendo os campos do formulário sincronizados.
 - **Notes**: Rodado python manage.py check.
+
+## 2026-01-31T18:49:15+00:00Z — Manual update
+- **Request**: No cadastro guiado de aventureiros adiciona campo Grau de parentesco no bloco do responsável e Religião dentro do bloco do aventureiro.
+- **Actions**: Incluí os campos HTML nos templates, capturei os valores no backend, passei para o modelo responsável (com manual de relacionamento) e para o modelo Adventurer (campo religião), e gerei migração 0016 para persistir as colunas.
+- **Notes**: Rodado python manage.py check.
