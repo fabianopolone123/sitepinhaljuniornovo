@@ -601,3 +601,8 @@ tira o quadrado do funcoi
 - **Request**: deu algum erro no ta dando pra clicar em nehum botao
 - **Actions**: Corrigi o getCookie usado para atualizar o CSRF ao importar/exportar, escapando corretamente os colchetes para evitar uma exceção JS que impedia o restante do script de rodar e bloquava os botões.
 - **Notes**: python manage.py check
+
+## 2026-01-31T22:55:40+00:00Z — Manual update
+- **Request**: ainda nao da pra clicar em nenhum botao
+- **Actions**: Simplifiquei o helper getCookie para evitar regex complexa e potenciais erros; agora ele varre document.cookie e retorna o valor do csrftoken, garantindo que o script continue funcionando e os botões respondam após importar.
+- **Notes**: python manage.py check

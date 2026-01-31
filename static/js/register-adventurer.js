@@ -47,14 +47,19 @@ document.addEventListener("DOMContentLoaded", () => {
     ((value) => value.replace(/([\\\"'!#%&()*+,./:;<=>?@[\\]^`{|}~-])/g, "\\$1"));
 
   const getCookie = (name) => {
-    const matches = document.cookie.match(
-      new RegExp(
-        "(^|; )" +
-          name.replace(/([.$?*|{}()\\[\\]\\/\\/+^])/g, "\\$1") +
-          "=([^;]*)"
-      )
-    );
-    return matches ? decodeURIComponent(matches[2]) : "";
+    const cookieString = document.cookie || "";
+    const cookies = cookieString.split(";");
+    for (let raw of cookies) {
+      const cookie = raw.trim();
+      if (!cookie) {
+        continue;
+      }
+      const [key, ...rest] = cookie.split("=");
+      if (key === name) {
+        return decodeURIComponent(rest.join("="));
+      }
+    }
+    return "";
   };
 
   const ignoredExportFields = new Set(["csrfmiddlewaretoken"]);
