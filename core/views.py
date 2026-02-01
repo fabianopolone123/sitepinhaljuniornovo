@@ -758,6 +758,57 @@ def register(request):
 
     if request.method == "POST":
         form_values = request.POST.dict()
+        general_required_fields = [
+            "aventureiro_nome",
+            "aventureiro_sobrenome",
+            "aventureiro_sexo",
+            "aventureiro_dia",
+            "aventureiro_mes",
+            "aventureiro_ano",
+            "aventureiro_colegio",
+            "aventureiro_serie",
+            "aventureiro_bolsa",
+            "aventureiro_rua",
+            "aventureiro_bairro",
+            "aventureiro_cidade",
+            "aventureiro_cep",
+            "aventureiro_estado",
+            "aventureiro_certidao",
+            "aventureiro_religiao",
+            "aventureiro_rg",
+            "aventureiro_orgao",
+            "aventureiro_cpf",
+            "camiseta_tamanho",
+            "responsavel_nome",
+            "responsavel_sobrenome",
+            "responsavel_sexo",
+            "responsavel_cpf",
+            "responsavel_endereco",
+            "responsavel_username",
+            "responsavel_password1",
+            "responsavel_password2",
+            "responsavel_email",
+            "responsavel_whatsapp",
+            "pai_nome",
+            "pai_email",
+            "pai_cpf",
+            "pai_whatsapp",
+            "mae_nome",
+            "mae_email",
+            "mae_cpf",
+            "mae_whatsapp",
+            "responsavel_legal_parentesco",
+            "responsavel_legal_nome",
+            "responsavel_legal_cpf",
+            "responsavel_legal_email",
+            "responsavel_legal_whatsapp",
+            "confirmacao_verdadeiro",
+        ]
+        missing_general = [
+            field for field in general_required_fields if not form_values.get(field)
+        ]
+        if missing_general:
+            field_errors["general"] = "Complete todos os campos obrigatórios antes de enviar."
         responsible_username = form_values.get("responsavel_username", "").strip()
         password1 = form_values.get("responsavel_password1", "")
         password2 = form_values.get("responsavel_password2", "")

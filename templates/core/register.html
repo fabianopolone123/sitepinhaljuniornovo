@@ -132,20 +132,45 @@
                 </div>
                 <label>
                   Colégio
-                  <input type="text" name="aventureiro_colegio" placeholder="Colégio frequentado" />
+                  <input
+                    type="text"
+                    name="aventureiro_colegio"
+                    placeholder="Colégio frequentado"
+                    required
+                    value="{{ form_values.aventureiro_colegio|default:'' }}"
+                  />
                 </label>
                 <label>
                   Série / Ano
-                  <input type="text" name="aventureiro_serie" placeholder="Ex: 6ª série" />
+                  <input
+                    type="text"
+                    name="aventureiro_serie"
+                    placeholder="Ex: 6ª série"
+                    required
+                    value="{{ form_values.aventureiro_serie|default:'' }}"
+                  />
                 </label>
                 <label class="field-group">
                   Beneficiário(a) Bolsa Família?
                   <div class="radio-group">
                     <label>
-                      <input type="radio" name="aventureiro_bolsa" value="sim" /> Sim
+                      <input
+                        type="radio"
+                        name="aventureiro_bolsa"
+                        value="sim"
+                        required
+                        {% if form_values.aventureiro_bolsa == 'sim' %}checked{% endif %}
+                      />
+                      Sim
                     </label>
                     <label>
-                      <input type="radio" name="aventureiro_bolsa" value="nao" checked /> Não
+                      <input
+                        type="radio"
+                        name="aventureiro_bolsa"
+                        value="nao"
+                        {% if form_values.aventureiro_bolsa != 'sim' %}checked{% endif %}
+                      />
+                      Não
                     </label>
                   </div>
                 </label>
@@ -162,43 +187,103 @@
                 </div>
                 <label>
                   Rua
-                  <input type="text" name="aventureiro_rua" placeholder="Rua" />
+                  <input
+                    type="text"
+                    name="aventureiro_rua"
+                    placeholder="Rua"
+                    required
+                    value="{{ form_values.aventureiro_rua|default:'' }}"
+                  />
                 </label>
                 <label>
                   Bairro
-                  <input type="text" name="aventureiro_bairro" placeholder="Bairro" />
+                  <input
+                    type="text"
+                    name="aventureiro_bairro"
+                    placeholder="Bairro"
+                    required
+                    value="{{ form_values.aventureiro_bairro|default:'' }}"
+                  />
                 </label>
                 <label>
                   Cidade
-                  <input type="text" name="aventureiro_cidade" placeholder="Cidade" value="São Carlos" />
+                  <input
+                    type="text"
+                    name="aventureiro_cidade"
+                    placeholder="Cidade"
+                    required
+                    value="{{ form_values.aventureiro_cidade|default:'São Carlos' }}"
+                  />
                 </label>
                 <label>
                   CEP
-                  <input type="text" name="aventureiro_cep" placeholder="00000-000" />
+                  <input
+                    type="text"
+                    name="aventureiro_cep"
+                    placeholder="00000-000"
+                    required
+                    value="{{ form_values.aventureiro_cep|default:'' }}"
+                  />
                 </label>
                 <label>
                   Estado
-                  <input type="text" name="aventureiro_estado" placeholder="Estado" value="SP" />
+                  <input
+                    type="text"
+                    name="aventureiro_estado"
+                    placeholder="Estado"
+                    required
+                    value="{{ form_values.aventureiro_estado|default:'SP' }}"
+                  />
                 </label>
                 <label>
                   Certidão de nascimento
-                  <input type="text" name="aventureiro_certidao" placeholder="Número da certidão" />
+                  <input
+                    type="text"
+                    name="aventureiro_certidao"
+                    placeholder="Número da certidão"
+                    required
+                    value="{{ form_values.aventureiro_certidao|default:'' }}"
+                  />
                 </label>
                 <label>
                   Religião
-                  <input type="text" name="aventureiro_religiao" placeholder="Religião" />
+                  <input
+                    type="text"
+                    name="aventureiro_religiao"
+                    placeholder="Religião"
+                    required
+                    value="{{ form_values.aventureiro_religiao|default:'' }}"
+                  />
                 </label>
                 <label>
                   RG
-                  <input type="text" name="aventureiro_rg" placeholder="RG" />
+                  <input
+                    type="text"
+                    name="aventureiro_rg"
+                    placeholder="RG"
+                    required
+                    value="{{ form_values.aventureiro_rg|default:'' }}"
+                  />
                 </label>
                 <label>
                   Órgão expedidor
-                  <input type="text" name="aventureiro_orgao" placeholder="Órgão expedidor" />
+                  <input
+                    type="text"
+                    name="aventureiro_orgao"
+                    placeholder="Órgão expedidor"
+                    required
+                    value="{{ form_values.aventureiro_orgao|default:'' }}"
+                  />
                 </label>
                 <label>
                   CPF
-                  <input type="text" name="aventureiro_cpf" placeholder="CPF" />
+                  <input
+                    type="text"
+                    name="aventureiro_cpf"
+                    placeholder="CPF"
+                    required
+                    value="{{ form_values.aventureiro_cpf|default:'' }}"
+                  />
                 </label>
                 <label>
                   WhatsApp do responsável
@@ -206,7 +291,13 @@
                 </label>
                 <label>
                   Tamanho da camiseta
-                  <input type="text" name="camiseta_tamanho" placeholder="P / M / G" />
+                  <input
+                    type="text"
+                    name="camiseta_tamanho"
+                    placeholder="P / M / G"
+                    required
+                    value="{{ form_values.camiseta_tamanho|default:'' }}"
+                  />
                 </label>
               </div>
             </div>
@@ -244,15 +335,33 @@
                 </label>
                 <label>
                   CPF
-                  <input type="text" name="responsavel_cpf" placeholder="CPF" required value="{{ form_values.responsavel_cpf|default:'' }}" />
+                  <input
+                    type="text"
+                    name="responsavel_cpf"
+                    placeholder="CPF"
+                    required
+                    value="{{ form_values.responsavel_cpf|default:'' }}"
+                  />
                 </label>
                 <label>
                   Endereço
-                  <input type="text" name="responsavel_endereco" placeholder="Rua, número, complemento" required value="{{ form_values.responsavel_endereco|default:'' }}" />
+                  <input
+                    type="text"
+                    name="responsavel_endereco"
+                    placeholder="Rua, número, complemento"
+                    required
+                    value="{{ form_values.responsavel_endereco|default:'' }}"
+                  />
                 </label>
                 <label>
                   Nome de usuário
-                  <input type="text" name="responsavel_username" placeholder="Login" required value="{{ form_values.responsavel_username|default:'' }}" />
+                  <input
+                    type="text"
+                    name="responsavel_username"
+                    placeholder="Login"
+                    required
+                    value="{{ form_values.responsavel_username|default:'' }}"
+                  />
                 </label>
                 <label>
                   Senha (4 dígitos)
@@ -264,7 +373,13 @@
                 </label>
                 <label>
                   E-mail
-                  <input type="email" name="responsavel_email" placeholder="email@example.com" value="{{ form_values.responsavel_email|default:'' }}" />
+                  <input
+                    type="email"
+                    name="responsavel_email"
+                    placeholder="email@example.com"
+                    required
+                    value="{{ form_values.responsavel_email|default:'' }}"
+                  />
                 </label>
                 <label>
                   WhatsApp
@@ -283,61 +398,126 @@
                   <h3>Pai</h3>
                   <label>
                     Nome
-                    <input type="text" name="pai_nome" />
+                    <input
+                      type="text"
+                      name="pai_nome"
+                      required
+                      value="{{ form_values.pai_nome|default:'' }}"
+                    />
                   </label>
                   <label>
                     E-mail
-                    <input type="email" name="pai_email" />
+                    <input
+                      type="email"
+                      name="pai_email"
+                      required
+                      value="{{ form_values.pai_email|default:'' }}"
+                    />
                   </label>
                   <label>
                     CPF
-                    <input type="text" name="pai_cpf" />
+                    <input
+                      type="text"
+                      name="pai_cpf"
+                      required
+                      value="{{ form_values.pai_cpf|default:'' }}"
+                    />
                   </label>
                   <label>
                     WhatsApp
-                    <input type="text" name="pai_whatsapp" />
+                    <input
+                      type="text"
+                      name="pai_whatsapp"
+                      required
+                      value="{{ form_values.pai_whatsapp|default:'' }}"
+                    />
                   </label>
                 </div>
                 <div>
                   <h3>Mãe</h3>
                   <label>
                     Nome
-                    <input type="text" name="mae_nome" />
+                    <input
+                      type="text"
+                      name="mae_nome"
+                      required
+                      value="{{ form_values.mae_nome|default:'' }}"
+                    />
                   </label>
                   <label>
                     E-mail
-                    <input type="email" name="mae_email" />
+                    <input
+                      type="email"
+                      name="mae_email"
+                      required
+                      value="{{ form_values.mae_email|default:'' }}"
+                    />
                   </label>
                   <label>
                     CPF
-                    <input type="text" name="mae_cpf" />
+                    <input
+                      type="text"
+                      name="mae_cpf"
+                      required
+                      value="{{ form_values.mae_cpf|default:'' }}"
+                    />
                   </label>
                   <label>
                     WhatsApp
-                    <input type="text" name="mae_whatsapp" />
+                    <input
+                      type="text"
+                      name="mae_whatsapp"
+                      required
+                      value="{{ form_values.mae_whatsapp|default:'' }}"
+                    />
                   </label>
                 </div>
                 <div>
                   <h3>Responsável legal</h3>
                   <label>
                     Grau de parentesco
-                    <input type="text" name="responsavel_legal_parentesco" />
+                    <input
+                      type="text"
+                      name="responsavel_legal_parentesco"
+                      required
+                      value="{{ form_values.responsavel_legal_parentesco|default:'' }}"
+                    />
                   </label>
                   <label>
                     Nome
-                    <input type="text" name="responsavel_legal_nome" />
+                    <input
+                      type="text"
+                      name="responsavel_legal_nome"
+                      required
+                      value="{{ form_values.responsavel_legal_nome|default:'' }}"
+                    />
                   </label>
                   <label>
                     CPF
-                    <input type="text" name="responsavel_legal_cpf" />
+                    <input
+                      type="text"
+                      name="responsavel_legal_cpf"
+                      required
+                      value="{{ form_values.responsavel_legal_cpf|default:'' }}"
+                    />
                   </label>
                   <label>
                     E-mail
-                    <input type="email" name="responsavel_legal_email" />
+                    <input
+                      type="email"
+                      name="responsavel_legal_email"
+                      required
+                      value="{{ form_values.responsavel_legal_email|default:'' }}"
+                    />
                   </label>
                   <label>
                     WhatsApp
-                    <input type="text" name="responsavel_legal_whatsapp" />
+                    <input
+                      type="text"
+                      name="responsavel_legal_whatsapp"
+                      required
+                      value="{{ form_values.responsavel_legal_whatsapp|default:'' }}"
+                    />
                   </label>
                 </div>
               </div>
