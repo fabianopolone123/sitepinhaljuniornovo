@@ -356,7 +356,16 @@
               <button type="button" class="primary-btn signature-btn" data-action="open-signature">
                 Assinar agora
               </button>
-              <p class="helper signature-preview" data-signature-preview>Sem assinatura ainda.</p>
+              <div class="helper signature-preview" data-signature-preview>
+                <span data-signature-preview-text>Sem assinatura ainda.</span>
+                <img
+                  class="signature-preview-img"
+                  data-signature-preview-img
+                  src=""
+                  alt="Prévia da assinatura"
+                  hidden
+                />
+              </div>
               <input type="hidden" name="assinatura_data" data-signature-input />
             </div>
           <button type="submit" class="primary-btn">Enviar cadastro</button>

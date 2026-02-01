@@ -100,7 +100,8 @@
     if (!canvas || !openButton || !saveButton || !clearButton) {
       return;
     }
-    const previewText = document.querySelector('[data-signature-preview]');
+    const previewText = document.querySelector('[data-signature-preview-text]');
+    const previewImage = document.querySelector('[data-signature-preview-img]');
     const ctx = canvas.getContext('2d');
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
@@ -153,12 +154,25 @@
       activePointerId = null;
     }
 
+    function setPreviewState(message, imageUrl) {
+      if (previewText) {
+        previewText.textContent = message;
+      }
+      if (previewImage) {
+        if (imageUrl) {
+          previewImage.src = imageUrl;
+          previewImage.hidden = false;
+        } else {
+          previewImage.removeAttribute('src');
+          previewImage.hidden = true;
+        }
+      }
+    }
+
     function clearCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       signatureInput.value = '';
-      if (previewText) {
-        previewText.textContent = 'Sem assinatura ainda.';
-      }
+      setPreviewState('Sem assinatura ainda.');
     }
 
     function openModal() {
@@ -172,11 +186,10 @@
     }
 
     function saveSignature() {
-      signatureInput.value = canvas.toDataURL('image/png');
+      const dataUrl = canvas.toDataURL('image/png');
+      signatureInput.value = dataUrl;
       closeModal();
-      if (previewText) {
-        previewText.textContent = 'Assinatura registrada';
-      }
+      setPreviewState('Assinatura registrada', dataUrl);
     }
 
     canvas.addEventListener('pointerdown', start);
@@ -196,6 +209,9 @@
         closeModal();
       }
     });
+    if (signatureInput.value) {
+      setPreviewState('Assinatura registrada', signatureInput.value);
+    }
   }
 
   function boot() {
