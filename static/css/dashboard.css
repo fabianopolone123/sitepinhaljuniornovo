@@ -83,6 +83,22 @@ body {
 .log-panel .ghost-btn {
   align-self: flex-end;
 }
+.log-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
+.log-file-select {
+  border-radius: 10px;
+  border: 1px solid rgba(4, 17, 44, 0.4);
+  padding: 0.6rem 0.9rem;
+  background: #fff;
+  min-width: 240px;
+  font-size: 0.95rem;
+}
 
 .dashboard-hero img {
   width: 120px;

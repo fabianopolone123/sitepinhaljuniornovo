@@ -24,8 +24,26 @@
     </header>
 
     <main class="dashboard-container">
+      <header class="log-toolbar">
+        <label>
+          Escolha o arquivo
+          <select id="log-file-select" class="log-file-select">
+            {% for log in log_files %}
+            <option value="log-{{ forloop.counter0 }}">{{ log.label }} ({{ log.path }})</option>
+            {% endfor %}
+          </select>
+        </label>
+        <p class="muted helper-text">
+          Use o seletor acima para trocar entre `django.log.jsonl` e `client.log.jsonl`. Quando houver
+          registros, eles aparecem em cada caixa; quando estiver vazio, exibimos o alerta reservado.
+        </p>
+      </header>
       {% for log in log_files %}
-      <section class="panel log-panel" data-log-panel>
+      <section
+        class="panel log-panel"
+        data-log-panel
+        data-log-key="log-{{ forloop.counter0 }}"
+      >
         <div class="panel-header">
           <div>
             <h2>{{ log.label }}</h2>

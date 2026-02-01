@@ -401,3 +401,7 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 ## 2026-02-01T14:42:16+00:00Z — Melhora logs
 - **Request**: A tela de auditoria mostrava muitas colunas estreitas e sem filtros
 - **Actions**: Reformulei templates/core/admin_logs.html para empilhar os painéis de log, adicionei campos de filtro e recalque visuais, criei static/js/admin-logs.js para filtrar as linhas e melhorei o CSS em static/css/dashboard.css
+
+## 2026-02-01T14:47:37+00:00Z — Refina visual logs
+- **Request**: Tela de logs ainda junta muita informação numa única coluna e precisa poder alternar entre arquivos
+- **Actions**: Adicionei seletor para ativar cada log, aumentei o layout do painel para uma mesa maior e reescrevi static/js/admin-logs.js para controlar visibilidade + filtros com linhas dedicadas
