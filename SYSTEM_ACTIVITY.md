@@ -405,3 +405,7 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 ## 2026-02-01T14:47:37+00:00Z — Refina visual logs
 - **Request**: Tela de logs ainda junta muita informação numa única coluna e precisa poder alternar entre arquivos
 - **Actions**: Adicionei seletor para ativar cada log, aumentei o layout do painel para uma mesa maior e reescrevi static/js/admin-logs.js para controlar visibilidade + filtros com linhas dedicadas
+
+## 2026-02-01T16:54:59+00:00Z — Corrige JS
+- **Request**: Preview da foto e assinatura ainda falhavam porque o script tinha um byte nulo e não carregava
+- **Actions**: Reescrevi static/js/register.js para remover o caractere nulo, normalizar a geração de opções e manter os handlers de preview/assinatura e boot
