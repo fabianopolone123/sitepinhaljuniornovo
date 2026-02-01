@@ -19,16 +19,19 @@
     const daySelects = document.querySelectorAll('[data-date-field="day"]');
     const monthSelects = document.querySelectorAll('[data-date-field="month"]');
     const yearSelects = document.querySelectorAll('[data-date-field="year"]');
+
     daySelects.forEach((select) => {
       if (select.options.length === 0) {
         buildOptions(select, dateFields.day.min, dateFields.day.max, true);
       }
     });
+
     monthSelects.forEach((select) => {
       if (select.options.length === 0) {
         buildOptions(select, dateFields.month.min, dateFields.month.max, true);
       }
     });
+
     yearSelects.forEach((select) => {
       if (select.options.length === 0) {
         buildOptions(select, dateFields.year.min, dateFields.year.max);
@@ -36,14 +39,33 @@
     });
 
     const today = new Date();
+    const defaultDay = String(today.getDate());
+    const defaultMonth = String(today.getMonth() + 1);
+    const defaultYear = String(today.getFullYear());
+
     daySelects.forEach((select) => {
-      select.value = String(today.getDate());
+      const initialValue = select.dataset.initialValue;
+      if (initialValue) {
+        select.value = initialValue;
+      } else if (!select.value) {
+        select.value = defaultDay;
+      }
     });
     monthSelects.forEach((select) => {
-      select.value = String(today.getMonth() + 1);
+      const initialValue = select.dataset.initialValue;
+      if (initialValue) {
+        select.value = initialValue;
+      } else if (!select.value) {
+        select.value = defaultMonth;
+      }
     });
     yearSelects.forEach((select) => {
-      select.value = String(today.getFullYear());
+      const initialValue = select.dataset.initialValue;
+      if (initialValue) {
+        select.value = initialValue;
+      } else if (!select.value) {
+        select.value = defaultYear;
+      }
     });
 
     const todayInputs = document.querySelectorAll('[data-today-date]');
@@ -52,16 +74,16 @@
     });
   }
 
-  function initPhotoPreview() {
-    const input =
-      document.querySelector('[data-photo-input]') || document.querySelector('[name="aventureiro_foto"]');
-    const preview = document.querySelector('[data-photo-preview]');
-    const helper = document.querySelector('[data-photo-helper]');
+  function setupPhotoPreview(block) {
+    const input = block.querySelector('[data-photo-input]');
+    const preview = block.querySelector('[data-photo-preview]');
+    const helper = block.querySelector('[data-photo-helper]');
     if (!input || !preview) {
       return;
     }
     const placeholderMarkup = preview.innerHTML;
-    const STORAGE_KEY = 'register_photo_preview';
+    const blockIndex = block.dataset.adventurerIndex || '0';
+    const STORAGE_KEY = `register_photo_preview_${blockIndex}`;
     const STORAGE_TTL = 5 * 60 * 1000;
 
     function readStoredPhoto() {
@@ -157,6 +179,110 @@
       };
       reader.readAsDataURL(file);
     });
+  }
+
+  function initBolsaGroup(block) {
+    const hiddenInput = block.querySelector('[data-bolsa-hidden]');
+    const radios = block.querySelectorAll('[data-bolsa-option]');
+    const syncHidden = () => {
+      if (!hiddenInput) {
+        return;
+      }
+      const checked = block.querySelector('[data-bolsa-option]:checked');
+      hiddenInput.value = (checked && checked.value) || '';
+    };
+    radios.forEach((radio) => {
+      const baseName = radio.dataset.bolsaGroupName || radio.name;
+      const newName = baseName.replace('__INDEX__', String(block.dataset.adventurerIndex || '0'));
+      radio.name = newName;
+      radio.dataset.bolsaGroupName = newName;
+      radio.addEventListener('change', syncHidden);
+    });
+    syncHidden();
+  }
+
+  function initBlockInteractivity(block) {
+    setupPhotoPreview(block);
+    initBolsaGroup(block);
+  }
+
+  function initAdventurerManager() {
+    const manager = document.querySelector('[data-adventurer-manager]');
+    if (!manager) {
+      return;
+    }
+    const blocksWrapper = manager.querySelector('[data-adventurer-blocks]');
+    const tabsWrapper = manager.querySelector('[data-adventurer-tabs]');
+    const template = document.getElementById('adventurer-template');
+    const addButton = document.querySelector('[data-action="add-adventurer"]');
+    if (!blocksWrapper || !tabsWrapper) {
+      return;
+    }
+    let activeIndex = 0;
+
+    function refreshTabs() {
+      tabsWrapper.innerHTML = '';
+      const blocks = blocksWrapper.querySelectorAll('[data-adventurer-block]');
+      blocks.forEach((block, idx) => {
+        const tab = document.createElement('button');
+        tab.type = 'button';
+        tab.className = 'adventurer-tab';
+        if (idx === activeIndex) {
+          tab.classList.add('is-active');
+        }
+        tab.textContent = `Aventureiro #${idx + 1}`;
+        tab.addEventListener('click', () => setActiveAdventurer(idx));
+        tabsWrapper.appendChild(tab);
+      });
+    }
+
+    function setActiveAdventurer(index) {
+      const blocks = Array.from(blocksWrapper.querySelectorAll('[data-adventurer-block]'));
+      if (!blocks.length) {
+        return;
+      }
+      const bounded = Math.min(Math.max(index, 0), blocks.length - 1);
+      blocks.forEach((block, idx) => block.classList.toggle('is-hidden', idx !== bounded));
+      activeIndex = bounded;
+      refreshTabs();
+    }
+
+    function createBlockFromTemplate() {
+      if (!template?.content?.firstElementChild) {
+        return null;
+      }
+      const clone = template.content.firstElementChild.cloneNode(true);
+      const newIndex = blocksWrapper.querySelectorAll('[data-adventurer-block]').length;
+      clone.dataset.adventurerIndex = String(newIndex);
+      clone.classList.remove('is-hidden');
+      clone.querySelectorAll('[data-bolsa-option]').forEach((radio) => {
+        const baseName = radio.dataset.bolsaGroupName || radio.name;
+        const newName = baseName.replace('__INDEX__', String(newIndex));
+        radio.name = newName;
+        radio.dataset.bolsaGroupName = newName;
+      });
+      const hiddenInput = clone.querySelector('[data-bolsa-hidden]');
+      if (hiddenInput) {
+        hiddenInput.value = '';
+      }
+      return clone;
+    }
+
+    blocksWrapper.querySelectorAll('[data-adventurer-block]').forEach(initBlockInteractivity);
+    setActiveAdventurer(0);
+
+    if (addButton && template) {
+      addButton.addEventListener('click', () => {
+        const block = createBlockFromTemplate();
+        if (!block) {
+          return;
+        }
+        blocksWrapper.appendChild(block);
+        hydrateDateSelectors();
+        initBlockInteractivity(block);
+        setActiveAdventurer(blocksWrapper.querySelectorAll('[data-adventurer-block]').length - 1);
+      });
+    }
   }
 
   function initSignatureModal() {
@@ -390,7 +516,7 @@
 
   function boot() {
     hydrateDateSelectors();
-    initPhotoPreview();
+    initAdventurerManager();
     initSignatureModal();
     initClientValidation();
   }

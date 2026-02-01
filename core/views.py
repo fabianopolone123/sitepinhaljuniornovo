@@ -112,6 +112,20 @@ def _empty_adventurer_data():
         "dia": "",
         "mes": "",
         "ano": "",
+        "colegio": "",
+        "serie": "",
+        "bolsa": "",
+        "rua": "",
+        "bairro": "",
+        "cidade": "",
+        "cep": "",
+        "estado": "",
+        "certidao": "",
+        "religiao": "",
+        "rg": "",
+        "orgao": "",
+        "cpf": "",
+        "camiseta_tamanho": "",
         "alergias": "",
         "medicacao": "",
         "observacao": "",
@@ -135,34 +149,49 @@ def _build_adventurers_data(post):
     if not post:
         return [_empty_adventurer_data()]
 
-    lists = {
-        "nome": _collect_values(post, "aventureiro_nome[]"),
-        "sobrenome": _collect_values(post, "aventureiro_sobrenome[]"),
-        "documento": _collect_values(post, "aventureiro_documento[]"),
-        "dia": _collect_values(post, "aventureiro_dia[]"),
-        "mes": _collect_values(post, "aventureiro_mes[]"),
-        "ano": _collect_values(post, "aventureiro_ano[]"),
-        "alergias": _collect_values(post, "aventureiro_alergias[]"),
-        "medicacao": _collect_values(post, "aventureiro_medicacao[]"),
-        "observacao": _collect_values(post, "aventureiro_observacao[]"),
-        "contato_nome": _collect_values(post, "emergencia_nome[]"),
-        "contato_telefone": _collect_values(post, "emergencia_telefone[]"),
-        "contato_whatsapp": _collect_values(post, "emergencia_whatsapp[]"),
-        "sexo": _collect_values(post, "aventureiro_sexo[]"),
+    field_mapping = {
+        "nome": "aventureiro_nome[]",
+        "sobrenome": "aventureiro_sobrenome[]",
+        "documento": "aventureiro_documento[]",
+        "sexo": "aventureiro_sexo[]",
+        "dia": "aventureiro_dia[]",
+        "mes": "aventureiro_mes[]",
+        "ano": "aventureiro_ano[]",
+        "colegio": "aventureiro_colegio[]",
+        "serie": "aventureiro_serie[]",
+        "bolsa": "aventureiro_bolsa[]",
+        "rua": "aventureiro_rua[]",
+        "bairro": "aventureiro_bairro[]",
+        "cidade": "aventureiro_cidade[]",
+        "cep": "aventureiro_cep[]",
+        "estado": "aventureiro_estado[]",
+        "certidao": "aventureiro_certidao[]",
+        "religiao": "aventureiro_religiao[]",
+        "rg": "aventureiro_rg[]",
+        "orgao": "aventureiro_orgao[]",
+        "cpf": "aventureiro_cpf[]",
+        "camiseta_tamanho": "camiseta_tamanho[]",
+        "alergias": "aventureiro_alergias[]",
+        "medicacao": "aventureiro_medicacao[]",
+        "observacao": "aventureiro_observacao[]",
+        "contato_nome": "emergencia_nome[]",
+        "contato_telefone": "emergencia_telefone[]",
+        "contato_whatsapp": "emergencia_whatsapp[]",
     }
 
-    max_len = max(len(values) for values in lists.values())
+    lists = {
+        key: _collect_values(post, field_name)
+        for key, field_name in field_mapping.items()
+    }
+
+    max_len = max((len(values) for values in lists.values()), default=0)
     if max_len == 0:
         return [_empty_adventurer_data()]
 
     data = []
     for idx in range(max_len):
-        data.append(
-            {
-                key: lists[key][idx] if idx < len(lists[key]) else ""
-                for key in lists
-            }
-        )
+        entry = {key: lists[key][idx] if idx < len(lists[key]) else "" for key in lists}
+        data.append(entry)
     return data
 
 
@@ -759,26 +788,6 @@ def register(request):
     if request.method == "POST":
         form_values = request.POST.dict()
         general_required_fields = [
-            "aventureiro_nome",
-            "aventureiro_sobrenome",
-            "aventureiro_sexo",
-            "aventureiro_dia",
-            "aventureiro_mes",
-            "aventureiro_ano",
-            "aventureiro_colegio",
-            "aventureiro_serie",
-            "aventureiro_bolsa",
-            "aventureiro_rua",
-            "aventureiro_bairro",
-            "aventureiro_cidade",
-            "aventureiro_cep",
-            "aventureiro_estado",
-            "aventureiro_certidao",
-            "aventureiro_religiao",
-            "aventureiro_rg",
-            "aventureiro_orgao",
-            "aventureiro_cpf",
-            "camiseta_tamanho",
             "responsavel_nome",
             "responsavel_sobrenome",
             "responsavel_sexo",
@@ -789,6 +798,7 @@ def register(request):
             "responsavel_password2",
             "responsavel_email",
             "responsavel_whatsapp",
+            "responsavel_legal_parentesco",
             "pai_nome",
             "pai_email",
             "pai_cpf",
@@ -797,11 +807,7 @@ def register(request):
             "mae_email",
             "mae_cpf",
             "mae_whatsapp",
-            "responsavel_legal_parentesco",
-            "responsavel_legal_nome",
-            "responsavel_legal_cpf",
-            "responsavel_legal_email",
-            "responsavel_legal_whatsapp",
+            "assinatura_data",
             "confirmacao_verdadeiro",
         ]
         missing_general = [
@@ -857,7 +863,31 @@ def register(request):
         adventurer_entries = []
         for idx, adventurer in enumerate(adventurers_data):
             errors_required = []
-            for key in ("nome", "sobrenome", "documento", "alergias", "medicacao", "observacao", "contato_nome", "contato_telefone", "contato_whatsapp"):
+            for key in (
+                "nome",
+                "sobrenome",
+                "documento",
+                "colegio",
+                "serie",
+                "bolsa",
+                "rua",
+                "bairro",
+                "cidade",
+                "cep",
+                "estado",
+                "certidao",
+                "religiao",
+                "rg",
+                "orgao",
+                "cpf",
+                "camiseta_tamanho",
+                "alergias",
+                "medicacao",
+                "observacao",
+                "contato_nome",
+                "contato_telefone",
+                "contato_whatsapp",
+            ):
                 if not adventurer.get(key):
                     errors_required.append(key)
             if not adventurer.get("dia") or not adventurer.get("mes") or not adventurer.get("ano"):

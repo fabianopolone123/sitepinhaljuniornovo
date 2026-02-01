@@ -1,0 +1,334 @@
+{% load static %}
+{% with adventurer=block|default:{} %}
+<div class="adventurer-block{% if not active and not is_template %} is-hidden{% endif %}" data-adventurer-block data-adventurer-index="{{ index }}">
+  <div class="adventurer-block__wrapper">
+    <div class="panel photo-panel">
+      <div>
+        <p class="panel-tag">Foto do aventureiro</p>
+        <p class="panel-hint">Upload obrigatório (3x4 com fundo branco/transparente).</p>
+      </div>
+      <div class="photo-preview" data-photo-preview aria-live="polite">
+        <span data-photo-placeholder>Preview 3x4</span>
+      </div>
+      <label class="file-field">
+        <span class="file-label">Selecionar imagem</span>
+        <input
+          type="file"
+          name="aventureiro_foto[]"
+          accept="image/*"
+          required
+          data-photo-input
+        />
+      </label>
+      <p class="helper photo-helper" data-photo-helper hidden>
+        Reenvie a foto 3x4 se o envio anterior falhar; o preview abaixo mostra a última imagem
+        enviada. Mesmo assim, o arquivo precisa ser selecionado novamente para concluir o cadastro.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Dados do aventureiro</h2>
+      <div class="form-grid adventure-grid">
+        <label>
+          Nome completo
+          <input
+            type="text"
+            name="aventureiro_nome[]"
+            placeholder="Nome"
+            required
+            value="{{ adventurer.nome|default:'' }}"
+          />
+        </label>
+        <label>
+          Sobrenome
+          <input
+            type="text"
+            name="aventureiro_sobrenome[]"
+            placeholder="Sobrenome"
+            required
+            value="{{ adventurer.sobrenome|default:'' }}"
+          />
+        </label>
+        <label>
+          Sexo
+          <select name="aventureiro_sexo[]" required>
+            <option value="">Selecione</option>
+            <option value="F" {% if adventurer.sexo == 'F' %}selected{% endif %}>Feminino</option>
+            <option value="M" {% if adventurer.sexo == 'M' %}selected{% endif %}>Masculino</option>
+          </select>
+        </label>
+        <div class="date-block">
+          <p class="date-heading">Data de nascimento (dia · mês · ano) — obrigatório</p>
+          <label>
+            Dia
+            <select
+              name="aventureiro_dia[]"
+              data-date-field="day"
+              data-initial-value="{{ adventurer.dia|default:'' }}"
+              required
+            ></select>
+          </label>
+          <label>
+            Mês
+            <select
+              name="aventureiro_mes[]"
+              data-date-field="month"
+              data-initial-value="{{ adventurer.mes|default:'' }}"
+              required
+            ></select>
+          </label>
+          <label>
+            Ano
+            <select
+              name="aventureiro_ano[]"
+              data-date-field="year"
+              data-initial-value="{{ adventurer.ano|default:'' }}"
+              required
+            ></select>
+          </label>
+        </div>
+        <label>
+          Documento principal
+          <input
+            type="text"
+            name="aventureiro_documento[]"
+            placeholder="RG ou outro documento"
+            required
+            value="{{ adventurer.documento|default:'' }}"
+          />
+        </label>
+        <label>
+          Colégio
+          <input
+            type="text"
+            name="aventureiro_colegio[]"
+            placeholder="Colégio frequentado"
+            required
+            value="{{ adventurer.colegio|default:'' }}"
+          />
+        </label>
+        <label>
+          Série / Ano
+          <input
+            type="text"
+            name="aventureiro_serie[]"
+            placeholder="Ex: 6ª série"
+            required
+            value="{{ adventurer.serie|default:'' }}"
+          />
+        </label>
+        <div class="field-group" style="width: 100%;">
+          <p class="field-group-heading">Beneficiário(a) Bolsa Família?</p>
+          <input type="hidden" name="aventureiro_bolsa[]" data-bolsa-hidden value="{{ adventurer.bolsa|default:'' }}" />
+          <div class="radio-group" data-bolsa-group>
+            <label>
+              <input
+                type="radio"
+                data-bolsa-option
+                name="aventureiro_bolsa_group_{{ index }}"
+                data-bolsa-group-name="aventureiro_bolsa_group_{{ index }}"
+                value="sim"
+                required
+                {% if adventurer.bolsa == 'sim' %}checked{% endif %}
+              />
+              Sim
+            </label>
+            <label>
+              <input
+                type="radio"
+                data-bolsa-option
+                name="aventureiro_bolsa_group_{{ index }}"
+                data-bolsa-group-name="aventureiro_bolsa_group_{{ index }}"
+                value="nao"
+                {% if adventurer.bolsa == 'nao' %}checked{% endif %}
+              />
+              Não
+            </label>
+          </div>
+        </div>
+        <div class="field-group" style="width: 100%;">
+          <p class="field-group-heading">Classe investida</p>
+            <div class="chip-group">
+            {% for classe in classes %}
+              <label class="chip">
+                <input type="checkbox" name="aventureiro_classes[]" value="{{ classe }}" />
+                {{ classe }}
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+        <label>
+          Rua
+          <input
+            type="text"
+            name="aventureiro_rua[]"
+            placeholder="Rua"
+            required
+            value="{{ adventurer.rua|default:'' }}"
+          />
+        </label>
+        <label>
+          Bairro
+          <input
+            type="text"
+            name="aventureiro_bairro[]"
+            placeholder="Bairro"
+            required
+            value="{{ adventurer.bairro|default:'' }}"
+          />
+        </label>
+        <label>
+          Cidade
+          <input
+            type="text"
+            name="aventureiro_cidade[]"
+            placeholder="Cidade"
+            required
+            value="{{ adventurer.cidade|default:'São Carlos' }}"
+          />
+        </label>
+        <label>
+          CEP
+          <input
+            type="text"
+            name="aventureiro_cep[]"
+            placeholder="00000-000"
+            required
+            value="{{ adventurer.cep|default:'' }}"
+          />
+        </label>
+        <label>
+          Estado
+          <input
+            type="text"
+            name="aventureiro_estado[]"
+            placeholder="Estado"
+            required
+            value="{{ adventurer.estado|default:'SP' }}"
+          />
+        </label>
+        <label>
+          Certidão de nascimento
+          <input
+            type="text"
+            name="aventureiro_certidao[]"
+            placeholder="Número da certidão"
+            required
+            value="{{ adventurer.certidao|default:'' }}"
+          />
+        </label>
+        <label>
+          Religião
+          <input
+            type="text"
+            name="aventureiro_religiao[]"
+            placeholder="Religião"
+            required
+            value="{{ adventurer.religiao|default:'' }}"
+          />
+        </label>
+        <label>
+          RG
+          <input
+            type="text"
+            name="aventureiro_rg[]"
+            placeholder="RG"
+            required
+            value="{{ adventurer.rg|default:'' }}"
+          />
+        </label>
+        <label>
+          Órgão expedidor
+          <input
+            type="text"
+            name="aventureiro_orgao[]"
+            placeholder="Órgão expedidor"
+            required
+            value="{{ adventurer.orgao|default:'' }}"
+          />
+        </label>
+        <label>
+          CPF
+          <input
+            type="text"
+            name="aventureiro_cpf[]"
+            placeholder="CPF"
+            required
+            value="{{ adventurer.cpf|default:'' }}"
+          />
+        </label>
+        <label>
+          Tamanho da camiseta
+          <input
+            type="text"
+            name="camiseta_tamanho[]"
+            placeholder="P / M / G"
+            required
+            value="{{ adventurer.camiseta_tamanho|default:'' }}"
+          />
+        </label>
+        <label>
+          Alergias
+          <textarea
+            name="aventureiro_alergias[]"
+            rows="2"
+            placeholder="Informe alergias"
+            required
+          >{{ adventurer.alergias|default:'' }}</textarea>
+        </label>
+        <label>
+          Medicação contínua
+          <textarea
+            name="aventureiro_medicacao[]"
+            rows="2"
+            placeholder="Medicamentos em uso"
+            required
+          >{{ adventurer.medicacao|default:'' }}</textarea>
+        </label>
+        <label>
+          Observações
+          <textarea
+            name="aventureiro_observacao[]"
+            rows="2"
+            placeholder="Observações gerais"
+            required
+          >{{ adventurer.observacao|default:'' }}</textarea>
+        </label>
+        <div class="emergency-grid">
+          <h3>Contato de emergência</h3>
+          <label>
+            Nome do contato
+            <input
+              type="text"
+              name="emergencia_nome[]"
+              placeholder="Nome"
+              required
+              value="{{ adventurer.contato_nome|default:'' }}"
+            />
+          </label>
+          <label>
+            Telefone
+            <input
+              type="text"
+              name="emergencia_telefone[]"
+              placeholder="(99) 99999-9999"
+              required
+              value="{{ adventurer.contato_telefone|default:'' }}"
+            />
+          </label>
+          <label>
+            WhatsApp
+            <input
+              type="text"
+              name="emergencia_whatsapp[]"
+              placeholder="(99) 99999-9999"
+              required
+              value="{{ adventurer.contato_whatsapp|default:'' }}"
+            />
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endwith %}
