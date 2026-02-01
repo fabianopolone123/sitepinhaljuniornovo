@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Ficha de inscriÁ„o ó Clube de Aventureiros Pinhal Junior</title>
+    <title>Ficha de inscri√ß√£o ¬ó Clube de Aventureiros Pinhal Junior</title>
     <link rel="stylesheet" href="{% static 'css/register.css' %}" />
     {% include 'core/client_logger_head.html' %}
   </head>
@@ -12,11 +12,11 @@
     <main class="registration-panel">
       <header class="registration-hero">
         <div>
-          <p class="tag">Ficha de inscriÁ„o</p>
+          <p class="tag">Ficha de inscri√ß√£o</p>
           <h1>Clube de Aventureiros Pinhal Junior</h1>
           <p class="hero-text">
-            Preencha os dados do aventureiro e do respons·vel para iniciar o cadastro.
-            O formul·rio È dividido em etapas guiadas; esta È a primeira aba.
+            Preencha os dados do aventureiro e do respons√°vel para iniciar o cadastro.
+            O formul√°rio √© dividido em etapas guiadas; esta √© a primeira aba.
           </p>
         </div>
         <div class="hero-meta">
@@ -27,13 +27,13 @@
 
       <nav class="registration-steps" aria-label="Etapas do cadastro">
         <button class="step is-active" type="button" data-step-target="initial">
-          01 ∑ Dados iniciais
+          01 ¬∑ Dados iniciais
         </button>
         <button class="step" type="button" disabled>
-          02 ∑ Ficha mÈdica
+          02 ¬∑ Ficha m√©dica
         </button>
         <button class="step" type="button" disabled>
-          03 ∑ Termo de imagem
+          03 ¬∑ Termo de imagem
         </button>
       </nav>
 
@@ -58,7 +58,7 @@
           <div class="panel photo-panel">
             <div>
               <p class="panel-tag">Foto do aventureiro</p>
-              <p class="panel-hint">Upload obrigatÛrio (3x4 com fundo branco/transparente).</p>
+              <p class="panel-hint">Upload obrigat√≥rio (3x4 com fundo branco/transparente).</p>
             </div>
             <div class="photo-preview" data-photo-preview>
               <span>Preview 3x4</span>
@@ -111,7 +111,7 @@
                     <select name="aventureiro_dia" data-date-field="day" required></select>
                   </label>
                   <label>
-                    MÍs
+                    M√™s
                     <select name="aventureiro_mes" data-date-field="month" required></select>
                   </label>
                   <label>
@@ -120,28 +120,28 @@
                   </label>
                 </div>
                 <label>
-                  ColÈgio
-                  <input type="text" name="aventureiro_colegio" placeholder="ColÈgio frequentado" />
+                  Col√©gio
+                  <input type="text" name="aventureiro_colegio" placeholder="Col√©gio frequentado" />
                 </label>
                 <label>
-                  SÈrie / Ano
-                  <input type="text" name="aventureiro_serie" placeholder="Ex: 6™ sÈrie" />
+                  S√©rie / Ano
+                  <input type="text" name="aventureiro_serie" placeholder="Ex: 6¬™ s√©rie" />
                 </label>
                 <label class="field-group">
-                  Benefici·rio(a) Bolsa FamÌlia?
+                  Benefici√°rio(a) Bolsa Fam√≠lia?
                   <div class="radio-group">
                     <label>
                       <input type="radio" name="aventureiro_bolsa" value="sim" /> Sim
                     </label>
                     <label>
-                      <input type="radio" name="aventureiro_bolsa" value="nao" checked /> N„o
+                      <input type="radio" name="aventureiro_bolsa" value="nao" checked /> N√£o
                     </label>
                   </div>
                 </label>
                 <div class="field-group">
                   Classe investida
                   <div class="chip-group">
-                    {% for classe in 'Abelinhas,Lumin·rias,Edificadores,M„os Ajudadoras'.split(',') %}
+                    {% for classe in 'Abelinhas,Lumin√°rias,Edificadores,M√£os Ajudadoras'.split(',') %}
                     <label class="chip">
                       <input type="checkbox" name="aventureiro_classes" value="{{ classe }}" />
                       {{ classe }}
@@ -159,7 +159,7 @@
                 </label>
                 <label>
                   Cidade
-                  <input type="text" name="aventureiro_cidade" placeholder="Cidade" value="S„o Carlos" />
+                  <input type="text" name="aventureiro_cidade" placeholder="Cidade" value="S√£o Carlos" />
                 </label>
                 <label>
                   CEP
@@ -170,27 +170,27 @@
                   <input type="text" name="aventureiro_estado" placeholder="Estado" value="SP" />
                 </label>
                 <label>
-                  Certid„o de nascimento
-                  <input type="text" name="aventureiro_certidao" placeholder="N˙mero da certid„o" />
+                  Certid√£o de nascimento
+                  <input type="text" name="aventureiro_certidao" placeholder="N√∫mero da certid√£o" />
                 </label>
                 <label>
-                  Religi„o
-                  <input type="text" name="aventureiro_religiao" placeholder="Religi„o" />
+                  Religi√£o
+                  <input type="text" name="aventureiro_religiao" placeholder="Religi√£o" />
                 </label>
                 <label>
                   RG
                   <input type="text" name="aventureiro_rg" placeholder="RG" />
                 </label>
                 <label>
-                  ”rg„o expedidor
-                  <input type="text" name="aventureiro_orgao" placeholder="”rg„o expedidor" />
+                  √ìrg√£o expedidor
+                  <input type="text" name="aventureiro_orgao" placeholder="√ìrg√£o expedidor" />
                 </label>
                 <label>
                   CPF
                   <input type="text" name="aventureiro_cpf" placeholder="CPF" />
                 </label>
                 <label>
-                  WhatsApp do respons·vel
+                  WhatsApp do respons√°vel
                   <input type="text" name="responsavel_whatsapp" placeholder="(99) 99999-9999" required value="{{ form_values.responsavel_whatsapp|default:'' }}" />
                 </label>
                 <label>
@@ -201,7 +201,7 @@
             </div>
 
             <div class="panel">
-              <h2>Dados do respons·vel principal</h2>
+              <h2>Dados do respons√°vel principal</h2>
               <div class="form-grid">
                 <label>
                   Nome completo
@@ -224,7 +224,7 @@
                   />
                 </label>
                 <label>
-                  Sexo do respons·vel
+                  Sexo do respons√°vel
                   <select name="responsavel_sexo" required>
                     <option value="">Selecione</option>
                     <option value="F" {% if form_values.responsavel_sexo == 'F' %}selected{% endif %}>Feminino</option>
@@ -236,15 +236,15 @@
                   <input type="text" name="responsavel_cpf" placeholder="CPF" required value="{{ form_values.responsavel_cpf|default:'' }}" />
                 </label>
                 <label>
-                  EndereÁo
-                  <input type="text" name="responsavel_endereco" placeholder="Rua, n˙mero, complemento" required value="{{ form_values.responsavel_endereco|default:'' }}" />
+                  Endere√ßo
+                  <input type="text" name="responsavel_endereco" placeholder="Rua, n√∫mero, complemento" required value="{{ form_values.responsavel_endereco|default:'' }}" />
                 </label>
                 <label>
-                  Nome de usu·rio
+                  Nome de usu√°rio
                   <input type="text" name="responsavel_username" placeholder="Login" required value="{{ form_values.responsavel_username|default:'' }}" />
                 </label>
                 <label>
-                  Senha (4 dÌgitos)
+                  Senha (4 d√≠gitos)
                   <input type="password" name="responsavel_password1" placeholder="Senha" required />
                 </label>
                 <label>
@@ -288,7 +288,7 @@
                   </label>
                 </div>
                 <div>
-                  <h3>M„e</h3>
+                  <h3>M√£e</h3>
                   <label>
                     Nome
                     <input type="text" name="mae_nome" />
@@ -307,7 +307,7 @@
                   </label>
                 </div>
                 <div>
-                  <h3>Respons·vel legal</h3>
+                  <h3>Respons√°vel legal</h3>
                   <label>
                     Grau de parentesco
                     <input type="text" name="responsavel_legal_parentesco" />
@@ -337,7 +337,7 @@
             <div class="declaration-row">
               <label>
                 Local
-                <input type="text" name="declaracao_local" value="S„o Carlos" readonly />
+                <input type="text" name="declaracao_local" value="S√£o Carlos" readonly />
               </label>
               <label>
                 Data
@@ -346,7 +346,7 @@
             </div>
             <label class="checkbox-field">
               <input type="checkbox" name="confirmacao_verdadeiro" required />
-              Declaro que todas as informaÁıes prestadas acima s„o verdadeiras.
+              Declaro que todas as informa√ß√µes prestadas acima s√£o verdadeiras.
             </label>
             <div class="signature-field">
               <div>
@@ -356,7 +356,7 @@
               <canvas id="signature-canvas" width="360" height="180"></canvas>
               <div class="signature-actions">
                 <button type="button" data-action="clear-signature">Limpar</button>
-                <small>O desenho ser· salvo automaticamente.</small>
+                <small>O desenho ser√° salvo automaticamente.</small>
               </div>
               <input type="hidden" name="assinatura_data" />
             </div>

@@ -381,3 +381,7 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 - **Actions**: Substituí o template de /cadastro/ por uma primeira aba com upload/preview 3x4, campos completos do aventureiro e do responsável (incluindo pai/mãe/legal) e a área de assinatura + checkbox, atualizei o CSS/JS para o novo layout e mantive o backend compatível com os mesmos nomes de campos
 - **Technical**: templates/core/register.html, static/css/register.css, static/js/register.js, core/views.py
 - **Notes**: python manage.py test
+
+## 2026-02-01T14:25:55+00:00Z — Fix encode
+- **Request**: UnicodeDecodeError ao abrir /cadastro/ causado pelo template em Latin-1
+- **Actions**: Regravei templates/core/register.html, static/css/register.css e static/js/register.js em UTF-8 para eliminar o erro do decode
