@@ -185,6 +185,15 @@ body {
   color: #fff;
   border-color: transparent;
 }
+.step-section {
+  display: none;
+}
+.registration-form[data-active-step="initial"] .step-section--initial {
+  display: block;
+}
+.registration-form[data-active-step="medical"] .step-section--medical {
+  display: block;
+}
 .adventurer-tab.is-new {
   animation: tab-pop 0.8s ease;
   box-shadow: 0 12px 24px rgba(51, 162, 255, 0.35);

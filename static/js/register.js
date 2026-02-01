@@ -319,6 +319,41 @@
     }
   }
 
+  function initStepNavigator() {
+    const form = document.getElementById('registration-form');
+    const stepButtons = document.querySelectorAll('[data-step-target]');
+    if (!form || !stepButtons.length) {
+      return;
+    }
+
+    function setStep(step) {
+      if (!step) {
+        return;
+      }
+      form.dataset.activeStep = step;
+      stepButtons.forEach((button) => {
+        button.classList.toggle('is-active', button.dataset.stepTarget === step);
+      });
+      if (step === 'medical') {
+        const firstMedical = document.querySelector('[data-step-section="medical"]');
+        if (firstMedical) {
+          firstMedical.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } else {
+        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    stepButtons.forEach((button) => {
+      if (button.disabled) {
+        return;
+      }
+      button.addEventListener('click', () => setStep(button.dataset.stepTarget));
+    });
+
+    setStep(form.dataset.activeStep || 'initial');
+  }
+
   function initSignatureModal() {
     const modal = document.getElementById('signature-modal');
     if (!modal) {
@@ -588,6 +623,7 @@
   function boot() {
     hydrateDateSelectors();
     initAdventurerManager();
+    initStepNavigator();
     initSignatureModal();
     initClientValidation();
   }

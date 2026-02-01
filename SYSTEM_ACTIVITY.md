@@ -473,3 +473,9 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 - **Actions**: Fiz o botão rolar suavemente o painel de aventureiros para o topo e marquei a nova aba com animação quando ela é criada, de modo que o usuário perceba qual ficha acabou de surgir.
 - **Technical**: static/js/register.js, static/css/register.css
 - **Notes**: Valide no navegador se a aba ativa recebe o destaque `is-new` e se o scroll mantém o painel visível após o clique.
+
+## 2026-02-01T18:53:19+00:00Z — Move ficha médica para a aba 02
+- **Request**: coloca a parte de ficha médica na aba 02 · Ficha médica ao clicar lá vai pra ficha nao nos dados iniciais.
+- **Actions**: Separei os blocos que pertencem aos dados iniciais e à ficha médica usando data-step-section, deixei a aba 02 habilitada e escrevi o CSS/JS para alternar o data-active-step do form, mostrar o painel correto e rolar a tela para a ficha quando o usuário clicar na etapa 02.
+- **Technical**: templates/core/_adventurer_block.html, templates/core/register.html, static/css/register.css, static/js/register.js; python manage.py test.
+- **Notes**: Testes (python manage.py test).

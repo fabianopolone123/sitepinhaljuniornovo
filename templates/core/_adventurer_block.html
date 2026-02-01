@@ -2,7 +2,8 @@
 {% with adventurer=block|default:empty_adventurer %}
 <div class="adventurer-block{% if not active and not is_template %} is-hidden{% endif %}" data-adventurer-block data-adventurer-index="{{ index }}">
   <div class="adventurer-block__wrapper">
-    <div class="panel photo-panel">
+    <div class="step-section step-section--initial" data-step-section="initial">
+      <div class="panel photo-panel">
       <div>
         <p class="panel-tag">Foto do aventureiro</p>
         <p class="panel-hint">Upload obrigatório (3x4 com fundo branco/transparente).</p>
@@ -296,9 +297,10 @@
         </label>
       </div>
     </div>
-
-    <div class="panel medical-panel">
-      <h2>Ficha médica</h2>
+    </div>
+    <div class="step-section step-section--medical" data-step-section="medical">
+      <div class="panel medical-panel">
+        <h2>Ficha médica</h2>
       <div class="form-grid medical-grid">
         <label>
           Tem plano de saúde?

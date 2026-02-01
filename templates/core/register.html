@@ -29,7 +29,7 @@
         <button class="step is-active" type="button" data-step-target="initial">
           01 · Dados iniciais
         </button>
-        <button class="step" type="button" disabled>
+        <button class="step" type="button" data-step-target="medical">
           02 · Ficha médica
         </button>
         <button class="step" type="button" disabled>
@@ -43,6 +43,7 @@
         method="post"
         enctype="multipart/form-data"
         novalidate
+        data-active-step="initial"
       >
         {% csrf_token %}
         <div class="form-feedback-wrapper">
