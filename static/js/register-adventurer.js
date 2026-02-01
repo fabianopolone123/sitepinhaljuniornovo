@@ -294,37 +294,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return issues;
   };
 
-  const collectSignatureState = () => {
-    const allowedSlots = getAllowedSlots();
-    const getFieldValue = (name) => {
-      const field = form?.querySelector(`[name="${cssEscape(name)}"]`);
-      if (!field) {
-        return null;
-      }
-      if (field.type === "checkbox") {
-        return field.checked;
-      }
-      return field.value;
-    };
-    const state = {};
-    allowedSlots.forEach((slot) => {
-      state[slot] = {
-        adventure_signature_length: getFieldValue(`adventure_data_signature_${slot}`)?.length || 0,
-        medical_signature_length: getFieldValue(`medical_signature_${slot}`)?.length || 0,
-        term_signature_length: getFieldValue(`term_signature_${slot}`)?.length || 0,
-        medical_confirmation: getFieldValue(`medical_confirmation_${slot}`),
-        medical_plan: getFieldValue(`medical_plan_${slot}`),
-        medical_plan_number: getFieldValue(`medical_plan_number_${slot}`),
-      };
-    });
-    const parentSignature = getFieldValue("parent_signature");
-    state.parent = {
-      signature_length: parentSignature?.length || 0,
-      value_present: Boolean(parentSignature),
-    };
-    return state;
-  };
-
   const resetSignatureFields = () => {
     form
       ?.querySelectorAll("input[name*='_signature']")
@@ -735,7 +704,6 @@ document.addEventListener("DOMContentLoaded", () => {
       issues: issues.map(describeForLog).filter(Boolean),
       activeSlot: currentAdventurerSlot,
       slotCount: getNormalizedSlotCount(),
-      signatureState: collectSignatureState(),
     });
   };
 
@@ -1050,7 +1018,6 @@ document.addEventListener("DOMContentLoaded", () => {
           issues: signaturePayload,
           activeSlot: currentAdventurerSlot,
           slotCount: getNormalizedSlotCount(),
-          signatureState: collectSignatureState(),
         });
       return;
     }
@@ -1082,7 +1049,6 @@ document.addEventListener("DOMContentLoaded", () => {
         errors: errors.map(describeForLog).filter(Boolean),
         activeSlot: currentAdventurerSlot,
         slotCount: getNormalizedSlotCount(),
-        signatureState: collectSignatureState(),
       });
     }
   });

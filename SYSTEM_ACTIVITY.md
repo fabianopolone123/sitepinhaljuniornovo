@@ -628,3 +628,10 @@ tira o quadrado do funcoi
 - **Actions**: criei collectSignatureState() para montar um snapshot das assinaturas, confirma��es e dados do plano para cada slot ativo e anexei esse snapshot aos eventos front-signature-warning, frontend-signature-block e frontend-validation-block, garantindo que o journal reflita os valores atuais antes de bloquear o envio.
 - **Technical**: static/js/register-adventurer.js.
 - **Notes**: python manage.py check.
+
+
+## 2026-02-01T02:10:00+00:00Z — Manual update
+- **Request**: retira o log extra de assinatura/coisa e deixa só a verificação dos campos não preenchidos, como você pediu.
+- **Actions**: removi o snapshot collectSignatureState() e os campos signatureState dos eventos front-signature-warning, frontend-signature-block e frontend-validation-block, mantendo apenas a validação normal dos campos não preenchidos (sem enviar os estados das assinaturas ao journal).
+- **Technical**: static/js/register-adventurer.js.
+- **Notes**: python manage.py check.
