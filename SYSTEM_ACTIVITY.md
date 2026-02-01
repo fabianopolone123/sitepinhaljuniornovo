@@ -375,3 +375,9 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 - **Actions**: Adicionei middleware RequestId/RequestLogging + LOGGING JSON rotativo com request_id filter e handlers, criei app observability com POST /api/client-logs/ e script client-logger.js que captura console/erros/fetch, e incluo o snippet em cada template junto com o context processor
 - **Technical**: core/middleware.py, core/logging_helpers.py, core/context_processors.py, pinhaljunior/settings.py, observability/views.py, observability/urls.py, 	emplates/core/client_logger_head.html + head includes, static/js/client-logger.js
 - **Notes**: python manage.py test
+
+## 2026-02-01T14:20:46+00:00Z — Refaz cadastro
+- **Request**: Reunião de ideias para refazer o cadastro do aventureiro com passos guiados e novos campos
+- **Actions**: Substituí o template de /cadastro/ por uma primeira aba com upload/preview 3x4, campos completos do aventureiro e do responsável (incluindo pai/mãe/legal) e a área de assinatura + checkbox, atualizei o CSS/JS para o novo layout e mantive o backend compatível com os mesmos nomes de campos
+- **Technical**: templates/core/register.html, static/css/register.css, static/js/register.js, core/views.py
+- **Notes**: python manage.py test

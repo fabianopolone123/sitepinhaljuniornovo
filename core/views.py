@@ -96,24 +96,33 @@ def _empty_adventurer_data():
     }
 
 
+def _collect_values(post, key):
+    values = post.getlist(key)
+    if values:
+        return values
+    normalized = key[:-2] if key.endswith("[]") else key
+    single = post.get(normalized)
+    return [single] if single else []
+
+
 def _build_adventurers_data(post):
     if not post:
         return [_empty_adventurer_data()]
 
     lists = {
-        "nome": post.getlist("aventureiro_nome[]"),
-        "sobrenome": post.getlist("aventureiro_sobrenome[]"),
-        "documento": post.getlist("aventureiro_documento[]"),
-        "dia": post.getlist("aventureiro_dia[]"),
-        "mes": post.getlist("aventureiro_mes[]"),
-        "ano": post.getlist("aventureiro_ano[]"),
-        "alergias": post.getlist("aventureiro_alergias[]"),
-        "medicacao": post.getlist("aventureiro_medicacao[]"),
-        "observacao": post.getlist("aventureiro_observacao[]"),
-        "contato_nome": post.getlist("emergencia_nome[]"),
-        "contato_telefone": post.getlist("emergencia_telefone[]"),
-        "contato_whatsapp": post.getlist("emergencia_whatsapp[]"),
-        "sexo": post.getlist("aventureiro_sexo[]"),
+        "nome": _collect_values(post, "aventureiro_nome[]"),
+        "sobrenome": _collect_values(post, "aventureiro_sobrenome[]"),
+        "documento": _collect_values(post, "aventureiro_documento[]"),
+        "dia": _collect_values(post, "aventureiro_dia[]"),
+        "mes": _collect_values(post, "aventureiro_mes[]"),
+        "ano": _collect_values(post, "aventureiro_ano[]"),
+        "alergias": _collect_values(post, "aventureiro_alergias[]"),
+        "medicacao": _collect_values(post, "aventureiro_medicacao[]"),
+        "observacao": _collect_values(post, "aventureiro_observacao[]"),
+        "contato_nome": _collect_values(post, "emergencia_nome[]"),
+        "contato_telefone": _collect_values(post, "emergencia_telefone[]"),
+        "contato_whatsapp": _collect_values(post, "emergencia_whatsapp[]"),
+        "sexo": _collect_values(post, "aventureiro_sexo[]"),
     }
 
     max_len = max(len(values) for values in lists.values())
@@ -751,6 +760,9 @@ def register(request):
             field_errors["responsavel_cpf"] = "Esse CPF já está cadastrado."
 
         adventurer_photos = request.FILES.getlist("aventureiro_foto[]")
+        if not adventurer_photos:
+            single_photo = request.FILES.get("aventureiro_foto")
+            adventurer_photos = [single_photo] if single_photo else []
         adventurer_entries = []
         for idx, adventurer in enumerate(adventurers_data):
             errors_required = []
