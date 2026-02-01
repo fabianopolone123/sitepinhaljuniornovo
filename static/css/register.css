@@ -111,6 +111,50 @@ body {
   padding: 1.5rem;
   background: #fafbff;
 }
+.medical-panel {
+  background: #fff;
+  border-color: rgba(28, 63, 170, 0.12);
+}
+.medical-panel h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+.medical-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.9rem;
+  margin-bottom: 1rem;
+}
+.medical-grid textarea {
+  min-height: 70px;
+  resize: vertical;
+}
+.disease-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.7rem;
+  margin-bottom: 1.2rem;
+}
+.medical-declaration-text {
+  margin: 1.25rem 0 0.15rem;
+  font-weight: 700;
+  color: #10255d;
+}
+.medical-declaration-date {
+  font-weight: 400;
+}
+.medical-declaration-agreement {
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+  color: #3a4c7c;
+}
+.signature-field--medical {
+  border: 1px dashed rgba(28, 63, 170, 0.3);
+  padding: 1rem;
+  border-radius: 16px;
+  background: #f7f9ff;
+  gap: 0.6rem;
+}
 .adventurer-manager {
   border: 1px solid rgba(6, 24, 69, 0.12);
   border-radius: 20px;

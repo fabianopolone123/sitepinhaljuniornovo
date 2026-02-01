@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from datetime import date
 from decimal import Decimal
 from django.utils import timezone
 
@@ -8,6 +9,47 @@ from django.db import models
 SEX_CHOICES = [
     ("M", "Masculino"),
     ("F", "Feminino"),
+]
+
+MEDICAL_DISEASES = [
+    ("catapora", "Catapora"),
+    ("meningite", "Meningite"),
+    ("hepatite", "Hepatite"),
+    ("dengue", "Dengue"),
+    ("pneumonia", "Pneumonia"),
+    ("malaria", "Malária"),
+    ("febre_amarela", "Febre amarela"),
+    ("h1n1", "H1N1"),
+    ("colera", "Cólera"),
+    ("rubeola", "Rubéola"),
+    ("sarampo", "Sarampo"),
+    ("tetano", "Tétano"),
+    ("variola", "Varíola"),
+    ("coqueluche", "Coqueluche"),
+    ("difteria", "Difteria"),
+    ("caxumba", "Caxumba"),
+    ("rinite", "Rinite"),
+    ("bronquite", "Bronquite"),
+]
+
+BLOOD_TYPE_CHOICES = [
+    ("A+", "A+"),
+    ("A-", "A-"),
+    ("B+", "B+"),
+    ("B-", "B-"),
+    ("AB+", "AB+"),
+    ("AB-", "AB-"),
+    ("O+", "O+"),
+    ("O-", "O-"),
+]
+
+DISABILITY_CHOICES = [
+    ("none", "Sem deficiência física"),
+    ("cadeirante", "Cadeirante"),
+    ("visual", "Visual"),
+    ("auditivo", "Auditivo"),
+    ("fala", "Fala / dificuldade"),
+    ("outra", "Outra deficiência"),
 ]
 
 
@@ -41,6 +83,80 @@ class Adventurer(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.responsible})"
+
+
+class MedicalRecord(models.Model):
+    adventurer = models.OneToOneField(Adventurer, on_delete=models.CASCADE, related_name="medical_record")
+    has_health_plan = models.BooleanField(default=False)
+    health_plan_name = models.CharField(max_length=140, blank=True)
+    health_plan_card = models.CharField(max_length=140, blank=True)
+    sus_card = models.CharField(max_length=140, blank=True)
+
+    catapora = models.BooleanField(default=False)
+    meningite = models.BooleanField(default=False)
+    hepatite = models.BooleanField(default=False)
+    dengue = models.BooleanField(default=False)
+    pneumonia = models.BooleanField(default=False)
+    malaria = models.BooleanField(default=False)
+    febre_amarela = models.BooleanField(default=False)
+    h1n1 = models.BooleanField(default=False)
+    colera = models.BooleanField(default=False)
+    rubeola = models.BooleanField(default=False)
+    sarampo = models.BooleanField(default=False)
+    tetano = models.BooleanField(default=False)
+    variola = models.BooleanField(default=False)
+    coqueluche = models.BooleanField(default=False)
+    difteria = models.BooleanField(default=False)
+    caxumba = models.BooleanField(default=False)
+    rinite = models.BooleanField(default=False)
+    bronquite = models.BooleanField(default=False)
+
+    allergy_cutanea = models.BooleanField(default=False)
+    allergy_cutanea_detail = models.CharField(max_length=255, blank=True)
+    allergy_alimentar = models.BooleanField(default=False)
+    allergy_alimentar_detail = models.CharField(max_length=255, blank=True)
+    allergy_medicamento = models.BooleanField(default=False)
+    allergy_medicamento_detail = models.CharField(max_length=255, blank=True)
+
+    disability_type = models.CharField(max_length=20, choices=DISABILITY_CHOICES, default="none")
+
+    heart_problem = models.BooleanField(default=False)
+    heart_medication = models.CharField(max_length=255, blank=True)
+    diabetic = models.BooleanField(default=False)
+    diabetic_medication = models.CharField(max_length=255, blank=True)
+    genital_problem = models.BooleanField(default=False)
+    genital_medication = models.CharField(max_length=255, blank=True)
+    psychological_problem = models.BooleanField(default=False)
+    psychological_medication = models.CharField(max_length=255, blank=True)
+
+    other_health_problem = models.BooleanField(default=False)
+    other_health_problem_detail = models.TextField(blank=True)
+    other_medication = models.BooleanField(default=False)
+    other_medication_detail = models.TextField(blank=True)
+
+    recent_health_issue = models.BooleanField(default=False)
+    recent_health_issue_detail = models.TextField(blank=True)
+    recent_medication = models.BooleanField(default=False)
+    recent_medication_detail = models.TextField(blank=True)
+    recent_injury = models.BooleanField(default=False)
+    recent_injury_detail = models.TextField(blank=True)
+    surgery = models.BooleanField(default=False)
+    surgery_detail = models.TextField(blank=True)
+    recent_change = models.BooleanField(default=False)
+    recent_change_detail = models.TextField(blank=True)
+
+    blood_type = models.CharField(max_length=3, choices=BLOOD_TYPE_CHOICES, blank=True)
+
+    declaration_city = models.CharField(max_length=140, default="São Carlos")
+    declaration_date = models.DateField(default=date.today)
+    signature_data = models.TextField(blank=True)
+
+    class Meta:
+        verbose_name = "Ficha médica"
+        verbose_name_plural = "Fichas médicas"
+
+    def __str__(self):
+        return f"Ficha médica de {self.adventurer}"
 
 
 class MonthlyFee(models.Model):

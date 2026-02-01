@@ -296,6 +296,509 @@
         </label>
       </div>
     </div>
+
+    <div class="panel medical-panel">
+      <h2>Ficha médica</h2>
+      <div class="form-grid medical-grid">
+        <label>
+          Tem plano de saúde?
+          <select name="medical_has_health_plan[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_has_health_plan == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_has_health_plan == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Nome do plano de saúde
+          <input
+            type="text"
+            name="medical_health_plan_name[]"
+            placeholder="Operadora"
+            value='{{ adventurer.medical_health_plan_name|default:"" }}'
+          />
+        </label>
+        <label>
+          Nome da carteirinha
+          <input
+            type="text"
+            name="medical_health_plan_card[]"
+            placeholder="Nome impresso na carteirinha"
+            value='{{ adventurer.medical_health_plan_card|default:"" }}'
+          />
+        </label>
+        <label>
+          Cartão SUS / carteira nacional de saúde
+          <input
+            type="text"
+            name="medical_sus_card[]"
+            placeholder="Número da carteirinha"
+            value='{{ adventurer.medical_sus_card|default:"" }}'
+          />
+        </label>
+      </div>
+
+      <div class="disease-grid">
+        <p class="panel-tag">Já teve/tem</p>
+        <label>
+          Catapora
+          <select name="medical_disease_catapora[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_disease_catapora == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_disease_catapora == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Meningite
+          <select name="medical_disease_meningite[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_disease_meningite == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_disease_meningite == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Hepatite
+          <select name="medical_disease_hepatite[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_disease_hepatite == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_disease_hepatite == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Dengue
+          <select name="medical_disease_dengue[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_disease_dengue == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_disease_dengue == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Pneumonia
+          <select name="medical_disease_pneumonia[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_disease_pneumonia == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_disease_pneumonia == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Malária
+          <select name="medical_disease_malaria[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_disease_malaria == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_disease_malaria == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Febre amarela
+          <select name="medical_disease_febre_amarela[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_disease_febre_amarela == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_disease_febre_amarela == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          H1N1
+          <select name="medical_disease_h1n1[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_disease_h1n1 == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_disease_h1n1 == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Cólera
+          <select name="medical_disease_colera[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_disease_colera == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_disease_colera == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Rubéola
+          <select name="medical_disease_rubeola[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_disease_rubeola == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_disease_rubeola == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Sarampo
+          <select name="medical_disease_sarampo[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_disease_sarampo == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_disease_sarampo == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Tétano
+          <select name="medical_disease_tetano[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_disease_tetano == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_disease_tetano == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Varíola
+          <select name="medical_disease_variola[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_disease_variola == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_disease_variola == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Coqueluche
+          <select name="medical_disease_coqueluche[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_disease_coqueluche == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_disease_coqueluche == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Difteria
+          <select name="medical_disease_difteria[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_disease_difteria == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_disease_difteria == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Caxumba
+          <select name="medical_disease_caxumba[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_disease_caxumba == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_disease_caxumba == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Rinite
+          <select name="medical_disease_rinite[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_disease_rinite == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_disease_rinite == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Bronquite
+          <select name="medical_disease_bronquite[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_disease_bronquite == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_disease_bronquite == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="form-grid medical-grid">
+        <label>
+          Possui alergia cutânea?
+          <select name="medical_allergy_cutanea[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_allergy_cutanea == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_allergy_cutanea == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Informe a alergia cutânea
+          <input
+            type="text"
+            name="medical_allergy_cutanea_detail[]"
+            placeholder="Qual?"
+            value='{{ adventurer.medical_allergy_cutanea_detail|default:"" }}'
+          />
+        </label>
+        <label>
+          Possui alergia alimentar?
+          <select name="medical_allergy_alimentar[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_allergy_alimentar == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_allergy_alimentar == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Informe a alergia alimentar
+          <input
+            type="text"
+            name="medical_allergy_alimentar_detail[]"
+            placeholder="Qual alimento?"
+            value='{{ adventurer.medical_allergy_alimentar_detail|default:"" }}'
+          />
+        </label>
+        <label>
+          Possui alergia a medicamentos?
+          <select name="medical_allergy_medicamento[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_allergy_medicamento == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_allergy_medicamento == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Informe o medicamento
+          <input
+            type="text"
+            name="medical_allergy_medicamento_detail[]"
+            placeholder="Qual remédio?"
+            value='{{ adventurer.medical_allergy_medicamento_detail|default:"" }}'
+          />
+        </label>
+      </div>
+
+      <div class="form-grid medical-grid">
+        <label>
+          Deficiência física
+          <select name="medical_disability_type[]" required>
+            <option value="">Selecione</option>
+            {% for value, label in disability_choices %}
+            <option value="{{ value }}" {% if adventurer.medical_disability_type == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>
+          Possui problemas cardíacos?
+          <select name="medical_heart_problem[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_heart_problem == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_heart_problem == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Remédios por conta disso
+          <input
+            type="text"
+            name="medical_heart_medication[]"
+            placeholder="Medicamentos utilizados"
+            value='{{ adventurer.medical_heart_medication|default:"" }}'
+          />
+        </label>
+        <label>
+          É diabético?
+          <select name="medical_diabetic[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_diabetic == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_diabetic == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Medicamentos por conta da diabetes
+          <input
+            type="text"
+            name="medical_diabetic_medication[]"
+            placeholder="Qual medicamento?"
+            value='{{ adventurer.medical_diabetic_medication|default:"" }}'
+          />
+        </label>
+      </div>
+
+      <div class="form-grid medical-grid">
+        <label>
+          Possui problemas geniais?
+          <select name="medical_genital_problem[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_genital_problem == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_genital_problem == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Medicamentos utilizados
+          <input
+            type="text"
+            name="medical_genital_medication[]"
+            placeholder="Remédios"
+            value='{{ adventurer.medical_genital_medication|default:"" }}'
+          />
+        </label>
+        <label>
+          Problema psicológico?
+          <select name="medical_psychological_problem[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_psychological_problem == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_psychological_problem == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Medicamentos utilizados
+          <input
+            type="text"
+            name="medical_psychological_medication[]"
+            placeholder="Remédios"
+            value='{{ adventurer.medical_psychological_medication|default:"" }}'
+          />
+        </label>
+      </div>
+
+      <div class="form-grid medical-grid">
+        <label>
+          Outros problemas de saúde?
+          <select name="medical_other_health_problem[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_other_health_problem == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_other_health_problem == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Descreva
+          <textarea
+            name="medical_other_health_problem_detail[]"
+            rows="2"
+            placeholder="Qual problema?"
+          >{{ adventurer.medical_other_health_problem_detail|default:"" }}</textarea>
+        </label>
+        <label>
+          Outro medicamento?
+          <select name="medical_other_medication[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_other_medication == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_other_medication == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Qual medicamento?
+          <textarea
+            name="medical_other_medication_detail[]"
+            rows="2"
+            placeholder="Informe o medicamento"
+          >{{ adventurer.medical_other_medication_detail|default:"" }}</textarea>
+        </label>
+      </div>
+
+      <div class="form-grid medical-grid">
+        <label>
+          Problemas de saúde recentes?
+          <select name="medical_recent_health_issue[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_recent_health_issue == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_recent_health_issue == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Qual?
+          <textarea
+            name="medical_recent_health_issue_detail[]"
+            rows="2"
+            placeholder="Descreva"
+          >{{ adventurer.medical_recent_health_issue_detail|default:"" }}</textarea>
+        </label>
+        <label>
+          Medicamentos usados recentemente?
+          <select name="medical_recent_medication[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_recent_medication == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_recent_medication == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Qual medicamento?
+          <textarea
+            name="medical_recent_medication_detail[]"
+            rows="2"
+            placeholder="Informe"
+          >{{ adventurer.medical_recent_medication_detail|default:"" }}</textarea>
+        </label>
+      </div>
+
+      <div class="form-grid medical-grid">
+        <label>
+          Teve ferimentos graves ou fraturas recentes?
+          <select name="medical_recent_injury[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_recent_injury == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_recent_injury == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Qual?
+          <textarea
+            name="medical_recent_injury_detail[]"
+            rows="2"
+            placeholder="Descreva"
+          >{{ adventurer.medical_recent_injury_detail|default:"" }}</textarea>
+        </label>
+        <label>
+          Passou por cirurgia?
+          <select name="medical_surgery[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_surgery == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_surgery == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Qual cirurgia?
+          <textarea
+            name="medical_surgery_detail[]"
+            rows="2"
+            placeholder="Informe"
+          >{{ adventurer.medical_surgery_detail|default:"" }}</textarea>
+        </label>
+      </div>
+
+      <div class="form-grid medical-grid">
+        <label>
+          Motivo de alteração nos últimos 5 anos?
+          <select name="medical_recent_change[]" required>
+            <option value="">Selecione</option>
+            <option value="sim" {% if adventurer.medical_recent_change == 'sim' %}selected{% endif %}>Sim</option>
+            <option value="nao" {% if adventurer.medical_recent_change == 'nao' %}selected{% endif %}>Não</option>
+          </select>
+        </label>
+        <label>
+          Qual motivo?
+          <textarea
+            name="medical_recent_change_detail[]"
+            rows="2"
+            placeholder="Descreva"
+          >{{ adventurer.medical_recent_change_detail|default:"" }}</textarea>
+        </label>
+        <label>
+          Tipo sanguíneo
+          <select name="medical_blood_type[]" required>
+            <option value="">Selecione</option>
+            {% for value, label in blood_types %}
+            <option value="{{ value }}" {% if adventurer.medical_blood_type == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </label>
+      </div>
+
+      <p class="medical-declaration-text">
+        São Carlos, <span data-today-date class="medical-declaration-date"></span>
+      </p>
+      <p class="medical-declaration-agreement">
+        Atesto que as informações médicas preenchidas são verdadeiras e estou ciente das responsabilidades
+        em caso de omissão de dados.
+      </p>
+
+      <div class="signature-field signature-field--medical">
+        <div>
+          <p>Assinatura da ficha médica</p>
+          <p class="helper">Assine separadamente para cada aventureiro.</p>
+        </div>
+        <button
+          type="button"
+          class="primary-btn signature-btn"
+          data-action="open-signature"
+          data-signature-target="medical-signature-{{ index }}"
+        >
+          Assinar ficha médica
+        </button>
+        <div
+          class="helper signature-preview"
+          data-signature-preview
+          data-signature-for="medical-signature-{{ index }}"
+        >
+          <span data-signature-preview-text>Sem assinatura ainda.</span>
+          <img
+            class="signature-preview-img"
+            data-signature-preview-img
+            src=""
+            alt="Próvia da assinatura médica"
+            hidden
+          />
+        </div>
+        <input
+          type="hidden"
+          id="medical-signature-{{ index }}"
+          name="medical_signature[]"
+          data-signature-field
+          value='{{ adventurer.medical_signature|default:"" }}'
+        />
+      </div>
+    </div>
   </div>
 </div>
 {% endwith %}

@@ -273,15 +273,24 @@
               <input type="checkbox" name="confirmacao_verdadeiro" required />
               Declaro que todas as informações prestadas acima são verdadeiras.
             </label>
-            <div class="signature-field">
+            <div class="signature-field signature-field--responsible">
               <div>
                 <p>Assinatura digital</p>
                 <p class="helper">Clique em “Assinar” para abrir a janela flutuante.</p>
               </div>
-              <button type="button" class="primary-btn signature-btn" data-action="open-signature">
+              <button
+                type="button"
+                class="primary-btn signature-btn"
+                data-action="open-signature"
+                data-signature-target="responsible-signature"
+              >
                 Assinar agora
               </button>
-              <div class="helper signature-preview" data-signature-preview>
+              <div
+                class="helper signature-preview"
+                data-signature-preview
+                data-signature-for="responsible-signature"
+              >
                 <span data-signature-preview-text>Sem assinatura ainda.</span>
                 <img
                   class="signature-preview-img"
@@ -293,8 +302,9 @@
               </div>
               <input
                 type="hidden"
+                id="responsible-signature"
                 name="assinatura_data"
-                data-signature-input
+                data-signature-field
                 required
                 value='{{ form_values.assinatura_data|default:"" }}'
               />

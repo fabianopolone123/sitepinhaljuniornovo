@@ -68,9 +68,14 @@
       }
     });
 
-    const todayInputs = document.querySelectorAll('[data-today-date]');
-    todayInputs.forEach((input) => {
-      input.value = today.toLocaleDateString('pt-BR');
+    const todayElements = document.querySelectorAll('[data-today-date]');
+    todayElements.forEach((element) => {
+      const formatted = today.toLocaleDateString('pt-BR');
+      if ('value' in element) {
+        element.value = formatted;
+      } else {
+        element.textContent = formatted;
+      }
     });
   }
 
@@ -316,21 +321,15 @@
 
   function initSignatureModal() {
     const modal = document.getElementById('signature-modal');
-    const signatureInput =
-      document.querySelector('[data-signature-input]') || document.querySelector('[name="assinatura_data"]');
-    if (!modal || !signatureInput) {
+    if (!modal) {
       return;
     }
     const canvas = modal.querySelector('canvas');
-    const openButton = document.querySelector('[data-action="open-signature"]');
-    const closeTriggers = modal.querySelectorAll('[data-action="close-signature"]');
     const clearButton = modal.querySelector('[data-action="clear-signature"]');
     const saveButton = modal.querySelector('[data-action="save-signature"]');
-    if (!canvas || !openButton || !saveButton || !clearButton) {
+    if (!canvas || !clearButton || !saveButton) {
       return;
     }
-    const previewText = document.querySelector('[data-signature-preview-text]');
-    const previewImage = document.querySelector('[data-signature-preview-img]');
     const ctx = canvas.getContext('2d');
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
@@ -338,6 +337,80 @@
     ctx.strokeStyle = '#0b1f64';
     let drawing = false;
     let activePointerId = null;
+    let activeSignatureField = null;
+
+    const signatureFields = document.querySelectorAll('[data-signature-field]');
+    const openButtons = document.querySelectorAll('[data-action="open-signature"]');
+
+    function getPreviewElements(targetId) {
+      const previewRoot =
+        document.querySelector(`[data-signature-preview][data-signature-for="${targetId}"]`);
+      return {
+        previewText: previewRoot?.querySelector('[data-signature-preview-text]') ?? null,
+        previewImage: previewRoot?.querySelector('[data-signature-preview-img]') ?? null,
+      };
+    }
+
+    function renderPreview(field) {
+      if (!field) {
+        return;
+      }
+      const { previewText, previewImage } = getPreviewElements(field.id);
+      const hasValue = !!field.value;
+      if (previewText) {
+        previewText.textContent = hasValue ? 'Assinatura registrada' : 'Sem assinatura ainda.';
+      }
+      if (previewImage) {
+        if (hasValue) {
+          previewImage.src = field.value;
+          previewImage.hidden = false;
+        } else {
+          previewImage.removeAttribute('src');
+          previewImage.hidden = true;
+        }
+      }
+    }
+
+    function resetCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawing = false;
+      activePointerId = null;
+    }
+
+    function openModalForTarget(targetId) {
+      const field = document.getElementById(targetId);
+      if (!field) {
+        return;
+      }
+      activeSignatureField = field;
+      resetCanvas();
+      modal.classList.add('is-visible');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeModal() {
+      modal.classList.remove('is-visible');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    function saveSignature() {
+      if (!activeSignatureField) {
+        closeModal();
+        return;
+      }
+      const dataUrl = canvas.toDataURL('image/png');
+      activeSignatureField.value = dataUrl;
+      renderPreview(activeSignatureField);
+      closeModal();
+    }
+
+    function clearSignature() {
+      resetCanvas();
+      if (activeSignatureField) {
+        activeSignatureField.value = '';
+        renderPreview(activeSignatureField);
+      }
+    }
 
     function getCoords(event) {
       const rect = canvas.getBoundingClientRect();
@@ -383,44 +456,6 @@
       activePointerId = null;
     }
 
-    function setPreviewState(message, imageUrl) {
-      if (previewText) {
-        previewText.textContent = message;
-      }
-      if (previewImage) {
-        if (imageUrl) {
-          previewImage.src = imageUrl;
-          previewImage.hidden = false;
-        } else {
-          previewImage.removeAttribute('src');
-          previewImage.hidden = true;
-        }
-      }
-    }
-
-    function clearCanvas() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      signatureInput.value = '';
-      setPreviewState('Sem assinatura ainda.');
-    }
-
-    function openModal() {
-      modal.classList.add('is-visible');
-      modal.setAttribute('aria-hidden', 'false');
-    }
-
-    function closeModal() {
-      modal.classList.remove('is-visible');
-      modal.setAttribute('aria-hidden', 'true');
-    }
-
-    function saveSignature() {
-      const dataUrl = canvas.toDataURL('image/png');
-      signatureInput.value = dataUrl;
-      closeModal();
-      setPreviewState('Assinatura registrada', dataUrl);
-    }
-
     canvas.addEventListener('pointerdown', start);
     canvas.addEventListener('pointermove', draw);
     canvas.addEventListener('pointerup', stop);
@@ -428,9 +463,19 @@
     canvas.addEventListener('pointercancel', stop);
     canvas.addEventListener('contextmenu', (event) => event.preventDefault());
 
-    clearButton.addEventListener('click', clearCanvas);
-    openButton.addEventListener('click', openModal);
+    signatureFields.forEach(renderPreview);
+
+    clearButton.addEventListener('click', clearSignature);
     saveButton.addEventListener('click', saveSignature);
+    openButtons.forEach((button) => {
+      const targetId = button.dataset.signatureTarget;
+      button.addEventListener('click', () => {
+        if (targetId) {
+          openModalForTarget(targetId);
+        }
+      });
+    });
+    const closeTriggers = modal.querySelectorAll('[data-action="close-signature"]');
     closeTriggers.forEach((trigger) => trigger.addEventListener('click', closeModal));
     modal.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
@@ -438,9 +483,6 @@
         closeModal();
       }
     });
-    if (signatureInput.value) {
-      setPreviewState('Assinatura registrada', signatureInput.value);
-    }
   }
 
   function initClientValidation() {

@@ -462,6 +462,12 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 - **Technical**: templates/core/_adventurer_block.html
 - **Notes**: Nenhuma.
 
+## 2026-02-01T18:45:20+00:00Z — Nova ficha médica por aventureiro
+- **Request**: Cadastra uma ficha médica para cada aventureiro com campos completos, assinatura própria e declaração de responsabilidade.
+- **Actions**: Criei o modelo `MedicalRecord`, atualizei a view de cadastro para salvar cada ficha médica completa e as assinaturas individuais, acrescentei o painel médico com todos os selects e textos no(card) do aventureiro, revisei o CSS/JS para renderizar as novas grids, o destaque das abas, as datas e os módulos de assinatura e gerei a migração `0010_medicalrecord`.
+- **Technical**: core/models.py, core/views.py, core/migrations/0010_medicalrecord.py, templates/core/_adventurer_block.html, templates/core/register.html, static/css/register.css, static/js/register.js; `python manage.py test`.
+- **Notes**: Testes executados (`python manage.py test`).
+
 ## 2026-02-01T18:21:36+00:00Z — Suaviza interação ao adicionar aventureiro
 - **Request**: Quando clica em adicionar um aventureiro a mais no botão volta pra cima da tela ou vai lá no botão para selecionar os aventureiros, coloca uns efeitos.
 - **Actions**: Fiz o botão rolar suavemente o painel de aventureiros para o topo e marquei a nova aba com animação quando ela é criada, de modo que o usuário perceba qual ficha acabou de surgir.

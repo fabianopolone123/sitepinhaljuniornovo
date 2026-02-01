@@ -28,6 +28,10 @@ from django.core.files.base import ContentFile
 
 from .models import (
     Adventurer,
+    BLOOD_TYPE_CHOICES,
+    DISABILITY_CHOICES,
+    MedicalRecord,
+    MEDICAL_DISEASES,
     MonthlyFee,
     PasswordRecovery,
     PixCharge,
@@ -104,8 +108,58 @@ MONTHLY_FEE_DUE_DAY = 10
 logger = logging.getLogger(__name__)
 
 
+MEDICAL_DISEASE_FIELDS = [f"medical_disease_{key}" for key, _ in MEDICAL_DISEASES]
+
+MEDICAL_BASIC_FIELDS = [
+    "medical_has_health_plan",
+    "medical_health_plan_name",
+    "medical_health_plan_card",
+    "medical_sus_card",
+    "medical_disability_type",
+    "medical_allergy_cutanea",
+    "medical_allergy_cutanea_detail",
+    "medical_allergy_alimentar",
+    "medical_allergy_alimentar_detail",
+    "medical_allergy_medicamento",
+    "medical_allergy_medicamento_detail",
+    "medical_heart_problem",
+    "medical_heart_medication",
+    "medical_diabetic",
+    "medical_diabetic_medication",
+    "medical_genital_problem",
+    "medical_genital_medication",
+    "medical_psychological_problem",
+    "medical_psychological_medication",
+    "medical_other_health_problem",
+    "medical_other_health_problem_detail",
+    "medical_other_medication",
+    "medical_other_medication_detail",
+    "medical_recent_health_issue",
+    "medical_recent_health_issue_detail",
+    "medical_recent_medication",
+    "medical_recent_medication_detail",
+    "medical_recent_injury",
+    "medical_recent_injury_detail",
+    "medical_surgery",
+    "medical_surgery_detail",
+    "medical_recent_change",
+    "medical_recent_change_detail",
+    "medical_blood_type",
+    "medical_signature",
+]
+
+MEDICAL_FORM_FIELDS = MEDICAL_BASIC_FIELDS + MEDICAL_DISEASE_FIELDS
+
+
+def _parse_bool_field(value):
+    return str(value or "").strip().lower() in ("sim", "s", "1", "true", "yes")
+
+
+def _text_field(value):
+    return (value or "").strip()
+
 def _empty_adventurer_data():
-    return {
+    base = {
         "nome": "",
         "sobrenome": "",
         "documento": "",
@@ -134,6 +188,8 @@ def _empty_adventurer_data():
         "contato_whatsapp": "",
         "sexo": "",
     }
+    base.update({field: "" for field in MEDICAL_FORM_FIELDS})
+    return base
 
 
 def _collect_values(post, key):
@@ -178,6 +234,8 @@ def _build_adventurers_data(post):
         "contato_telefone": "emergencia_telefone[]",
         "contato_whatsapp": "emergencia_whatsapp[]",
     }
+
+    field_mapping.update({field: f"{field}[]" for field in MEDICAL_FORM_FIELDS})
 
     lists = {
         key: _collect_values(post, field_name)
@@ -861,6 +919,27 @@ def register(request):
             adventurer_photos = [single_photo] if single_photo else []
         signature_payload = request.POST.get("assinatura_data", "").strip()
         adventurer_entries = []
+        medical_required = [
+            "medical_has_health_plan",
+            "medical_disability_type",
+            "medical_allergy_cutanea",
+            "medical_allergy_alimentar",
+            "medical_allergy_medicamento",
+            "medical_heart_problem",
+            "medical_diabetic",
+            "medical_genital_problem",
+            "medical_psychological_problem",
+            "medical_other_health_problem",
+            "medical_other_medication",
+            "medical_recent_health_issue",
+            "medical_recent_medication",
+            "medical_recent_injury",
+            "medical_surgery",
+            "medical_recent_change",
+            "medical_blood_type",
+            "medical_signature",
+        ] + MEDICAL_DISEASE_FIELDS
+
         for idx, adventurer in enumerate(adventurers_data):
             errors_required = []
             for key in (
@@ -894,6 +973,9 @@ def register(request):
                 errors_required.append("nascimento")
             if not adventurer.get("sexo"):
                 errors_required.append("sexo")
+            for key in medical_required:
+                if not adventurer.get(key):
+                    errors_required.append(key)
 
             if errors_required:
                 field_errors["adventurer"] = "Preencha todos os campos de cada aventureiro."
@@ -909,6 +991,46 @@ def register(request):
                 field_errors["adventurer_date"] = "Selecione uma data de nascimento válida."
                 break
 
+            medical_payload = {
+                "has_health_plan": _parse_bool_field(adventurer.get("medical_has_health_plan")),
+                "health_plan_name": _text_field(adventurer.get("medical_health_plan_name")),
+                "health_plan_card": _text_field(adventurer.get("medical_health_plan_card")),
+                "sus_card": _text_field(adventurer.get("medical_sus_card")),
+                "disability_type": _text_field(adventurer.get("medical_disability_type") or "none") or "none",
+                "allergy_cutanea": _parse_bool_field(adventurer.get("medical_allergy_cutanea")),
+                "allergy_cutanea_detail": _text_field(adventurer.get("medical_allergy_cutanea_detail")),
+                "allergy_alimentar": _parse_bool_field(adventurer.get("medical_allergy_alimentar")),
+                "allergy_alimentar_detail": _text_field(adventurer.get("medical_allergy_alimentar_detail")),
+                "allergy_medicamento": _parse_bool_field(adventurer.get("medical_allergy_medicamento")),
+                "allergy_medicamento_detail": _text_field(adventurer.get("medical_allergy_medicamento_detail")),
+                "heart_problem": _parse_bool_field(adventurer.get("medical_heart_problem")),
+                "heart_medication": _text_field(adventurer.get("medical_heart_medication")),
+                "diabetic": _parse_bool_field(adventurer.get("medical_diabetic")),
+                "diabetic_medication": _text_field(adventurer.get("medical_diabetic_medication")),
+                "genital_problem": _parse_bool_field(adventurer.get("medical_genital_problem")),
+                "genital_medication": _text_field(adventurer.get("medical_genital_medication")),
+                "psychological_problem": _parse_bool_field(adventurer.get("medical_psychological_problem")),
+                "psychological_medication": _text_field(adventurer.get("medical_psychological_medication")),
+                "other_health_problem": _parse_bool_field(adventurer.get("medical_other_health_problem")),
+                "other_health_problem_detail": _text_field(adventurer.get("medical_other_health_problem_detail")),
+                "other_medication": _parse_bool_field(adventurer.get("medical_other_medication")),
+                "other_medication_detail": _text_field(adventurer.get("medical_other_medication_detail")),
+                "recent_health_issue": _parse_bool_field(adventurer.get("medical_recent_health_issue")),
+                "recent_health_issue_detail": _text_field(adventurer.get("medical_recent_health_issue_detail")),
+                "recent_medication": _parse_bool_field(adventurer.get("medical_recent_medication")),
+                "recent_medication_detail": _text_field(adventurer.get("medical_recent_medication_detail")),
+                "recent_injury": _parse_bool_field(adventurer.get("medical_recent_injury")),
+                "recent_injury_detail": _text_field(adventurer.get("medical_recent_injury_detail")),
+                "surgery": _parse_bool_field(adventurer.get("medical_surgery")),
+                "surgery_detail": _text_field(adventurer.get("medical_surgery_detail")),
+                "recent_change": _parse_bool_field(adventurer.get("medical_recent_change")),
+                "recent_change_detail": _text_field(adventurer.get("medical_recent_change_detail")),
+                "blood_type": _text_field(adventurer.get("medical_blood_type")),
+                "signature": _text_field(adventurer.get("medical_signature")),
+            }
+            for key, _ in MEDICAL_DISEASES:
+                medical_payload[key] = _parse_bool_field(adventurer.get(f"medical_disease_{key}"))
+
             adventurer_entries.append(
                 {
                     "first_name": adventurer["nome"],
@@ -923,6 +1045,7 @@ def register(request):
                     "emergency_whatsapp": adventurer["contato_whatsapp"],
                     "sexo": adventurer["sexo"],
                     "photo": adventurer_photos[idx],
+                    "medical": medical_payload,
                 }
             )
 
@@ -945,8 +1068,51 @@ def register(request):
                         signature_image=_decode_signature(signature_payload),
                     )
                     for entry in adventurer_entries:
+                        medical_payload = entry.pop("medical", {})
                         sexo_val = entry.pop("sexo")
                         adventurer = Adventurer.objects.create(responsible=responsible, sexo=sexo_val, **entry)
+                        MedicalRecord.objects.create(
+                            adventurer=adventurer,
+                            declaration_date=timezone.localdate(),
+                            **{
+                                "has_health_plan": medical_payload.get("has_health_plan", False),
+                                "health_plan_name": medical_payload.get("health_plan_name", ""),
+                                "health_plan_card": medical_payload.get("health_plan_card", ""),
+                                "sus_card": medical_payload.get("sus_card", ""),
+                                "disability_type": medical_payload.get("disability_type", "none"),
+                                "allergy_cutanea": medical_payload.get("allergy_cutanea", False),
+                                "allergy_cutanea_detail": medical_payload.get("allergy_cutanea_detail", ""),
+                                "allergy_alimentar": medical_payload.get("allergy_alimentar", False),
+                                "allergy_alimentar_detail": medical_payload.get("allergy_alimentar_detail", ""),
+                                "allergy_medicamento": medical_payload.get("allergy_medicamento", False),
+                                "allergy_medicamento_detail": medical_payload.get("allergy_medicamento_detail", ""),
+                                "heart_problem": medical_payload.get("heart_problem", False),
+                                "heart_medication": medical_payload.get("heart_medication", ""),
+                                "diabetic": medical_payload.get("diabetic", False),
+                                "diabetic_medication": medical_payload.get("diabetic_medication", ""),
+                                "genital_problem": medical_payload.get("genital_problem", False),
+                                "genital_medication": medical_payload.get("genital_medication", ""),
+                                "psychological_problem": medical_payload.get("psychological_problem", False),
+                                "psychological_medication": medical_payload.get("psychological_medication", ""),
+                                "other_health_problem": medical_payload.get("other_health_problem", False),
+                                "other_health_problem_detail": medical_payload.get("other_health_problem_detail", ""),
+                                "other_medication": medical_payload.get("other_medication", False),
+                                "other_medication_detail": medical_payload.get("other_medication_detail", ""),
+                                "recent_health_issue": medical_payload.get("recent_health_issue", False),
+                                "recent_health_issue_detail": medical_payload.get("recent_health_issue_detail", ""),
+                                "recent_medication": medical_payload.get("recent_medication", False),
+                                "recent_medication_detail": medical_payload.get("recent_medication_detail", ""),
+                                "recent_injury": medical_payload.get("recent_injury", False),
+                                "recent_injury_detail": medical_payload.get("recent_injury_detail", ""),
+                                "surgery": medical_payload.get("surgery", False),
+                                "surgery_detail": medical_payload.get("surgery_detail", ""),
+                                "recent_change": medical_payload.get("recent_change", False),
+                                "recent_change_detail": medical_payload.get("recent_change_detail", ""),
+                                "blood_type": medical_payload.get("blood_type", ""),
+                                "signature_data": medical_payload.get("signature", ""),
+                                **{key: medical_payload.get(key, False) for key, _ in MEDICAL_DISEASES},
+                            },
+                        )
                         _create_monthly_fees(responsible, adventurer)
                 messages.success(request, "Cadastro enviado! Faça login para acessar o painel.")
                 return redirect("login")
@@ -964,6 +1130,9 @@ def register(request):
         "sex_choices": SEX_CHOICES,
         "classes": CLASS_OPTIONS,
         "empty_adventurer": _empty_adventurer_data(),
+        "medical_diseases": MEDICAL_DISEASES,
+        "blood_types": BLOOD_TYPE_CHOICES,
+        "disability_choices": DISABILITY_CHOICES,
     }
     return render(request, "core/register.html", context)
 
