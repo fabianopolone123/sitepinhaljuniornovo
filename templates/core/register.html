@@ -351,20 +351,32 @@
             <div class="signature-field">
               <div>
                 <p>Assinatura digital</p>
-                <p class="helper">Use o dedo ou mouse para assinar com fundo transparente.</p>
+                <p class="helper">Clique em “Assinar” para abrir a janela flutuante.</p>
               </div>
-              <canvas id="signature-canvas" width="360" height="180"></canvas>
-              <div class="signature-actions">
-                <button type="button" data-action="clear-signature">Limpar</button>
-                <small>O desenho será salvo automaticamente.</small>
-              </div>
+              <button type="button" class="primary-btn signature-btn" data-action="open-signature">
+                Assinar agora
+              </button>
               <input type="hidden" name="assinatura_data" />
             </div>
-            <button type="submit" class="primary-btn">Enviar cadastro</button>
-          </div>
-        </section>
-      </form>
-    </main>
-    <script src="{% static 'js/register.js' %}"></script>
-  </body>
+          <button type="submit" class="primary-btn">Enviar cadastro</button>
+        </div>
+      </section>
+    </form>
+  </main>
+  <div class="signature-modal" id="signature-modal" aria-hidden="true">
+    <div class="signature-backdrop" data-action="close-signature"></div>
+    <div class="signature-modal__card">
+      <div class="signature-modal__header">
+        <h3>Assine com o dedo ou mouse</h3>
+        <button class="ghost-btn" type="button" data-action="close-signature">Fechar</button>
+      </div>
+      <canvas id="signature-canvas" width="600" height="240"></canvas>
+      <div class="signature-modal__actions">
+        <button type="button" class="ghost-btn" data-action="clear-signature">Limpar</button>
+        <button type="button" class="primary-btn" data-action="save-signature">Salvar assinatura</button>
+      </div>
+    </div>
+  </div>
+  <script src="{% static 'js/register.js' %}"></script>
+</body>
 </html>

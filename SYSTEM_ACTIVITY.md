@@ -409,3 +409,7 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 ## 2026-02-01T16:54:59+00:00Z — Corrige JS
 - **Request**: Preview da foto e assinatura ainda falhavam porque o script tinha um byte nulo e não carregava
 - **Actions**: Reescrevi static/js/register.js para remover o caractere nulo, normalizar a geração de opções e manter os handlers de preview/assinatura e boot
+
+## 2026-02-01T17:01:26+00:00Z — Modal assinatura
+- **Request**: Assinatura não registrava nem abria janela
+- **Actions**: Substituí a área de assinatura por um botão que abre modal com canvas maior, limpei o canvas e salvei Base64 no hidden input; o JS de register agora controla o modal/clear/save assinaturas e mantém o preview
