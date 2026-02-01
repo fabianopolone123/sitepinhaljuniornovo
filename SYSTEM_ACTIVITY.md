@@ -617,3 +617,14 @@ tira o quadrado do funcoi
 - **Actions**: criei o endpoint diagnostics/log-event/, a view log_program_event e exportei window.EVENT_LOG_URL para o JS; inclui static/js/diagnostic-logger.js, o snippet templates/core/_diagnostics_scripts.html e instrui os templates principais a disparar eventos, mantendo os warnings e as assinaturas do backend logados.
 - **Technical**: core/urls.py, core/views.py, templates/core/_diagnostics_scripts.html, static/js/diagnostic-logger.js, static/js/register-adventurer.js, templates/core/register.html, templates/core/login.html, templates/core/register_choice.html, templates/core/register_director.html, templates/core/dashboard.html, templates/core/finance_pix.html, templates/core/forgot_password.html, templates/core/verify_code.html.
 - **Notes**: confirme via journalctl -u pinhaljunior -f e redirecione a saida para um arquivo se quiser historico permanente.
+## 2026-02-01T01:15:00+00:00Z — Manual update
+- **Request**: modifica o que preciso pra tentar pegar o porque fica travado na assinatura 01 da ficha médica, capturando mais contexto quando o modal de assinatura/validação aparece.
+- **Actions**: ampliei o payload enviado ao logProgramEvent para incluir o valor atual do campo identificado, o slot ativo, o total de slots habilitados e o valor dos campos de assinatura que disparam os modais front-signature-warning e frontend-signature-block, facilitando a triagem. Também loguei o contexto nos eventos de validação e no modal de erros de servidor para que o journalctl reflita exatamente qual campo/slot está travando a ficha médica.
+- **Technical**: static/js/register-adventurer.js.
+- **Notes**: python manage.py check.
+
+## 2026-02-01T01:30:00+00:00Z — Manual update
+- **Request**: registrar mais contexto sobre qual campo/slot trava a Ficha médica 01 para que o journal mostre os valores e ajude a desenrolar o bloqueio.
+- **Actions**: criei collectSignatureState() para montar um snapshot das assinaturas, confirmações e dados do plano para cada slot ativo e anexei esse snapshot aos eventos front-signature-warning, frontend-signature-block e frontend-validation-block, garantindo que o journal reflita os valores atuais antes de bloquear o envio.
+- **Technical**: static/js/register-adventurer.js.
+- **Notes**: python manage.py check.
