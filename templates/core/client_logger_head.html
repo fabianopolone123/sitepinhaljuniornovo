@@ -1,0 +1,9 @@
+{% load static %}
+<meta name="client-log-request-id" content="{{ request_id }}">
+<script>
+window.__CLIENT_LOGGER_OPTIONS = {
+  endpoint: "{% url 'client_logs' %}",
+  requestId: "{{ request_id|default:'' }}",
+};
+</script>
+<script src="{% static 'js/client-logger.js' %}" defer></script>

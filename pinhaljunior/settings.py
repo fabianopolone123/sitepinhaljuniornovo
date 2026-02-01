@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 import os
 from pathlib import Path
 
+from core.logging_helpers import JsonFormatter, RequestIdFilter
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -53,10 +55,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'diagnostics.apps.DiagnosticsConfig',
     'core.apps.CoreConfig',
+    'observability.apps.ObservabilityConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'core.middleware.RequestIdMiddleware',
+    'core.middleware.RequestLoggingMiddleware',
     'diagnostics.middleware.DiagnosticLoggingMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -74,11 +79,12 @@ TEMPLATES = [
         'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
+        'context_processors': [
+            'django.template.context_processors.request',
+            'core.context_processors.request_id',
+            'django.contrib.auth.context_processors.auth',
+            'django.contrib.messages.context_processors.messages',
+        ],
         },
     },
 ]
@@ -139,26 +145,79 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOG_DIR = BASE_DIR / "logs"
+LOG_DIR.mkdir(exist_ok=True)
+
+DJANGO_LOG_FILE = LOG_DIR / "django.log.jsonl"
+CLIENT_LOG_FILE = LOG_DIR / "client.log.jsonl"
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'filters': {
+        'request_id': {
+            '()': RequestIdFilter,
+        },
+    },
     'formatters': {
         'verbose': {
-            'format': '[%(asctime)s] %(levelname)s %(name)s %(message)s'
-        }
+            'format': '[%(asctime)s] %(levelname)s %(name)s %(message)s',
+        },
+        'json': {
+            '()': JsonFormatter,
+        },
     },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
+            'filters': ['request_id'],
         },
         'db': {
             'level': 'INFO',
             'class': 'diagnostics.logging.DatabaseLogHandler',
+            'filters': ['request_id'],
+        },
+        'django_file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'level': 'INFO',
+            'formatter': 'json',
+            'filename': str(DJANGO_LOG_FILE),
+            'maxBytes': 5 * 1024 * 1024,
+            'backupCount': 5,
+            'encoding': 'utf-8',
+            'filters': ['request_id'],
+        },
+        'client_file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'level': 'INFO',
+            'formatter': 'json',
+            'filename': str(CLIENT_LOG_FILE),
+            'maxBytes': 2 * 1024 * 1024,
+            'backupCount': 3,
+            'encoding': 'utf-8',
+            'filters': ['request_id'],
         },
     },
     'root': {
-        'handlers': ['console', 'db'],
+        'handlers': ['console', 'db', 'django_file'],
         'level': 'DEBUG',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'django_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'core.requests': {
+            'handlers': ['django_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'client_logs': {
+            'handlers': ['client_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
     },
 }

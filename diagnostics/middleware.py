@@ -1,6 +1,8 @@
 import logging
 import time
 
+from core.logging_helpers import get_request_id
+
 
 class DiagnosticLoggingMiddleware:
     """Middleware that logs each incoming request/response cycle."""
@@ -23,6 +25,8 @@ class DiagnosticLoggingMiddleware:
                 'request_path': request.get_full_path(),
                 'response_status': response.status_code,
                 'duration_ms': duration_ms,
+                'request_id': get_request_id(),
+                'user_id': getattr(request.user, 'id', None),
             },
         )
         return response

@@ -7,6 +7,7 @@
     <title>PIX Mensalidades — Clube Pinhal Junior</title>
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
     <link rel="stylesheet" href="{% static 'css/finance.css' %}" />
+    {% include 'core/client_logger_head.html' %}
   </head>
   <body class="finance-page">
     <main class="finance-card" data-charge-status="{{ charge.status }}">
