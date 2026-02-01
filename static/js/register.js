@@ -219,6 +219,7 @@
       return;
     }
     let activeIndex = 0;
+    let pendingHighlightIndex = null;
 
     function refreshTabs() {
       tabsWrapper.innerHTML = '';
@@ -234,9 +235,30 @@
         tab.addEventListener('click', () => setActiveAdventurer(idx));
         tabsWrapper.appendChild(tab);
       });
+      if (pendingHighlightIndex !== null) {
+        const tabs = tabsWrapper.querySelectorAll('.adventurer-tab');
+        const targetTab = tabs[pendingHighlightIndex];
+        if (targetTab) {
+          targetTab.classList.add('is-new');
+          targetTab.addEventListener(
+            'animationend',
+            () => targetTab.classList.remove('is-new'),
+            { once: true },
+          );
+        }
+        pendingHighlightIndex = null;
+      }
     }
 
-    function setActiveAdventurer(index) {
+    function focusAdventurerManager() {
+      if (!manager) {
+        return;
+      }
+      manager.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function setActiveAdventurer(index, options = {}) {
+      const { focus = false, highlight = false } = options;
       const blocks = Array.from(blocksWrapper.querySelectorAll('[data-adventurer-block]'));
       if (!blocks.length) {
         return;
@@ -244,7 +266,13 @@
       const bounded = Math.min(Math.max(index, 0), blocks.length - 1);
       blocks.forEach((block, idx) => block.classList.toggle('is-hidden', idx !== bounded));
       activeIndex = bounded;
+      if (highlight) {
+        pendingHighlightIndex = bounded;
+      }
       refreshTabs();
+      if (focus) {
+        focusAdventurerManager();
+      }
     }
 
     function createBlockFromTemplate() {
@@ -280,7 +308,8 @@
         blocksWrapper.appendChild(block);
         hydrateDateSelectors();
         initBlockInteractivity(block);
-        setActiveAdventurer(blocksWrapper.querySelectorAll('[data-adventurer-block]').length - 1);
+        const newIndex = blocksWrapper.querySelectorAll('[data-adventurer-block]').length - 1;
+        setActiveAdventurer(newIndex, { focus: true, highlight: true });
       });
     }
   }

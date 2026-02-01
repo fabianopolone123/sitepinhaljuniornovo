@@ -294,39 +294,6 @@
             required
           >{{ adventurer.observacao|default:"" }}</textarea>
         </label>
-        <div class="emergency-grid">
-          <h3>Contato de emergência</h3>
-          <label>
-            Nome do contato
-            <input
-              type="text"
-              name="emergencia_nome[]"
-              placeholder="Nome"
-              required
-              value='{{ adventurer.contato_nome|default:"" }}'
-            />
-          </label>
-          <label>
-            Telefone
-            <input
-              type="text"
-              name="emergencia_telefone[]"
-              placeholder="(99) 99999-9999"
-              required
-              value='{{ adventurer.contato_telefone|default:"" }}'
-            />
-          </label>
-          <label>
-            WhatsApp
-            <input
-              type="text"
-              name="emergencia_whatsapp[]"
-              placeholder="(99) 99999-9999"
-              required
-              value='{{ adventurer.contato_whatsapp|default:"" }}'
-            />
-          </label>
-        </div>
       </div>
     </div>
   </div>

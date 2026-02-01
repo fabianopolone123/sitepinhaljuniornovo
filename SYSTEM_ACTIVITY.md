@@ -461,3 +461,9 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 - **Actions**: Troquei todos os atributos `value` e `data-initial-value` do bloco reutilizável para usarem aspas simples e `default:""` (em vez de colocar `default:""` dentro de atributos com aspas duplas), garantindo que o parser reconheça o segundo argumento e a sintaxe HTML permaneça válida.
 - **Technical**: templates/core/_adventurer_block.html
 - **Notes**: Nenhuma.
+
+## 2026-02-01T18:21:36+00:00Z — Suaviza interação ao adicionar aventureiro
+- **Request**: Quando clica em adicionar um aventureiro a mais no botão volta pra cima da tela ou vai lá no botão para selecionar os aventureiros, coloca uns efeitos.
+- **Actions**: Fiz o botão rolar suavemente o painel de aventureiros para o topo e marquei a nova aba com animação quando ela é criada, de modo que o usuário perceba qual ficha acabou de surgir.
+- **Technical**: static/js/register.js, static/css/register.css
+- **Notes**: Valide no navegador se a aba ativa recebe o destaque `is-new` e se o scroll mantém o painel visível após o clique.

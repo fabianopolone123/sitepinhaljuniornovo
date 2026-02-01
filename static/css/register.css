@@ -141,6 +141,32 @@ body {
   color: #fff;
   border-color: transparent;
 }
+.adventurer-tab.is-new {
+  animation: tab-pop 0.8s ease;
+  box-shadow: 0 12px 24px rgba(51, 162, 255, 0.35);
+}
+
+.adventurer-tab.is-new:focus {
+  outline: none;
+}
+.adventurer-tab.is-new:not(.is-active) {
+  border-color: #33a2ff;
+}
+
+@keyframes tab-pop {
+  0% {
+    transform: scale(0.96);
+    opacity: 0.8;
+  }
+  60% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
 .adventurer-blocks {
   display: flex;
   flex-direction: column;
