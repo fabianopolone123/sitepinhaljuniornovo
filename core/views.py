@@ -33,6 +33,8 @@ from pagamento import criar_pix, consultar_pagamento, extrair_copia_cola, is_apr
 
 MONTHLY_FEE_DUE_DAY = 10
 
+CLASS_OPTIONS = ["Abelinhas", "Luminárias", "Edificadores", "Mãos Ajudadoras"]
+
 WAPI_INSTANCE = os.getenv("WAPI_INSTANCE", "LITE-F75JN4-FWW3NA")
 WAPI_TOKEN = os.getenv("WAPI_TOKEN", "o8bWQDnlomrsOaBF2CqnlHguBKIbX87By")
 WAPI_URL = os.getenv(
@@ -840,6 +842,7 @@ def register(request):
         "years": YEAR_OPTIONS,
         "adventurers_data": adventurers_data,
         "sex_choices": SEX_CHOICES,
+        "classes": CLASS_OPTIONS,
     }
     return render(request, "core/register.html", context)
 

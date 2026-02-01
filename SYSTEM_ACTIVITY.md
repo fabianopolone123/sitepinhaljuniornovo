@@ -385,3 +385,7 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 ## 2026-02-01T14:25:55+00:00Z — Fix encode
 - **Request**: UnicodeDecodeError ao abrir /cadastro/ causado pelo template em Latin-1
 - **Actions**: Regravei templates/core/register.html, static/css/register.css e static/js/register.js em UTF-8 para eliminar o erro do decode
+
+## 2026-02-01T14:27:36+00:00Z — Ajusta classes
+- **Request**: TemplateSyntaxError ao mapear a lista de classes investidas
+- **Actions**: Passei classes via contexto e removi o split direto do template para respeitar o template engine

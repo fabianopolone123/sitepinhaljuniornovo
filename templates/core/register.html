@@ -140,8 +140,8 @@
                 </label>
                 <div class="field-group">
                   Classe investida
-                  <div class="chip-group">
-                    {% for classe in 'Abelinhas,Luminárias,Edificadores,Mãos Ajudadoras'.split(',') %}
+                <div class="chip-group">
+                    {% for classe in classes %}
                     <label class="chip">
                       <input type="checkbox" name="aventureiro_classes" value="{{ classe }}" />
                       {{ classe }}
