@@ -397,3 +397,7 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 ## 2026-02-01T14:37:40+00:00Z — Admin logs
 - **Request**: Preciso testar e ver os logs e queria um perfil adm para acessar eles
 - **Actions**: Adicionei a rota /admin/logs/ com view que lê os arquivos django.log.jsonl/client.log.jsonl, criei tela/admin_register para criar perfis staff e coloquei botão 'Logs' no dashboard restrito a staff; o login agora dá acesso fácil ao cadastro administrativo
+
+## 2026-02-01T14:42:16+00:00Z — Melhora logs
+- **Request**: A tela de auditoria mostrava muitas colunas estreitas e sem filtros
+- **Actions**: Reformulei templates/core/admin_logs.html para empilhar os painéis de log, adicionei campos de filtro e recalque visuais, criei static/js/admin-logs.js para filtrar as linhas e melhorei o CSS em static/css/dashboard.css
