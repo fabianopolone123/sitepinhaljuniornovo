@@ -866,6 +866,17 @@ def register(request):
             "mae_cpf",
             "mae_whatsapp",
             "assinatura_data",
+            "termo_nome_crianca",
+            "termo_responsavel",
+            "termo_nacionalidade",
+            "termo_estado_civil",
+            "termo_rg",
+            "termo_cpf",
+            "termo_endereco",
+            "termo_municipio",
+            "termo_telefone",
+            "termo_data",
+            "termo_assinatura",
             "confirmacao_verdadeiro",
         ]
         missing_general = [

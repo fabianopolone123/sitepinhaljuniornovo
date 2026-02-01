@@ -339,6 +339,11 @@
         if (firstMedical) {
           firstMedical.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+      } else if (step === 'termo') {
+        const termSection = document.querySelector('[data-step-section="termo"]');
+        if (termSection) {
+          termSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       } else {
         form.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }

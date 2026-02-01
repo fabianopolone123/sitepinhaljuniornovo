@@ -479,3 +479,9 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 - **Actions**: Separei os blocos que pertencem aos dados iniciais e à ficha médica usando data-step-section, deixei a aba 02 habilitada e escrevi o CSS/JS para alternar o data-active-step do form, mostrar o painel correto e rolar a tela para a ficha quando o usuário clicar na etapa 02.
 - **Technical**: templates/core/_adventurer_block.html, templates/core/register.html, static/css/register.css, static/js/register.js; python manage.py test.
 - **Notes**: Testes (python manage.py test).
+
+## 2026-02-01T19:00:12+00:00Z — Adiciona termo de imagem na aba 03
+- **Request**: faz o termo agora em 03 · Termo de imagem (texto e campos).
+- **Actions**: Criei o painel do termo com os campos de identificação, assinatura e data no Step 3, conectei o botão da aba ao novo `step-section` e acrescentei os inputs/assinatura obrigatórios no backend; o CSS/JS agora mostram a aba 03 e rolam para o termo.
+- **Technical**: templates/core/register.html, static/css/register.css, static/js/register.js, core/views.py; `python manage.py test`.
+- **Notes**: Testes (`python manage.py test`).

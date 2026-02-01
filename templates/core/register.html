@@ -32,7 +32,7 @@
         <button class="step" type="button" data-step-target="medical">
           02 · Ficha médica
         </button>
-        <button class="step" type="button" disabled>
+        <button class="step" type="button" data-step-target="termo">
           03 · Termo de imagem
         </button>
       </nav>
@@ -63,20 +63,21 @@
         </div>
 
         <section class="tab-pane is-active" data-step="initial">
-        <div class="adventurer-manager" data-adventurer-manager>
-          <div class="adventurer-tabs" data-adventurer-tabs></div>
-          <div class="adventurer-blocks" data-adventurer-blocks>
+          <div class="step-section step-section--initial" data-step-section="initial">
+            <div class="adventurer-manager" data-adventurer-manager>
+            <div class="adventurer-tabs" data-adventurer-tabs></div>
+            <div class="adventurer-blocks" data-adventurer-blocks>
             {% for adventurer in adventurers_data %}
               {% include 'core/_adventurer_block.html' with block=adventurer index=forloop.counter0 active=forloop.first is_template=False classes=classes %}
             {% endfor %}
+            </div>
+            <button type="button" class="ghost-btn add-adventurer-btn" data-action="add-adventurer">
+              + Adicionar outro aventureiro
+            </button>
           </div>
-          <button type="button" class="ghost-btn add-adventurer-btn" data-action="add-adventurer">
-            + Adicionar outro aventureiro
-          </button>
-        </div>
-        <template id="adventurer-template">
-          {% include 'core/_adventurer_block.html' with block=empty_adventurer index='__INDEX__' active=False is_template=True classes=classes %}
-        </template>
+          <template id="adventurer-template">
+            {% include 'core/_adventurer_block.html' with block=empty_adventurer index='__INDEX__' active=False is_template=True classes=classes %}
+          </template>
         <div class="panel">
           <h2>Dados do responsável principal</h2>
           <div class="form-grid">
@@ -310,10 +311,160 @@
                 value='{{ form_values.assinatura_data|default:"" }}'
               />
             </div>
-          <button type="submit" class="primary-btn">Enviar cadastro</button>
-        </div>
-      </section>
-    </form>
+              <button type="submit" class="primary-btn">Enviar cadastro</button>
+            </div>
+          </div>
+          <div class="step-section step-section--termo" data-step-section="termo">
+            <div class="panel term-panel">
+              <h2>📸 Termo de autorização de uso de imagem</h2>
+              <p class="term-lead">
+                Eu, responsável legal pelo menor acima identificado, autorizo o uso gratuito de imagem
+                em fotos, vídeos e documentos para fins institucionais, promocionais e de divulgação em
+                todo território nacional.
+              </p>
+              <div class="form-grid term-grid">
+                <label>
+                  Nome da Criança
+                  <input
+                    type="text"
+                    name="termo_nome_crianca"
+                    placeholder="Nome completo"
+                    required
+                    value='{{ form_values.termo_nome_crianca|default:"" }}'
+                  />
+                </label>
+                <label>
+                  Nome do Responsável Legal
+                  <input
+                    type="text"
+                    name="termo_responsavel"
+                    placeholder="Nome completo"
+                    required
+                    value='{{ form_values.termo_responsavel|default:"" }}'
+                  />
+                </label>
+                <label>
+                  Nacionalidade
+                  <input
+                    type="text"
+                    name="termo_nacionalidade"
+                    placeholder="Ex: Brasileira"
+                    required
+                    value='{{ form_values.termo_nacionalidade|default:"" }}'
+                  />
+                </label>
+                <label>
+                  Estado civil
+                  <input
+                    type="text"
+                    name="termo_estado_civil"
+                    placeholder="Ex: Casado(a)"
+                    required
+                    value='{{ form_values.termo_estado_civil|default:"" }}'
+                  />
+                </label>
+                <label>
+                  RG
+                  <input
+                    type="text"
+                    name="termo_rg"
+                    placeholder="Número do RG"
+                    required
+                    value='{{ form_values.termo_rg|default:"" }}'
+                  />
+                </label>
+                <label>
+                  CPF
+                  <input
+                    type="text"
+                    name="termo_cpf"
+                    placeholder="Número do CPF"
+                    required
+                    value='{{ form_values.termo_cpf|default:"" }}'
+                  />
+                </label>
+                <label>
+                  Residência
+                  <input
+                    type="text"
+                    name="termo_endereco"
+                    placeholder="Logradouro, número, complemento"
+                    required
+                    value='{{ form_values.termo_endereco|default:"" }}'
+                  />
+                </label>
+                <label>
+                  Município
+                  <input
+                    type="text"
+                    name="termo_municipio"
+                    placeholder="Cidade"
+                    required
+                    value='{{ form_values.termo_municipio|default:"" }}'
+                  />
+                </label>
+                <label>
+                  Telefone para contato
+                  <input
+                    type="text"
+                    name="termo_telefone"
+                    placeholder="(99) 99999-9999"
+                    required
+                    value='{{ form_values.termo_telefone|default:"" }}'
+                  />
+                </label>
+                <label>
+                  Data
+                  <input
+                    type="text"
+                    name="termo_data"
+                    data-today-date
+                    required
+                    readonly
+                    value='{{ form_values.termo_data|default:"" }}'
+                  />
+                </label>
+              </div>
+              <div class="signature-field signature-field--termo">
+                <div>
+                  <p>Assinatura do Responsável Legal</p>
+                  <p class="helper">Assine aqui para validar o termo.</p>
+                </div>
+                <button
+                  type="button"
+                  class="primary-btn signature-btn"
+                  data-action="open-signature"
+                  data-signature-target="termo-signature"
+                >
+                  Assinar termo de imagem
+                </button>
+                <div
+                  class="helper signature-preview"
+                  data-signature-preview
+                  data-signature-for="termo-signature"
+                >
+                  <span data-signature-preview-text>Sem assinatura ainda.</span>
+                  <img
+                    class="signature-preview-img"
+                    data-signature-preview-img
+                    src=""
+                    alt="Prévia da assinatura do termo"
+                    hidden
+                  />
+                </div>
+                <input
+                  type="hidden"
+                  id="termo-signature"
+                  name="termo_assinatura"
+                  data-signature-field
+                  required
+                  value='{{ form_values.termo_assinatura|default:"" }}'
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      </form>
   </main>
   <div class="signature-modal" id="signature-modal" aria-hidden="true">
     <div class="signature-backdrop" data-action="close-signature"></div>

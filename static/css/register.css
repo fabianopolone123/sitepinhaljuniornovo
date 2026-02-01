@@ -155,6 +155,33 @@ body {
   background: #f7f9ff;
   gap: 0.6rem;
 }
+.term-panel {
+  border: 1px solid rgba(6, 24, 69, 0.12);
+  background: #fff;
+  border-radius: 18px;
+  padding: 1.5rem;
+}
+.term-lead {
+  font-weight: 600;
+  color: #1a2c64;
+  margin-bottom: 1rem;
+}
+.term-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.9rem;
+  margin-bottom: 1rem;
+}
+.term-grid input {
+  width: 100%;
+}
+.signature-field--termo {
+  border: 1px dashed rgba(6, 24, 69, 0.3);
+  padding: 1rem;
+  border-radius: 16px;
+  background: #f7f9ff;
+  gap: 0.6rem;
+}
 .adventurer-manager {
   border: 1px solid rgba(6, 24, 69, 0.12);
   border-radius: 20px;
@@ -192,6 +219,9 @@ body {
   display: block;
 }
 .registration-form[data-active-step="medical"] .step-section--medical {
+  display: block;
+}
+.registration-form[data-active-step="termo"] .step-section--termo {
   display: block;
 }
 .adventurer-tab.is-new {
