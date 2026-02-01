@@ -1,0 +1,5 @@
+{% load static %}
+<script>
+  window.EVENT_LOG_URL = "{% url 'program_log_event' %}";
+</script>
+<script src="{% static 'js/diagnostic-logger.js' %}" defer></script>

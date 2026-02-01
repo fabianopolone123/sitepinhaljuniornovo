@@ -20,6 +20,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 
 from .models import (
@@ -157,7 +158,23 @@ def _create_monthly_fees(responsible, adventurer, start_date=None):
             month=month,
             year=year,
             defaults={"amount": Decimal("1.50"), "due_day": MONTHLY_FEE_DUE_DAY},
-        )
+            )
+
+
+@require_POST
+def log_program_event(request):
+    try:
+        payload = json.loads(request.body.decode("utf-8") or "{}")
+    except (ValueError, UnicodeDecodeError):
+        payload = {}
+    event = str(payload.get("event") or "program_event")
+    detail = payload.get("detail") or {}
+    level = str(payload.get("level") or "info").lower()
+    if level not in ("debug", "info", "warning", "error", "critical"):
+        level = "info"
+    log_fn = getattr(logger, level, logger.info)
+    log_fn("Front event: %s", event, extra={"event_detail": detail})
+    return JsonResponse({"ok": True})
 
 
 def _build_finance_periods(fees_qs):

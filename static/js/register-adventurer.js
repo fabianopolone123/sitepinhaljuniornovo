@@ -572,15 +572,26 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!slot) {
         slot = deriveSlotFromName(field.name) || currentAdventurerSlot;
       }
-      const guidance =
-        signatureGuidance.find((entry) => entry.pattern.test(field.name)) || null;
-      return {
-        field,
-        label: guidance?.label || label,
-        step: guidance?.step || stepNumber,
-        slot,
-        guidance,
-      };
+    const guidance =
+      signatureGuidance.find((entry) => entry.pattern.test(field.name)) || null;
+    return {
+      field,
+      label: guidance?.label || label,
+      step: guidance?.step || stepNumber,
+      slot,
+      guidance,
+    };
+  };
+  const describeForLog = (error) => {
+    if (!error) {
+      return null;
+    }
+    return {
+      label: error.label,
+      step: error.step,
+      slot: error.slot,
+      field: error.field?.name || null,
+    };
   };
 
   const buildErrorMarkup = (error) => {
@@ -625,6 +636,8 @@ document.addEventListener("DOMContentLoaded", () => {
     errorList.innerHTML = "";
     errors.forEach((error) => errorList.appendChild(buildErrorMarkup(error)));
     errorModal.classList.add("is-open");
+    const payload = errors.map(describeForLog).filter(Boolean);
+    logProgramEvent?.("front-error-modal", { errors: payload });
   };
 
   const closeErrorModal = () => {
@@ -672,6 +685,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     signatureWarningModal.classList.add("is-open");
     signatureWarningModal.setAttribute("aria-hidden", "false");
+    logProgramEvent?.("front-signature-warning", {
+      issues: issues.map(describeForLog).filter(Boolean),
+    });
   };
 
   const applyServerFieldErrors = () => {
@@ -724,6 +740,10 @@ document.addEventListener("DOMContentLoaded", () => {
       goToStep(firstIssue.step);
       firstIssue.field.focus();
     }
+    logProgramEvent?.("server-validation-errors", {
+      errors: errors.map(describeForLog).filter(Boolean),
+      keys,
+    });
     if (serverSignatureWarning) {
       const signatureIssues = collectSignatureIssues();
       if (signatureIssues.length) {
@@ -976,6 +996,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (signatureIssues.length) {
       event.preventDefault();
       openSignatureWarning(signatureIssues);
+      logProgramEvent?.("frontend-signature-block", {
+        issues: signatureIssues.map(describeForLog).filter(Boolean),
+      });
       return;
     }
     const allowedSlots = new Set(getAllowedSlots());
@@ -1000,6 +1023,11 @@ document.addEventListener("DOMContentLoaded", () => {
       goToStep(Number(firstInvalid?.closest(".adventurer-step")?.dataset.step) || 1);
       const errors = highlightedFields.map(describeField);
       openErrorModal(errors);
+      logProgramEvent?.("frontend-validation-block", {
+        fields: highlightedFields.map((field) => field?.name || field?.id || field?.type),
+        slot,
+        errors: errors.map(describeForLog).filter(Boolean),
+      });
     }
   });
 

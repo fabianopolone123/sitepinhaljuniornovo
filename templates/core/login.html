@@ -55,5 +55,15 @@
         <a class="tiny-link" href="{% url 'forgot_password' %}">Esqueci meu usuário ou senha</a>
       </div>
     </main>
+    {% include "core/_diagnostics_scripts.html" %}
+    <script defer>
+      document.addEventListener("DOMContentLoaded", () => {
+        logProgramEvent?.("page-view-login", {
+          alreadyAuthenticated: {{ already_authenticated|yesno:"true,false" }},
+        });
+        const loginForm = document.querySelector(".login-form");
+        loginForm?.addEventListener("submit", () => logProgramEvent?.("login-submit"));
+      });
+    </script>
   </body>
 </html>

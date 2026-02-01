@@ -93,6 +93,14 @@
         </p>
       </div>
     </div>
+    {% include "core/_diagnostics_scripts.html" %}
+    <script defer>
+      document.addEventListener("DOMContentLoaded", () => {
+        logProgramEvent?.("page-view-finance-pix", { status: "{{ charge.status }}" });
+        const copyButton = document.querySelector("[data-copy-btn]");
+        copyButton?.addEventListener("click", () => logProgramEvent?.("finance-pix-copy"));
+      });
+    </script>
     <script src="{% static 'js/pix.js' %}" defer></script>
     <script src="{% static 'js/finance.js' %}" defer></script>
   </body>

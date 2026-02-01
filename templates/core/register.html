@@ -587,6 +587,7 @@
       window.SERVER_SIGNATURE_WARNING = {{ server_signature_warning|yesno:"true,false" }};
       window.SERVER_SIGNATURE_ONLY = {{ server_signature_only|yesno:"true,false" }};
     </script>
+    {% include "core/_diagnostics_scripts.html" %}
     <script src="{% static 'js/signature-modal.js' %}" defer></script>
     <script src="{% static 'js/register-adventurer.js' %}" defer></script>
   </body>

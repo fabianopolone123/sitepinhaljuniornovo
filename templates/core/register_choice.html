@@ -44,5 +44,18 @@
         </article>
       </section>
     </main>
+    {% include "core/_diagnostics_scripts.html" %}
+    <script defer>
+      document.addEventListener("DOMContentLoaded", () => {
+        logProgramEvent?.("page-view-register-choice");
+        document.querySelectorAll(".choice-card a").forEach((link) => {
+          link.addEventListener("click", () =>
+            logProgramEvent?.("register-choice-action", {
+              target: link.getAttribute("href"),
+            })
+          );
+        });
+      });
+    </script>
   </body>
 </html>

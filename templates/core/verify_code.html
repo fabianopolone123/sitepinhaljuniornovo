@@ -67,6 +67,19 @@
       {% endif %}
       <a class="ghost-btn" href="{% url 'login' %}">Voltar ao login</a>
     </main>
+    {% include "core/_diagnostics_scripts.html" %}
+    <script defer>
+      document.addEventListener("DOMContentLoaded", () => {
+        logProgramEvent?.("page-view-verify-code", {
+          verified: {{ verified|yesno:"true,false" }},
+        });
+        const formMode = '{{ verified|yesno:"reset,code" }}';
+        const form = document.querySelector(".verify-form");
+        form?.addEventListener("submit", () =>
+          logProgramEvent?.("verify-code-submit", { mode: formMode })
+        );
+      });
+    </script>
     <script src="{% static 'js/verify.js' %}" defer></script>
   </body>
 </html>

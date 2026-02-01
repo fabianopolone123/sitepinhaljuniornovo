@@ -462,6 +462,22 @@
       </main>
     </div>
 
+    {% include "core/_diagnostics_scripts.html" %}
+    <script defer>
+      document.addEventListener("DOMContentLoaded", () => {
+        logProgramEvent?.("page-view-dashboard");
+        document.querySelectorAll(".tab-btn[data-tab]").forEach((tabButton) => {
+          tabButton.addEventListener("click", () =>
+            logProgramEvent?.("dashboard-tab-switch", { target: tabButton.dataset.tab })
+          );
+        });
+        document.querySelectorAll(".finance-card a.primary-btn").forEach((button) => {
+          button.addEventListener("click", () =>
+            logProgramEvent?.("financeiro-pagar", { href: button.getAttribute("href") })
+          );
+        });
+      });
+    </script>
     <script src="{% static 'js/dashboard.js' %}" defer></script>
   </body>
 </html>

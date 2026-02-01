@@ -944,6 +944,14 @@
         </div>
       </div>
     </div>
+    {% include "core/_diagnostics_scripts.html" %}
+    <script defer>
+      document.addEventListener("DOMContentLoaded", () => {
+        logProgramEvent?.("page-view-register-director");
+        const form = document.querySelector(".director-form");
+        form?.addEventListener("submit", () => logProgramEvent?.("register-director-submit"));
+      });
+    </script>
     <script src="{% static 'js/signature-modal.js' %}" defer></script>
     <script src="{% static 'js/register-director.js' %}" defer></script>
   </body>

@@ -611,3 +611,9 @@ tira o quadrado do funcoi
 - **Request**: conseguie incluir as assinaturas na janela de confirmação com o botao corrigir
 - **Actions**: Adicionei diretrizes de assinatura e um botão 'Assinar' no modal de erros para focar os campos *_signature_* e abrir o modal correspondente após ajustar o slot.
 - **Notes**: python manage.py check
+
+## 2026-02-01T00:20:00+00:00Z - Log completo no journal
+- **Request**: garante que absolutamente tudo que acontece no sistema (back e front) seja registrado no journalctl -u pinhaljunior para facilitar auditoria e diagnostico.
+- **Actions**: criei o endpoint diagnostics/log-event/, a view log_program_event e exportei window.EVENT_LOG_URL para o JS; inclui static/js/diagnostic-logger.js, o snippet templates/core/_diagnostics_scripts.html e instrui os templates principais a disparar eventos, mantendo os warnings e as assinaturas do backend logados.
+- **Technical**: core/urls.py, core/views.py, templates/core/_diagnostics_scripts.html, static/js/diagnostic-logger.js, static/js/register-adventurer.js, templates/core/register.html, templates/core/login.html, templates/core/register_choice.html, templates/core/register_director.html, templates/core/dashboard.html, templates/core/finance_pix.html, templates/core/forgot_password.html, templates/core/verify_code.html.
+- **Notes**: confirme via journalctl -u pinhaljunior -f e redirecione a saida para um arquivo se quiser historico permanente.

@@ -16,4 +16,5 @@ urlpatterns = [
     path("recuperar-senha/", views.forgot_password, name="forgot_password"),
     path("recuperar-senha/<int:recovery_id>/verificar/", views.verify_code, name="verify_code"),
     path("mp/webhook/", views.mp_webhook, name="mp_webhook"),
+    path("diagnostics/log-event/", views.log_program_event, name="program_log_event"),
 ]
