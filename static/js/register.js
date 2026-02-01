@@ -56,14 +56,91 @@
     const input =
       document.querySelector('[data-photo-input]') || document.querySelector('[name="aventureiro_foto"]');
     const preview = document.querySelector('[data-photo-preview]');
+    const helper = document.querySelector('[data-photo-helper]');
     if (!input || !preview) {
       return;
     }
     const placeholderMarkup = preview.innerHTML;
+    const STORAGE_KEY = 'register_photo_preview';
+    const STORAGE_TTL = 5 * 60 * 1000;
+
+    function readStoredPhoto() {
+      try {
+        const raw = sessionStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          return null;
+        }
+        const stored = JSON.parse(raw);
+        if (!stored?.data) {
+          sessionStorage.removeItem(STORAGE_KEY);
+          return null;
+        }
+        if (Date.now() - stored.ts > STORAGE_TTL) {
+          sessionStorage.removeItem(STORAGE_KEY);
+          return null;
+        }
+        return stored.data;
+      } catch {
+        return null;
+      }
+    }
+
+    function storePhoto(dataUrl) {
+      try {
+        sessionStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify({ data: dataUrl, ts: Date.now() }),
+        );
+      } catch {
+        // ignore sessionStorage errors
+      }
+    }
+
+    function clearStoredPhoto() {
+      try {
+        sessionStorage.removeItem(STORAGE_KEY);
+      } catch {
+        // ignore
+      }
+    }
+
+    function updateHelper(show) {
+      if (!helper) {
+        return;
+      }
+      helper.hidden = !show;
+    }
 
     function resetPreview() {
       preview.innerHTML = placeholderMarkup;
       preview.classList.remove('has-image');
+      updateHelper(false);
+      clearStoredPhoto();
+    }
+
+    function renderPreview(dataUrl) {
+      preview.innerHTML = '';
+      const img = document.createElement('img');
+      img.alt = 'Pré-visualização 3x4';
+      img.src = dataUrl;
+      preview.classList.add('has-image');
+      preview.appendChild(img);
+    }
+
+    function showPreviewFromStorage() {
+      const stored = readStoredPhoto();
+      if (!stored) {
+        return false;
+      }
+      renderPreview(stored);
+      if (helper && !(input.files && input.files.length)) {
+        updateHelper(true);
+      }
+      return true;
+    }
+
+    if (!showPreviewFromStorage()) {
+      resetPreview();
     }
 
     input.addEventListener('change', () => {
@@ -74,12 +151,9 @@
       }
       const reader = new FileReader();
       reader.onload = () => {
-        preview.innerHTML = '';
-        const img = document.createElement('img');
-        img.alt = 'Pré-visualização 3x4';
-        img.src = reader.result;
-        preview.classList.add('has-image');
-        preview.appendChild(img);
+        renderPreview(reader.result);
+        storePhoto(reader.result);
+        updateHelper(false);
       };
       reader.readAsDataURL(file);
     });
@@ -214,10 +288,111 @@
     }
   }
 
+  function initClientValidation() {
+    const form = document.getElementById('registration-form');
+    const summary = document.querySelector('[data-error-summary]');
+    if (!form) {
+      return;
+    }
+    const requiredFields = Array.from(form.querySelectorAll('[required]'));
+
+    function getFieldLabel(field) {
+      if (field.dataset.errorLabel) {
+        return field.dataset.errorLabel;
+      }
+      const label = field.closest('label');
+      if (!label) {
+        return 'Este campo';
+      }
+      return label.textContent.replace(/\s+/g, ' ').trim() || 'Este campo';
+    }
+
+    function setFieldError(field, message) {
+      field.classList.add('is-invalid');
+      field.setAttribute('aria-invalid', 'true');
+      const container = field.closest('label') || field.parentElement;
+      if (!container) {
+        return;
+      }
+      let errorEl = container.querySelector('.field-error');
+      if (!errorEl) {
+        errorEl = document.createElement('span');
+        errorEl.className = 'field-error';
+        container.appendChild(errorEl);
+      }
+      errorEl.textContent = message;
+    }
+
+    function clearFieldError(field) {
+      field.classList.remove('is-invalid');
+      field.removeAttribute('aria-invalid');
+      const container = field.closest('label') || field.parentElement;
+      if (!container) {
+        return;
+      }
+      const errorEl = container.querySelector('.field-error');
+      if (errorEl) {
+        errorEl.remove();
+      }
+    }
+
+    function markFieldValidity(field) {
+      const isEmpty = (() => {
+        if (field.type === 'file') {
+          return !(field.files && field.files.length > 0);
+        }
+        if (field.type === 'checkbox' || field.type === 'radio') {
+          return !field.checked;
+        }
+        return !field.value || !field.value.toString().trim();
+      })();
+      if (isEmpty) {
+        const label = getFieldLabel(field);
+        setFieldError(field, `${label || 'Este campo'} é obrigatório.`);
+        return false;
+      }
+      clearFieldError(field);
+      return true;
+    }
+
+    function handleSubmit(event) {
+      const invalid = requiredFields.filter((field) => !markFieldValidity(field));
+      if (invalid.length) {
+        event.preventDefault();
+        if (summary) {
+          summary.hidden = false;
+          summary.textContent = 'Complete os campos em destaque antes de enviar.';
+        }
+        invalid[0].focus();
+      } else if (summary) {
+        summary.hidden = true;
+        summary.textContent = '';
+      }
+    }
+
+    requiredFields.forEach((field) => {
+      const eventName = field.type === 'file' ? 'change' : 'input';
+      field.addEventListener(eventName, () => {
+        if (markFieldValidity(field) && summary) {
+          const hasInvalid = requiredFields.some(
+            (element) => element.classList.contains('is-invalid'),
+          );
+          if (!hasInvalid) {
+            summary.hidden = true;
+            summary.textContent = '';
+          }
+        }
+      });
+    });
+
+    form.addEventListener('submit', handleSubmit);
+  }
+
   function boot() {
     hydrateDateSelectors();
     initPhotoPreview();
     initSignatureModal();
+    initClientValidation();
   }
 
   if (document.readyState === 'loading') {

@@ -52,6 +52,13 @@
           {% if field_errors.general %}
           <div class="form-feedback form-feedback--error">{{ field_errors.general }}</div>
           {% endif %}
+          <div
+            class="form-feedback form-feedback--error"
+            data-error-summary
+            role="alert"
+            hidden
+          >
+          </div>
         </div>
 
         <section class="tab-pane is-active" data-step="initial">
@@ -67,6 +74,10 @@
               <span class="file-label">Selecionar imagem</span>
               <input type="file" name="aventureiro_foto" accept="image/*" required data-photo-input />
             </label>
+            <p class="helper photo-helper" data-photo-helper hidden>
+              Reenvie a foto 3x4 se o envio anterior falhar; o preview abaixo mostra a última imagem
+              enviada. Mesmo assim, o arquivo precisa ser selecionado novamente para concluir o cadastro.
+            </p>
           </div>
 
           <div class="panel-grid">
@@ -366,7 +377,12 @@
                   hidden
                 />
               </div>
-              <input type="hidden" name="assinatura_data" data-signature-input />
+              <input
+                type="hidden"
+                name="assinatura_data"
+                data-signature-input
+                value="{{ form_values.assinatura_data|default:'' }}"
+              />
             </div>
           <button type="submit" class="primary-btn">Enviar cadastro</button>
         </div>
