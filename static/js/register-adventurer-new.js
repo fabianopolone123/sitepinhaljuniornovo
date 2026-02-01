@@ -123,12 +123,41 @@ document.addEventListener("DOMContentLoaded", () => {
     const nameInput = panel.querySelector(`[data-slot-name-input="${slot}"]`);
     nameInput?.addEventListener("input", () => {
       updateSlotNameLabels();
+      updateTermChildNameLabels();
     });
   });
+  const termNameSpans = Array.from(document.querySelectorAll("[data-term-child-name]"));
+  const termNameInputs = Array.from(document.querySelectorAll("[data-term-child-name-input]"));
 
+  const updateTermChildNameLabels = () => {
+    termNameSpans.forEach((span) => {
+      const slot = span.dataset.termChildName;
+      const termInput = document.querySelector(`[data-term-child-name-input="${slot}"]`);
+      const adventureInput = document.querySelector(`[data-slot-name-input="${slot}"]`);
+      const fallback = `Aventureiro ${slot}`;
+      span.textContent = termInput?.value?.trim() || adventureInput?.value?.trim() || fallback;
+    });
+  };
+
+  termNameInputs.forEach((input) => {
+    input.addEventListener("input", updateTermChildNameLabels);
+  });
   updateStepVisibility(1);
   updateSlots();
   updateSlotNameLabels();
+  updateTermChildNameLabels();
+
+  const setTermDefaultDates = () => {
+    const today = new Date().toISOString().split("T")[0];
+    const termDateInputs = document.querySelectorAll('[name^="term_date_"]');
+    termDateInputs.forEach((input) => {
+      if (!input.value) {
+        input.value = today;
+      }
+    });
+  };
+
+  setTermDefaultDates();
 
   if (window.initSignatureModal) {
     initSignatureModal({

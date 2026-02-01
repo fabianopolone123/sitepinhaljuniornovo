@@ -67,6 +67,16 @@
             </div>
             <div class="grid two-columns">
               <label class="field-group">
+                E-mail
+                <input type="email" name="responsavel_email" required />
+              </label>
+              <label class="field-group">
+                Celular
+                <input type="text" name="responsavel_celular" required />
+              </label>
+            </div>
+            <div class="grid two-columns">
+              <label class="field-group">
                 CPF
                 <input type="text" name="responsavel_cpf" required />
               </label>
@@ -128,8 +138,31 @@
                 <input type="text" name="mae_nome" />
               </label>
             </div>
+            <div class="grid two-columns">
+              <label class="field-group">
+                E-mail do pai
+                <input type="email" name="pai_email" />
+              </label>
+              <label class="field-group">
+                E-mail da mãe
+                <input type="email" name="mae_email" />
+              </label>
+            </div>
+            <div class="grid two-columns">
+              <label class="field-group">
+                Telefone do pai
+                <input type="text" name="pai_telefone" />
+              </label>
+              <label class="field-group">
+                Telefone da mãe
+                <input type="text" name="mae_telefone" />
+              </label>
+            </div>
             <p class="hint">Os contatos dos pais podem ser copiados automaticamente do responsável.</p>
           </div>
+          <p class="flow-helper">
+            Atesto serem VERDADEIRAS todas as informações acima preenchidas.
+          </p>
           <div class="signatures-grid">
             <button
               type="button"
@@ -176,7 +209,7 @@
                 <p class="slot-heading__title" data-slot-heading="adventure" data-slot="{{ slot }}">
                   Aventura {{ slot }} • <span data-slot-name-label="{{ slot }}"></span>
                 </p>
-                <p class="slot-heading__sub">Passo 2 • dados básicos</p>
+                <p class="slot-heading__sub">Passo 2 • dados do aventureiro</p>
               </div>
               <div class="grid two-columns">
                 <label class="field-group">
@@ -184,25 +217,66 @@
                   <input type="text" name="adventure_full_name_{{ slot }}" required data-slot-name-input="{{ slot }}" />
                 </label>
                 <label class="field-group">
-                  Data de nascimento
-                  <input type="date" name="adventure_birth_date_{{ slot }}" required />
+                  Sexo
+                  <div class="checkbox-grid">
+                    <label>
+                      <input type="radio" name="adventure_gender_{{ slot }}" value="masculino" required /> Masculino
+                    </label>
+                    <label>
+                      <input type="radio" name="adventure_gender_{{ slot }}" value="feminino" /> Feminino
+                    </label>
+                  </div>
                 </label>
               </div>
               <div class="grid two-columns">
                 <label class="field-group">
-                  WhatsApp do responsável
-                  <input
-                    type="text"
-                    name="adventure_whatsapp_{{ slot }}"
-                    data-auto-from="responsavel_whatsapp"
-                  />
+                  Colégio
+                  <input type="text" name="adventure_school_{{ slot }}" required />
                 </label>
                 <label class="field-group">
-                  Av / Rua
+                  Beneficiado pela Bolsa Família?
+                  <select name="adventure_bolsa_familia_{{ slot }}" required>
+                    <option value="">Selecione</option>
+                    <option value="sim">Sim</option>
+                    <option value="nao">Não</option>
+                  </select>
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Data de nascimento
+                  <input type="date" name="adventure_birth_date_{{ slot }}" required />
+                </label>
+                <label class="field-group">
+                  Série (ano)
+                  <input type="text" name="adventure_grade_{{ slot }}" required />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Classes investidas
+                  <div class="checkbox-grid">
+                    <label>
+                      <input type="checkbox" name="adventure_classes_{{ slot }}[]" value="abelhinhas" /> Abelhinhas
+                    </label>
+                    <label>
+                      <input type="checkbox" name="adventure_classes_{{ slot }}[]" value="luminares" /> Luminares
+                    </label>
+                    <label>
+                      <input type="checkbox" name="adventure_classes_{{ slot }}[]" value="edificadores" /> Edificadores
+                    </label>
+                    <label>
+                      <input type="checkbox" name="adventure_classes_{{ slot }}[]" value="maos_ajudadoras" /> Mãos Ajudadoras
+                    </label>
+                  </div>
+                </label>
+                <label class="field-group">
+                  Endereço completo
                   <input
                     type="text"
                     name="adventure_street_{{ slot }}"
                     data-auto-from="responsavel_street"
+                    required
                   />
                 </label>
               </div>
@@ -213,6 +287,7 @@
                     type="text"
                     name="adventure_neighborhood_{{ slot }}"
                     data-auto-from="responsavel_neighborhood"
+                    required
                   />
                 </label>
                 <label class="field-group">
@@ -221,22 +296,41 @@
                     type="text"
                     name="adventure_city_{{ slot }}"
                     data-auto-from="responsavel_city"
+                    required
                   />
                 </label>
               </div>
               <div class="grid two-columns">
                 <label class="field-group">
-                  Escola
-                  <input type="text" name="adventure_school_{{ slot }}" required />
+                  CEP
+                  <input
+                    type="text"
+                    name="adventure_postal_code_{{ slot }}"
+                    data-auto-from="responsavel_postal_code"
+                  />
                 </label>
                 <label class="field-group">
-                  Série / ano
-                  <input type="text" name="adventure_grade_{{ slot }}" required />
+                  Estado
+                  <input
+                    type="text"
+                    name="adventure_state_{{ slot }}"
+                    data-auto-from="responsavel_state"
+                  />
                 </label>
               </div>
               <div class="grid two-columns">
                 <label class="field-group">
-                  RG
+                  Certidão de nascimento
+                  <input type="text" name="adventure_certidao_{{ slot }}" />
+                </label>
+                <label class="field-group">
+                  Religião
+                  <input type="text" name="adventure_religion_{{ slot }}" />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  R.G.
                   <input type="text" name="adventure_rg_{{ slot }}" />
                 </label>
                 <label class="field-group">
@@ -250,10 +344,39 @@
                   <input type="text" name="adventure_cpf_{{ slot }}" />
                 </label>
                 <label class="field-group">
-                  Certidão (opcional)
-                  <input type="text" name="adventure_certidao_{{ slot }}" />
+                  Pai / Mãe tem WhatsApp?
+                  <select name="adventure_parents_whatsapp_{{ slot }}">
+                    <option value="">Selecione</option>
+                    <option value="sim">Sim</option>
+                    <option value="nao">Não</option>
+                  </select>
                 </label>
               </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  WhatsApp do responsável
+                  <input
+                    type="text"
+                    name="adventure_whatsapp_{{ slot }}"
+                    data-auto-from="responsavel_whatsapp"
+                  />
+                </label>
+                <label class="field-group">
+                  Tamanho da camiseta
+                  <select name="adventure_shirt_size_{{ slot }}" required>
+                    <option value="">Selecione</option>
+                    <option value="pp">PP</option>
+                    <option value="p">P</option>
+                    <option value="m">M</option>
+                    <option value="g">G</option>
+                    <option value="gg">GG</option>
+                    <option value="xgg">XG</option>
+                  </select>
+                </label>
+              </div>
+              <p class="flow-helper">
+                Atesto que os dados do aventureiro acima são verdadeiros para fins de registro.
+              </p>
               <div class="signatures-grid">
                 <button
                   type="button"
@@ -288,24 +411,193 @@
               <div class="grid two-columns">
                 <label class="field-group">
                   Possui plano de saúde?
-                  <select name="medical_plan_{{ slot }}">
+                  <select name="medical_plan_{{ slot }}" required>
                     <option value="">Selecione</option>
                     <option value="sim">Sim</option>
                     <option value="nao">Não</option>
                   </select>
                 </label>
                 <label class="field-group">
-                  Número do plano
-                  <input type="text" name="medical_plan_number_{{ slot }}" />
+                  Qual?
+                  <input type="text" name="medical_plan_name_{{ slot }}" />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Número da Carteira Nacional de Saúde (SUS)
+                  <input type="text" name="medical_sus_number_{{ slot }}" />
+                </label>
+                <label class="field-group">
+                  Tipo sanguíneo
+                  <select name="medical_blood_type_{{ slot }}">
+                    <option value="">Selecione</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="NS">Não sabe</option>
+                  </select>
+                </label>
+              </div>
+              <div class="flow-helper">
+                <p>Já teve ou tem (marque X apenas nas positivas):</p>
+                <div class="checkbox-grid">
+                  <label><input type="checkbox" name="medical_conditions_{{ slot }}[]" value="pneumonia" /> Pneumonia</label>
+                  <label><input type="checkbox" name="medical_conditions_{{ slot }}[]" value="sarampo" /> Sarampo</label>
+                  <label><input type="checkbox" name="medical_conditions_{{ slot }}[]" value="tetano" /> Tétano</label>
+                  <label><input type="checkbox" name="medical_conditions_{{ slot }}[]" value="catapora" /> Catapora</label>
+                  <label><input type="checkbox" name="medical_conditions_{{ slot }}[]" value="meningite" /> Meningite</label>
+                  <label><input type="checkbox" name="medical_conditions_{{ slot }}[]" value="hepatite" /> Hepatite</label>
+                  <label><input type="checkbox" name="medical_conditions_{{ slot }}[]" value="dengue" /> Dengue</label>
+                  <label><input type="checkbox" name="medical_conditions_{{ slot }}[]" value="febre_amarela" /> Febre Amarela</label>
+                  <label><input type="checkbox" name="medical_conditions_{{ slot }}[]" value="h1n1" /> H1N1</label>
+                  <label><input type="checkbox" name="medical_conditions_{{ slot }}[]" value="colera" /> Cólera</label>
+                  <label><input type="checkbox" name="medical_conditions_{{ slot }}[]" value="rubeola" /> Rubéola</label>
+                  <label><input type="checkbox" name="medical_conditions_{{ slot }}[]" value="coqueluche" /> Coqueluche</label>
+                  <label><input type="checkbox" name="medical_conditions_{{ slot }}[]" value="difteria" /> Difteria</label>
+                  <label><input type="checkbox" name="medical_conditions_{{ slot }}[]" value="caxumba" /> Caxumba</label>
+                  <label><input type="checkbox" name="medical_conditions_{{ slot }}[]" value="renite" /> Renite</label>
+                  <label><input type="checkbox" name="medical_conditions_{{ slot }}[]" value="bronquite" /> Bronquite</label>
+                  <label><input type="checkbox" name="medical_conditions_{{ slot }}[]" value="malaria" /> Malária</label>
+                  <label><input type="checkbox" name="medical_conditions_{{ slot }}[]" value="variola" /> Varíola</label>
+                </div>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Possui alergia cutânea (pele)? Se sim, qual?
+                  <input type="text" name="medical_allergy_skin_{{ slot }}" />
+                </label>
+                <label class="field-group">
+                  Possui alergia alimentar? Se sim, a qual alimento?
+                  <input type="text" name="medical_allergy_food_{{ slot }}" />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Possui alergia a medicamentos? Se sim, a qual remédio?
+                  <input type="text" name="medical_allergy_meds_{{ slot }}" />
+                </label>
+                <label class="field-group">
+                  Deficiência física?
+                  <select name="medical_disability_{{ slot }}">
+                    <option value="">Selecione</option>
+                    <option value="cadeirante">Cadeirante</option>
+                    <option value="visual">Visual</option>
+                    <option value="auditivo">Auditivo</option>
+                    <option value="fala">Fala / mudo</option>
+                    <option value="nao">Nenhuma</option>
+                  </select>
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Possui problemas cardíacos?
+                  <div class="checkbox-grid">
+                    <label><input type="radio" name="medical_heart_condition_{{ slot }}" value="sim" required /> Sim</label>
+                    <label><input type="radio" name="medical_heart_condition_{{ slot }}" value="nao" /> Não</label>
+                  </div>
+                </label>
+                <label class="field-group">
+                  Utiliza remédios para problemas cardíacos?
+                  <input type="text" name="medical_heart_medication_{{ slot }}" />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  É diabético?
+                  <div class="checkbox-grid">
+                    <label><input type="radio" name="medical_diabetes_{{ slot }}" value="sim" required /> Sim</label>
+                    <label><input type="radio" name="medical_diabetes_{{ slot }}" value="nao" /> Não</label>
+                  </div>
+                </label>
+                <label class="field-group">
+                  Utiliza remédios para diabetes?
+                  <input type="text" name="medical_diabetes_medication_{{ slot }}" />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Possui problemas renais?
+                  <div class="checkbox-grid">
+                    <label><input type="radio" name="medical_renal_{{ slot }}" value="sim" required /> Sim</label>
+                    <label><input type="radio" name="medical_renal_{{ slot }}" value="nao" /> Não</label>
+                  </div>
+                </label>
+                <label class="field-group">
+                  Utiliza remédios para problemas renais?
+                  <input type="text" name="medical_renal_medication_{{ slot }}" />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Problemas psicológicos?
+                  <div class="checkbox-grid">
+                    <label><input type="radio" name="medical_psychological_{{ slot }}" value="sim" required /> Sim</label>
+                    <label><input type="radio" name="medical_psychological_{{ slot }}" value="nao" /> Não</label>
+                  </div>
+                </label>
+                <label class="field-group">
+                  Utiliza remédios para problemas psicológicos?
+                  <input type="text" name="medical_psychological_medication_{{ slot }}" />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Outros problemas de saúde?
+                  <select name="medical_other_problems_{{ slot }}">
+                    <option value="">Selecione</option>
+                    <option value="sim">Sim</option>
+                    <option value="nao">Não</option>
+                  </select>
+                </label>
+                <label class="field-group">
+                  Descreva outros problemas / medicamentos
+                  <input type="text" name="medical_other_description_{{ slot }}" />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Problemas de saúde recentes?
+                  <select name="medical_recent_problems_{{ slot }}">
+                    <option value="">Selecione</option>
+                    <option value="sim">Sim</option>
+                    <option value="nao">Não</option>
+                  </select>
+                </label>
+                <label class="field-group">
+                  Medicamentos usados recentemente (ano vigente)
+                  <input type="text" name="medical_recent_medications_{{ slot }}" />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Teve ferimentos graves ou fraturas recentes?
+                  <select name="medical_recent_injuries_{{ slot }}">
+                    <option value="">Selecione</option>
+                    <option value="sim">Sim</option>
+                    <option value="nao">Não</option>
+                  </select>
+                </label>
+                <label class="field-group">
+                  Passou por cirurgias?
+                  <select name="medical_recent_surgeries_{{ slot }}">
+                    <option value="">Selecione</option>
+                    <option value="sim">Sim</option>
+                    <option value="nao">Não</option>
+                  </select>
                 </label>
               </div>
               <label class="field-group">
-                Tipo sanguíneo
-                <input type="text" name="medical_blood_type_{{ slot }}" />
+                Motivo de internação nos últimos cinco anos
+                <textarea name="medical_recent_hospitalizations_{{ slot }}" rows="2"></textarea>
               </label>
               <label class="checkbox-field">
                 <input type="checkbox" name="medical_confirmation_{{ slot }}" value="on" required />
-                Declaro que os dados médicos fornecidos são verdadeiros.
+                Atesto serem VERDADEIRAS todas as informações médicas preenchidas e me responsabilizo por quaisquer acidentes que venham a ocorrer em decorrência do não informe de problemas médicos de qualquer natureza.
               </label>
               <div class="signatures-grid">
                 <button
@@ -335,14 +627,101 @@
 
         <section class="flow-step" data-flow-step-content="4">
           <div class="flow-card">
-            <h2>Termo de autorização</h2>
+            <h2>Termo de autorização de uso de imagem</h2>
             {% for slot in adventurer_slots %}
             <div class="term-slot-panel" data-term-slot="{{ slot }}" {% if not forloop.first %}hidden{% endif %}>
-              <h3>{{ slot }} • Termo do aventureiro</h3>
-              <p>Aventureiro: <span data-term-child-name="{{ slot }}">Nome do aventureiro</span></p>
+              <div class="slot-heading">
+                <p class="slot-heading__title">Aventura {{ slot }} • Termo</p>
+              </div>
+              <p>
+                AUTORIZO o uso de imagem em todo e qualquer material do CLUBE DE AVENTUREIROS PINHAL JÚNIOR,
+                em campanhas promocionais e institucionais, sem qualquer ônus, em todo o território nacional.
+              </p>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Nome da criança
+                  <input
+                    type="text"
+                    name="term_child_name_{{ slot }}"
+                    required
+                    data-term-child-name-input="{{ slot }}"
+                  />
+                </label>
+                <label class="field-group">
+                  Nacionalidade
+                  <input type="text" name="term_nationality_{{ slot }}" value="Brasileiro" />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Local
+                  <input type="text" name="term_local_{{ slot }}" value="São Carlos" />
+                </label>
+                <label class="field-group">
+                  Data
+                  <input type="date" name="term_date_{{ slot }}" />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  RG do menor
+                  <input type="text" name="term_child_rg_{{ slot }}" />
+                </label>
+                <label class="field-group">
+                  CPF do menor
+                  <input type="text" name="term_child_cpf_{{ slot }}" />
+                </label>
+              </div>
+              <label class="field-group">
+                Endereço completo
+                <input type="text" name="term_child_address_{{ slot }}" />
+              </label>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Município
+                  <input type="text" name="term_child_city_{{ slot }}" />
+                </label>
+                <label class="field-group">
+                  Estado
+                  <input type="text" name="term_child_state_{{ slot }}" />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Nome do responsável legal
+                  <input
+                    type="text"
+                    name="term_responsible_name_{{ slot }}"
+                    data-auto-from="responsavel_nome"
+                    required
+                  />
+                </label>
+                <label class="field-group">
+                  CPF do responsável
+                  <input type="text" name="term_responsible_cpf_{{ slot }}" data-auto-from="responsavel_cpf" />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  RG do responsável
+                  <input type="text" name="term_responsible_rg_{{ slot }}" />
+                </label>
+                <label class="field-group">
+                  Av / Rua do responsável
+                  <input
+                    type="text"
+                    name="term_responsible_address_{{ slot }}"
+                    data-auto-from="responsavel_street"
+                  />
+                </label>
+              </div>
+              <p class="flow-helper">
+                A presente autorização é concedida para campanhas promocionais e institucionais do clube,
+                abrangendo outdoor, folhetos, anúncios, mídia eletrônica e demais materiais digitais e impressos.
+              </p>
               <label class="checkbox-field">
                 <input type="checkbox" name="term_confirmation_{{ slot }}" value="on" required />
-                Declaro que os dados acima estão corretos e autorizo a utilização da imagem do menor.
+                Declaro que os dados do termo são verdadeiros.
               </label>
               <div class="signatures-grid">
                 <button

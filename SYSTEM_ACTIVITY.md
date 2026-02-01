@@ -667,3 +667,27 @@ egister_adventurer e a estrutura de slots para garantir que todas as informaçõ
 - **Actions**: incluí os campos `responsavel_username`, `responsavel_password1` e `responsavel_password2` no topo da etapa 1 para que o responsável receba login imediatamente (senha de 4 dígitos repetida).
 - **Technical**: templates/core/register_adventurer_new.html.
 - **Notes**: python manage.py check e garantir que a view original continue processando esses campos.
+
+## 2026-02-01T03:50:00+00:00Z — Manual update
+- **Request**: corrigir o fluxo guiado para que cada botão da stepper mostre apenas a etapa correspondente ao invés de renderizar todas as etapas de uma vez.
+- **Actions**: atualizei o CSS de `static/css/register-adventurer.css` para que as seções `flow-step` fiquem ocultas por padrão e apenas a aba ativa (`flow-step--active`) seja exibida, garantindo que os botões 01–04 controlem realmente a visibilidade dos blocos.
+- **Technical**: static/css/register-adventurer.css.
+- **Notes**: sem testes automatizados; confirme no navegador clicando nas abas e verificando que apenas o bloco ativo fica visível.
+
+## 2026-02-01T04:05:00+00:00Z — Manual update
+- **Request**: ampliar a Etapa 1 (responsável/pais) com todos os campos do cadastro antigo, incluindo e-mail/celular, contatos de pai e mãe e declaração de veracidade.
+- **Actions**: inseri campos de e-mail e celular do responsável, adicionei inputs para e-mail/telefone de pai e mãe, mantive o hint sobre copiar contatos e acrescentei a declaração “Atesto serem VERDADEIRAS…” antes das assinaturas; nada do back-end mudou ainda.
+- **Technical**: templates/core/register_adventurer_new.html.
+- **Notes**: confirme o layout e a validação navegando na etapa 1 e verificando os novos inputs.
+
+## 2026-02-01T04:30:00+00:00Z — Manual update
+- **Request**: preencher a Etapa 2 (dados do aventureiro) com todos os campos do cadastro antigo, incluindo classes investidas, documentos, endereço e WhatsApp/Pai, além da declaração “Atesto” e seleção de tamanho de camiseta.
+- **Actions**: reescrevi o painel de cada slot na etapa 2 para adicionar os campos de sexo, escola, Bolsa Família, data de nascimento, série, classes investidas (checkboxes), endereço completo, certidão, religião, RG/Órgão/CPF, pai/mãe com WhatsApp e tamanho da camiseta; mantive a assinatura digital ao final e reforcei a declaração de veracidade.
+- **Technical**: templates/core/register_adventurer_new.html.
+- **Notes**: sem testes automatizados; valide preenchendo a etapa 2 para cada slot e garantindo que o botão “Adicionar aventureiro” ainda habilita novos grupos.
+
+## 2026-02-01T05:10:00+00:00Z — Manual update
+- **Request**: completar a Etapa 3 (ficha médica) e Etapa 4 (termo), inserindo todos os campos/declarações do PDF e garantindo as assinaturas e atualizações de nome.
+- **Actions**: ampliei a etapa 3 para capturar plano de saúde, SUS, tipo sanguíneo, histórico de doenças, alergias, deficiências, problemas crônicos, medicações, internações, cirurgias, motivo de internação, declaração de responsabilidade e assinatura por slot; reescrevi a etapa 4 com campos de nome, nacionalidade, local/data, RG/CPF, endereço e informações do responsável, além do texto completo do termo, checkbox de confirmação e assinatura. Atualizei `register-adventurer-new.js` para manter as abas sincronizadas com os nomes dos aventureiros e preencher a data atual nos termos.
+- **Technical**: templates/core/register_adventurer_new.html, static/js/register-adventurer-new.js.
+- **Notes**: sem testes automatizados; verifique cada etapa manualmente e confira `journalctl -u pinhaljunior -f` caso os campos obrigatórios travem.
