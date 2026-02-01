@@ -963,6 +963,7 @@ def register(request):
         "adventurers_data": adventurers_data,
         "sex_choices": SEX_CHOICES,
         "classes": CLASS_OPTIONS,
+        "empty_adventurer": _empty_adventurer_data(),
     }
     return render(request, "core/register.html", context)
 

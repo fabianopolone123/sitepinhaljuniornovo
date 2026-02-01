@@ -431,3 +431,9 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 - **Actions**: Mudei o formulário para remover a coluna de responsável legal, adicionei o campo de grau de parentesco dentro do painel principal, retirei os campos adicionais e os requisitos correspondentes da validação, e mantive o log atualizado para refletir o fluxo simplificado.
 - **Technical**: templates/core/register.html, core/views.py
 - **Notes**: Verifique no navegador se o novo campo aparece logo abaixo do WhatsApp e continua sendo obrigatório.
+
+## 2026-02-02T00:05:00+00:00Z — Corrige template de bloco extra
+- **Request**: TemplateSyntaxError complaining about `{}` ao incluir o template do aventuriero extra.
+- **Actions**: Troquei o include do template `adventurer-template` para usar a variável `empty_adventurer` e passei esse dicionário no contexto, garantindo que o template de clonagem sempre tenha um exemplo válido.
+- **Technical**: templates/core/register.html, core/views.py
+- **Notes**: Depois de testar, confirme se `/cadastro/` monta o bloco em branco sem erros.
