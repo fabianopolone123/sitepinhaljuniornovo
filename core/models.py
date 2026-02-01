@@ -18,6 +18,7 @@ class Responsible(models.Model):
     whatsapp = models.CharField(max_length=20)
     endereco = models.CharField(max_length=255)
     sexo = models.CharField(max_length=1, choices=SEX_CHOICES, default="M")
+    signature_image = models.ImageField(upload_to="signatures/%Y/%m", blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.username} ({self.user.get_full_name()})"

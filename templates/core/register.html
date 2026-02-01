@@ -60,12 +60,12 @@
               <p class="panel-tag">Foto do aventureiro</p>
               <p class="panel-hint">Upload obrigatório (3x4 com fundo branco/transparente).</p>
             </div>
-            <div class="photo-preview" data-photo-preview>
-              <span>Preview 3x4</span>
+            <div class="photo-preview" data-photo-preview aria-live="polite">
+              <span data-photo-placeholder>Preview 3x4</span>
             </div>
             <label class="file-field">
               <span class="file-label">Selecionar imagem</span>
-              <input type="file" name="aventureiro_foto" accept="image/*" required />
+              <input type="file" name="aventureiro_foto" accept="image/*" required data-photo-input />
             </label>
           </div>
 
@@ -356,7 +356,8 @@
               <button type="button" class="primary-btn signature-btn" data-action="open-signature">
                 Assinar agora
               </button>
-              <input type="hidden" name="assinatura_data" />
+              <p class="helper signature-preview" data-signature-preview>Sem assinatura ainda.</p>
+              <input type="hidden" name="assinatura_data" data-signature-input />
             </div>
           <button type="submit" class="primary-btn">Enviar cadastro</button>
         </div>

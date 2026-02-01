@@ -2,11 +2,14 @@ from calendar import month_name, monthrange
 from collections import deque
 from datetime import date, timedelta
 from decimal import Decimal, ROUND_HALF_UP
+import base64
+import binascii
 import json
 import logging
 import os
 import random
 import re
+import uuid
 
 import requests
 from django.conf import settings
@@ -21,6 +24,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.core.files.base import ContentFile
 
 from .models import (
     Adventurer,
@@ -40,6 +44,20 @@ LOG_FILES = [
     ("Django", settings.LOG_DIR / "django.log.jsonl"),
     ("Client", settings.LOG_DIR / "client.log.jsonl"),
 ]
+
+
+def _decode_signature(signature_data):
+    if not signature_data:
+        return None
+    payload = signature_data
+    if "," in payload:
+        payload = payload.split(",", 1)[1]
+    try:
+        binary = base64.b64decode(payload)
+    except (binascii.Error, TypeError):
+        return None
+    filename = f"assinatura_{uuid.uuid4().hex}.png"
+    return ContentFile(binary, name=filename)
 
 WAPI_INSTANCE = os.getenv("WAPI_INSTANCE", "LITE-F75JN4-FWW3NA")
 WAPI_TOKEN = os.getenv("WAPI_TOKEN", "o8bWQDnlomrsOaBF2CqnlHguBKIbX87By")
@@ -784,6 +802,7 @@ def register(request):
         if not adventurer_photos:
             single_photo = request.FILES.get("aventureiro_foto")
             adventurer_photos = [single_photo] if single_photo else []
+        signature_payload = request.POST.get("assinatura_data", "").strip()
         adventurer_entries = []
         for idx, adventurer in enumerate(adventurers_data):
             errors_required = []
@@ -842,6 +861,7 @@ def register(request):
                         whatsapp=whatsapp,
                         endereco=endereco,
                         sexo=responsavel_sexo,
+                        signature_image=_decode_signature(signature_payload),
                     )
                     for entry in adventurer_entries:
                         sexo_val = entry.pop("sexo")

@@ -2,32 +2,40 @@
   const panelState = new Map();
   const panels = Array.from(document.querySelectorAll('[data-log-panel]'));
 
+  function formatLineCount(value) {
+    return `${value} ${value === 1 ? 'linha' : 'linhas'}`;
+  }
+
   function applyFilter(panel) {
     const state = panelState.get(panel);
     if (!state) {
       return;
     }
-    const { content, count, filterInput, lines } = state;
-    const term = (filterInput ? filterInput.value.trim().toLowerCase() : '');
-    const filtered = term
-      ? lines.filter((line) => line.toLowerCase().includes(term))
-      : lines;
-    content.textContent = filtered.length
-      ? filtered.join('\n')
-      : 'Nenhuma linha corresponde ao filtro.';
-    count.textContent = ${filtered.length} linha;
+    const { lines, count, filterInput, emptyMessage } = state;
+    const term = filterInput ? filterInput.value.trim().toLowerCase() : '';
+    let visible = 0;
+    lines.forEach((line) => {
+      const matches = !term || line.textContent.toLowerCase().includes(term);
+      line.hidden = !matches;
+      if (matches) {
+        visible += 1;
+      }
+    });
+    if (count) {
+      count.textContent = formatLineCount(visible);
+    }
+    if (emptyMessage) {
+      emptyMessage.hidden = visible > 0;
+    }
   }
 
   function initPanel(panel) {
-    const content = panel.querySelector('[data-log-content]');
-    if (!content) {
-      return;
-    }
-    const lines = content.textContent.split(/\r?\n/);
     const filterInput = panel.querySelector('[data-log-filter]');
     const clearButton = panel.querySelector('[data-log-clear]');
     const count = panel.querySelector('[data-log-count]');
-    panelState.set(panel, { content, count, filterInput, lines });
+    const emptyMessage = panel.querySelector('[data-log-empty]');
+    const lines = Array.from(panel.querySelectorAll('[data-log-line]'));
+    panelState.set(panel, { lines, count, filterInput, emptyMessage });
 
     if (filterInput) {
       filterInput.addEventListener('input', () => applyFilter(panel));
@@ -43,6 +51,8 @@
         }
       });
     }
+
+    applyFilter(panel);
   }
 
   function setActivePanel(key) {

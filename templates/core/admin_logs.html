@@ -66,13 +66,16 @@
           <button type="button" class="ghost-btn" data-log-clear>Limpar filtro</button>
         </div>
         {% if log.lines %}
-        <pre
-          class="radius-box log-lines"
-          data-log-content
-          tabindex="0"
-        >{{ log.lines|join:"\n" }}</pre>
+        <div class="log-lines" data-log-lines>
+          {% for line in log.lines %}
+          <div class="log-line" data-log-line>
+            <span class="log-line-prefix">{{ forloop.counter|stringformat:"02d" }}</span>
+            <code>{{ line|escape }}</code>
+          </div>
+          {% endfor %}
+        </div>
         {% else %}
-        <p class="helper-text">Nenhum registro foi encontrado para este arquivo.</p>
+        <p class="helper-text" data-log-empty>Nenhum registro foi encontrado para este arquivo.</p>
         {% endif %}
       </section>
       {% endfor %}
