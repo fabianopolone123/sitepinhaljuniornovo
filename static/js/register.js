@@ -322,7 +322,7 @@
   function initStepNavigator() {
     const form = document.getElementById('registration-form');
     const stepButtons = document.querySelectorAll('[data-step-target]');
-    const stepSections = document.querySelectorAll('[data-step-section]');
+    const stepSections = document.querySelectorAll('[data-main-step]');
     if (!form || !stepButtons.length) {
       return;
     }
@@ -336,9 +336,9 @@
         button.classList.toggle('is-active', button.dataset.stepTarget === step);
       });
       stepSections.forEach((section) => {
-        section.classList.toggle('is-visible', section.dataset.stepSection === step);
+        section.classList.toggle('is-visible', section.dataset.mainStep === step);
       });
-      const targetSection = document.querySelector(`[data-step-section="${step}"]`);
+      const targetSection = document.querySelector(`[data-main-step="${step}"]`);
       if (targetSection) {
         targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } else {

@@ -63,7 +63,7 @@
         </div>
 
         <section class="tab-pane is-active" data-step="initial">
-          <div class="step-section step-section--initial" data-step-section="initial">
+          <div class="step-section step-section--initial" data-main-step="initial">
             <div class="panel">
               <h2>Dados do responsável principal</h2>
               <div class="form-grid">
@@ -297,7 +297,7 @@
               </div>
             </div>
           </div>
-          <div class="step-section step-section--medical" data-step-section="medical">
+          <div class="step-section step-section--medical" data-main-step="medical">
             <div class="adventurer-manager" data-adventurer-manager>
               <div class="adventurer-tabs" data-adventurer-tabs></div>
               <div class="adventurer-blocks" data-adventurer-blocks>
@@ -313,7 +313,7 @@
               {% include 'core/_adventurer_block.html' with block=empty_adventurer index='__INDEX__' active=False is_template=True classes=classes %}
             </template>
           </div>
-          <div class="step-section step-section--termo" data-step-section="termo">
+          <div class="step-section step-section--termo" data-main-step="termo">
             <div class="panel term-panel">
               <h2>📸 Termo de autorização de uso de imagem</h2>
               <p class="term-lead">
