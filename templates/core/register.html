@@ -104,7 +104,7 @@
                 name="responsavel_nome"
                 placeholder="Nome"
                 required
-                value="{{ form_values.responsavel_nome|default:'' }}"
+                value="{{ form_values.responsavel_nome|default:\"\" }}"
               />
             </label>
             <label>
@@ -114,7 +114,7 @@
                 name="responsavel_sobrenome"
                 placeholder="Sobrenome"
                 required
-                value="{{ form_values.responsavel_sobrenome|default:'' }}"
+                value="{{ form_values.responsavel_sobrenome|default:\"\" }}"
               />
             </label>
             <label>
@@ -132,7 +132,7 @@
                 name="responsavel_cpf"
                 placeholder="CPF"
                 required
-                value="{{ form_values.responsavel_cpf|default:'' }}"
+                value="{{ form_values.responsavel_cpf|default:\"\" }}"
               />
             </label>
             <label>
@@ -142,7 +142,7 @@
                 name="responsavel_endereco"
                 placeholder="Rua, número, complemento"
                 required
-                value="{{ form_values.responsavel_endereco|default:'' }}"
+                value="{{ form_values.responsavel_endereco|default:\"\" }}"
               />
             </label>
             <label>
@@ -152,7 +152,7 @@
                 name="responsavel_username"
                 placeholder="Login"
                 required
-                value="{{ form_values.responsavel_username|default:'' }}"
+                value="{{ form_values.responsavel_username|default:\"\" }}"
               />
             </label>
             <label>
@@ -170,7 +170,7 @@
                 name="responsavel_email"
                 placeholder="email@example.com"
                 required
-                value="{{ form_values.responsavel_email|default:'' }}"
+                value="{{ form_values.responsavel_email|default:\"\" }}"
               />
             </label>
             <label>
@@ -180,7 +180,7 @@
                 name="responsavel_whatsapp"
                 placeholder="(99) 99999-9999"
                 required
-                value="{{ form_values.responsavel_whatsapp|default:'' }}"
+                value="{{ form_values.responsavel_whatsapp|default:\"\" }}"
               />
             </label>
             <label>
@@ -190,7 +190,7 @@
                 name="responsavel_legal_parentesco"
                 placeholder="Ex: Pai, Mãe, Responsável"
                 required
-                value="{{ form_values.responsavel_legal_parentesco|default:'' }}"
+                value="{{ form_values.responsavel_legal_parentesco|default:\"\" }}"
               />
             </label>
           </div>
@@ -204,7 +204,7 @@
                     type="text"
                     name="pai_nome"
                     required
-                    value="{{ form_values.pai_nome|default:'' }}"
+                    value="{{ form_values.pai_nome|default:\"\" }}"
                   />
                 </label>
                 <label>
@@ -213,7 +213,7 @@
                     type="email"
                     name="pai_email"
                     required
-                    value="{{ form_values.pai_email|default:'' }}"
+                    value="{{ form_values.pai_email|default:\"\" }}"
                   />
                 </label>
                 <label>
@@ -222,7 +222,7 @@
                     type="text"
                     name="pai_cpf"
                     required
-                    value="{{ form_values.pai_cpf|default:'' }}"
+                    value="{{ form_values.pai_cpf|default:\"\" }}"
                   />
                 </label>
                 <label>
@@ -231,7 +231,7 @@
                     type="text"
                     name="pai_whatsapp"
                     required
-                    value="{{ form_values.pai_whatsapp|default:'' }}"
+                    value="{{ form_values.pai_whatsapp|default:\"\" }}"
                   />
                 </label>
               </div>
@@ -243,7 +243,7 @@
                     type="text"
                     name="mae_nome"
                     required
-                    value="{{ form_values.mae_nome|default:'' }}"
+                    value="{{ form_values.mae_nome|default:\"\" }}"
                   />
                 </label>
                 <label>
@@ -252,7 +252,7 @@
                     type="email"
                     name="mae_email"
                     required
-                    value="{{ form_values.mae_email|default:'' }}"
+                    value="{{ form_values.mae_email|default:\"\" }}"
                   />
                 </label>
                 <label>
@@ -261,7 +261,7 @@
                     type="text"
                     name="mae_cpf"
                     required
-                    value="{{ form_values.mae_cpf|default:'' }}"
+                    value="{{ form_values.mae_cpf|default:\"\" }}"
                   />
                 </label>
                 <label>
@@ -270,7 +270,7 @@
                     type="text"
                     name="mae_whatsapp"
                     required
-                    value="{{ form_values.mae_whatsapp|default:'' }}"
+                    value="{{ form_values.mae_whatsapp|default:\"\" }}"
                   />
                 </label>
               </div>
@@ -314,7 +314,7 @@
                 name="assinatura_data"
                 data-signature-input
                 required
-                value="{{ form_values.assinatura_data|default:'' }}"
+                value="{{ form_values.assinatura_data|default:\"\" }}"
               />
             </div>
           <button type="submit" class="primary-btn">Enviar cadastro</button>

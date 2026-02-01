@@ -437,3 +437,9 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 - **Actions**: Troquei o include do template `adventurer-template` para usar a variável `empty_adventurer` e passei esse dicionário no contexto, garantindo que o template de clonagem sempre tenha um exemplo válido.
 - **Technical**: templates/core/register.html, core/views.py
 - **Notes**: Depois de testar, confirme se `/cadastro/` monta o bloco em branco sem erros.
+
+## 2026-02-02T00:10:00+00:00Z — Corrige defaults
+- **Request**: TemplateSyntaxError default requires 2 arguments 1 provided
+- **Actions**: Ajustei os filtros |default:'' para |default:"" no template de cadastro para não quebrar o parsing.
+- **Technical**: templates/core/register.html
+- **Notes**: Nenhuma.
