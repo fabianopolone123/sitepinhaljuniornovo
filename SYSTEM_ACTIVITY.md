@@ -438,6 +438,12 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 - **Technical**: templates/core/register.html, core/views.py
 - **Notes**: Depois de testar, confirme se `/cadastro/` monta o bloco em branco sem erros.
 
+## 2026-02-02T00:12:00+00:00Z — Alinha defaults no bloco
+- **Request**: TemplateSyntaxError default requires 2 arguments 1 provided
+- **Actions**: Substituí todos os filtros `|default:''` do bloco reutilizável por `|default:""` (e os casos com valores como `São Carlos` e `SP` também recebem aspas duplas), garantindo que a sintaxe seja válida e não gere o erro na nova versão do template.
+- **Technical**: templates/core/_adventurer_block.html
+- **Notes**: Nenhuma.
+
 ## 2026-02-02T00:10:00+00:00Z — Corrige defaults
 - **Request**: TemplateSyntaxError default requires 2 arguments 1 provided
 - **Actions**: Ajustei os filtros |default:'' para |default:"" no template de cadastro para não quebrar o parsing.
