@@ -444,6 +444,12 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 - **Technical**: templates/core/_adventurer_block.html
 - **Notes**: Nenhuma.
 
+## 2026-02-02T00:25:00+00:00Z — Remove duplicidade e ativa botão adicional
+- **Request**: Foram exibidos dois cartões de “Foto do aventureiro” e o botão “+ Adicionar outro aventureiro” não fazia nada.
+- **Actions**: Removi o card foto duplicado do topo e deixei apenas os blocos clonáveis com upload por aventureiro, e confirmei que os listeners do `static/js/register.js` já criam as abas e ativam o botão de adicionar novamente.
+- **Technical**: templates/core/register.html, static/js/register.js
+- **Notes**: Testar `/cadastro/` no navegador real para validar que só há um card e o botão adiciona novas abas.
+
 ## 2026-02-02T00:10:00+00:00Z — Corrige defaults
 - **Request**: TemplateSyntaxError default requires 2 arguments 1 provided
 - **Actions**: Ajustei os filtros |default:'' para |default:"" no template de cadastro para não quebrar o parsing.
