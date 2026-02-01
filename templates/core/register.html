@@ -65,252 +65,251 @@
         <section class="tab-pane is-active" data-step="initial">
           <div class="step-section step-section--initial" data-step-section="initial">
             <div class="adventurer-manager" data-adventurer-manager>
-            <div class="adventurer-tabs" data-adventurer-tabs></div>
-            <div class="adventurer-blocks" data-adventurer-blocks>
-            {% for adventurer in adventurers_data %}
-              {% include 'core/_adventurer_block.html' with block=adventurer index=forloop.counter0 active=forloop.first is_template=False classes=classes %}
-            {% endfor %}
-            </div>
-            <button type="button" class="ghost-btn add-adventurer-btn" data-action="add-adventurer">
-              + Adicionar outro aventureiro
-            </button>
-          </div>
-          <template id="adventurer-template">
-            {% include 'core/_adventurer_block.html' with block=empty_adventurer index='__INDEX__' active=False is_template=True classes=classes %}
-          </template>
-        <div class="panel">
-          <h2>Dados do responsável principal</h2>
-          <div class="form-grid">
-            <label>
-              Nome completo
-              <input
-                type="text"
-                name="responsavel_nome"
-                placeholder="Nome"
-                required
-                value='{{ form_values.responsavel_nome|default:"" }}'
-              />
-            </label>
-            <label>
-              Sobrenome
-              <input
-                type="text"
-                name="responsavel_sobrenome"
-                placeholder="Sobrenome"
-                required
-                value='{{ form_values.responsavel_sobrenome|default:"" }}'
-              />
-            </label>
-            <label>
-              Sexo do responsável
-              <select name="responsavel_sexo" required>
-                <option value="">Selecione</option>
-                <option value="F" {% if form_values.responsavel_sexo == 'F' %}selected{% endif %}>Feminino</option>
-                <option value="M" {% if form_values.responsavel_sexo == 'M' %}selected{% endif %}>Masculino</option>
-              </select>
-            </label>
-            <label>
-              CPF
-              <input
-                type="text"
-                name="responsavel_cpf"
-                placeholder="CPF"
-                required
-                value='{{ form_values.responsavel_cpf|default:"" }}'
-              />
-            </label>
-            <label>
-              Endereço
-              <input
-                type="text"
-                name="responsavel_endereco"
-                placeholder="Rua, número, complemento"
-                required
-                value='{{ form_values.responsavel_endereco|default:"" }}'
-              />
-            </label>
-            <label>
-              Nome de usuário
-              <input
-                type="text"
-                name="responsavel_username"
-                placeholder="Login"
-                required
-                value='{{ form_values.responsavel_username|default:"" }}'
-              />
-            </label>
-            <label>
-              Senha (4 dígitos)
-              <input type="password" name="responsavel_password1" placeholder="Senha" required />
-            </label>
-            <label>
-              Confirme a senha
-              <input type="password" name="responsavel_password2" placeholder="Confirme" required />
-            </label>
-            <label>
-              E-mail
-              <input
-                type="email"
-                name="responsavel_email"
-                placeholder="email@example.com"
-                required
-                value='{{ form_values.responsavel_email|default:"" }}'
-              />
-            </label>
-            <label>
-              WhatsApp
-              <input
-                type="text"
-                name="responsavel_whatsapp"
-                placeholder="(99) 99999-9999"
-                required
-                value='{{ form_values.responsavel_whatsapp|default:"" }}'
-              />
-            </label>
-            <label>
-              Grau de parentesco com o aventureiro
-              <input
-                type="text"
-                name="responsavel_legal_parentesco"
-                placeholder="Ex: Pai, Mãe, Responsável"
-                required
-                value='{{ form_values.responsavel_legal_parentesco|default:"" }}'
-              />
-            </label>
-          </div>
-
-            <div class="family-grid">
-              <div>
-                <h3>Pai</h3>
-                <label>
-                  Nome
-                  <input
-                    type="text"
-                    name="pai_nome"
-                    required
-                    value='{{ form_values.pai_nome|default:"" }}'
-                  />
-                </label>
-                <label>
-                  E-mail
-                  <input
-                    type="email"
-                    name="pai_email"
-                    required
-                    value='{{ form_values.pai_email|default:"" }}'
-                  />
-                </label>
-                <label>
-                  CPF
-                  <input
-                    type="text"
-                    name="pai_cpf"
-                    required
-                    value='{{ form_values.pai_cpf|default:"" }}'
-                  />
-                </label>
-                <label>
-                  WhatsApp
-                  <input
-                    type="text"
-                    name="pai_whatsapp"
-                    required
-                    value='{{ form_values.pai_whatsapp|default:"" }}'
-                  />
-                </label>
+              <div class="adventurer-tabs" data-adventurer-tabs></div>
+              <div class="adventurer-blocks" data-adventurer-blocks>
+                {% for adventurer in adventurers_data %}
+                {% include 'core/_adventurer_block.html' with block=adventurer index=forloop.counter0 active=forloop.first is_template=False classes=classes %}
+                {% endfor %}
               </div>
-              <div>
-                <h3>Mãe</h3>
-                <label>
-                  Nome
-                  <input
-                    type="text"
-                    name="mae_nome"
-                    required
-                    value='{{ form_values.mae_nome|default:"" }}'
-                  />
-                </label>
-                <label>
-                  E-mail
-                  <input
-                    type="email"
-                    name="mae_email"
-                    required
-                    value='{{ form_values.mae_email|default:"" }}'
-                  />
-                </label>
-                <label>
-                  CPF
-                  <input
-                    type="text"
-                    name="mae_cpf"
-                    required
-                    value='{{ form_values.mae_cpf|default:"" }}'
-                  />
-                </label>
-                <label>
-                  WhatsApp
-                  <input
-                    type="text"
-                    name="mae_whatsapp"
-                    required
-                    value='{{ form_values.mae_whatsapp|default:"" }}'
-                  />
-                </label>
-              </div>
-            </div>
-        </div>
-          <div class="declaration-panel">
-            <div class="declaration-row">
-              <label>
-                Local
-                <input type="text" name="declaracao_local" value="São Carlos" readonly />
-              </label>
-              <label>
-                Data
-                <input type="text" name="declaracao_data" data-today-date readonly />
-              </label>
-            </div>
-            <label class="checkbox-field">
-              <input type="checkbox" name="confirmacao_verdadeiro" required />
-              Declaro que todas as informações prestadas acima são verdadeiras.
-            </label>
-            <div class="signature-field signature-field--responsible">
-              <div>
-                <p>Assinatura digital</p>
-                <p class="helper">Clique em “Assinar” para abrir a janela flutuante.</p>
-              </div>
-              <button
-                type="button"
-                class="primary-btn signature-btn"
-                data-action="open-signature"
-                data-signature-target="responsible-signature"
-              >
-                Assinar agora
+              <button type="button" class="ghost-btn add-adventurer-btn" data-action="add-adventurer">
+                + Adicionar outro aventureiro
               </button>
-              <div
-                class="helper signature-preview"
-                data-signature-preview
-                data-signature-for="responsible-signature"
-              >
-                <span data-signature-preview-text>Sem assinatura ainda.</span>
-                <img
-                  class="signature-preview-img"
-                  data-signature-preview-img
-                  src=""
-                  alt="Prévia da assinatura"
-                  hidden
+            </div>
+            <template id="adventurer-template">
+              {% include 'core/_adventurer_block.html' with block=empty_adventurer index='__INDEX__' active=False is_template=True classes=classes %}
+            </template>
+            <div class="panel">
+              <h2>Dados do responsável principal</h2>
+              <div class="form-grid">
+                <label>
+                  Nome completo
+                  <input
+                    type="text"
+                    name="responsavel_nome"
+                    placeholder="Nome"
+                    required
+                    value='{{ form_values.responsavel_nome|default:"" }}'
+                  />
+                </label>
+                <label>
+                  Sobrenome
+                  <input
+                    type="text"
+                    name="responsavel_sobrenome"
+                    placeholder="Sobrenome"
+                    required
+                    value='{{ form_values.responsavel_sobrenome|default:"" }}'
+                  />
+                </label>
+                <label>
+                  Sexo do responsável
+                  <select name="responsavel_sexo" required>
+                    <option value="">Selecione</option>
+                    <option value="F" {% if form_values.responsavel_sexo == 'F' %}selected{% endif %}>Feminino</option>
+                    <option value="M" {% if form_values.responsavel_sexo == 'M' %}selected{% endif %}>Masculino</option>
+                  </select>
+                </label>
+                <label>
+                  CPF
+                  <input
+                    type="text"
+                    name="responsavel_cpf"
+                    placeholder="CPF"
+                    required
+                    value='{{ form_values.responsavel_cpf|default:"" }}'
+                  />
+                </label>
+                <label>
+                  Endereço
+                  <input
+                    type="text"
+                    name="responsavel_endereco"
+                    placeholder="Rua, número, complemento"
+                    required
+                    value='{{ form_values.responsavel_endereco|default:"" }}'
+                  />
+                </label>
+                <label>
+                  Nome de usuário
+                  <input
+                    type="text"
+                    name="responsavel_username"
+                    placeholder="Login"
+                    required
+                    value='{{ form_values.responsavel_username|default:"" }}'
+                  />
+                </label>
+                <label>
+                  Senha (4 dígitos)
+                  <input type="password" name="responsavel_password1" placeholder="Senha" required />
+                </label>
+                <label>
+                  Confirme a senha
+                  <input type="password" name="responsavel_password2" placeholder="Confirme" required />
+                </label>
+                <label>
+                  E-mail
+                  <input
+                    type="email"
+                    name="responsavel_email"
+                    placeholder="email@example.com"
+                    required
+                    value='{{ form_values.responsavel_email|default:"" }}'
+                  />
+                </label>
+                <label>
+                  WhatsApp
+                  <input
+                    type="text"
+                    name="responsavel_whatsapp"
+                    placeholder="(99) 99999-9999"
+                    required
+                    value='{{ form_values.responsavel_whatsapp|default:"" }}'
+                  />
+                </label>
+                <label>
+                  Grau de parentesco com o aventureiro
+                  <input
+                    type="text"
+                    name="responsavel_legal_parentesco"
+                    placeholder="Ex: Pai, Mãe, Responsável"
+                    required
+                    value='{{ form_values.responsavel_legal_parentesco|default:"" }}'
+                  />
+                </label>
+              </div>
+              <div class="family-grid">
+                <div>
+                  <h3>Pai</h3>
+                  <label>
+                    Nome
+                    <input
+                      type="text"
+                      name="pai_nome"
+                      required
+                      value='{{ form_values.pai_nome|default:"" }}'
+                    />
+                  </label>
+                  <label>
+                    E-mail
+                    <input
+                      type="email"
+                      name="pai_email"
+                      required
+                      value='{{ form_values.pai_email|default:"" }}'
+                    />
+                  </label>
+                  <label>
+                    CPF
+                    <input
+                      type="text"
+                      name="pai_cpf"
+                      required
+                      value='{{ form_values.pai_cpf|default:"" }}'
+                    />
+                  </label>
+                  <label>
+                    WhatsApp
+                    <input
+                      type="text"
+                      name="pai_whatsapp"
+                      required
+                      value='{{ form_values.pai_whatsapp|default:"" }}'
+                    />
+                  </label>
+                </div>
+                <div>
+                  <h3>Mãe</h3>
+                  <label>
+                    Nome
+                    <input
+                      type="text"
+                      name="mae_nome"
+                      required
+                      value='{{ form_values.mae_nome|default:"" }}'
+                    />
+                  </label>
+                  <label>
+                    E-mail
+                    <input
+                      type="email"
+                      name="mae_email"
+                      required
+                      value='{{ form_values.mae_email|default:"" }}'
+                    />
+                  </label>
+                  <label>
+                    CPF
+                    <input
+                      type="text"
+                      name="mae_cpf"
+                      required
+                      value='{{ form_values.mae_cpf|default:"" }}'
+                    />
+                  </label>
+                  <label>
+                    WhatsApp
+                    <input
+                      type="text"
+                      name="mae_whatsapp"
+                      required
+                      value='{{ form_values.mae_whatsapp|default:"" }}'
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="declaration-panel">
+              <div class="declaration-row">
+                <label>
+                  Local
+                  <input type="text" name="declaracao_local" value="São Carlos" readonly />
+                </label>
+                <label>
+                  Data
+                  <input type="text" name="declaracao_data" data-today-date readonly />
+                </label>
+              </div>
+              <label class="checkbox-field">
+                <input type="checkbox" name="confirmacao_verdadeiro" required />
+                Declaro que todas as informações prestadas acima são verdadeiras.
+              </label>
+              <div class="signature-field signature-field--responsible">
+                <div>
+                  <p>Assinatura digital</p>
+                  <p class="helper">Clique em “Assinar” para abrir a janela flutuante.</p>
+                </div>
+                <button
+                  type="button"
+                  class="primary-btn signature-btn"
+                  data-action="open-signature"
+                  data-signature-target="responsible-signature"
+                >
+                  Assinar agora
+                </button>
+                <div
+                  class="helper signature-preview"
+                  data-signature-preview
+                  data-signature-for="responsible-signature"
+                >
+                  <span data-signature-preview-text>Sem assinatura ainda.</span>
+                  <img
+                    class="signature-preview-img"
+                    data-signature-preview-img
+                    src=""
+                    alt="Prévia da assinatura"
+                    hidden
+                  />
+                </div>
+                <input
+                  type="hidden"
+                  id="responsible-signature"
+                  name="assinatura_data"
+                  data-signature-field
+                  required
+                  value='{{ form_values.assinatura_data|default:"" }}'
                 />
               </div>
-              <input
-                type="hidden"
-                id="responsible-signature"
-                name="assinatura_data"
-                data-signature-field
-                required
-                value='{{ form_values.assinatura_data|default:"" }}'
-              />
-            </div>
               <button type="submit" class="primary-btn">Enviar cadastro</button>
             </div>
           </div>

@@ -485,3 +485,9 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 - **Actions**: Criei o painel do termo com os campos de identificação, assinatura e data no Step 3, conectei o botão da aba ao novo `step-section` e acrescentei os inputs/assinatura obrigatórios no backend; o CSS/JS agora mostram a aba 03 e rolam para o termo.
 - **Technical**: templates/core/register.html, static/css/register.css, static/js/register.js, core/views.py; `python manage.py test`.
 - **Notes**: Testes (`python manage.py test`).
+
+## 2026-02-01T19:05:57+00:00Z — Corrige abas da ficha e termo
+- **Request**: clico na aba ficha médica e termo e os 2 ficam em branco
+- **Actions**: Reestruturei o `section` do formulário para que os blocos das etapas fiquem como `step-section` irmãos, reposicionei o painel do responsável/termo dentro deles e mantive o botão de envio visível, garantindo que trocar de aba mostre o conteúdo apropriado.
+- **Technical**: templates/core/register.html; `python manage.py test`.
+- **Notes**: Testes (`python manage.py test`).
