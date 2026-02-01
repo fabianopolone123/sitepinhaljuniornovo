@@ -98,7 +98,7 @@
           return null;
         }
         const stored = JSON.parse(raw);
-        if (!stored?.data) {
+        if (!stored || !stored.data) {
           sessionStorage.removeItem(STORAGE_KEY);
           return null;
         }
@@ -281,7 +281,7 @@
     }
 
     function createBlockFromTemplate() {
-      if (!template?.content?.firstElementChild) {
+      if (!template || !template.content || !template.content.firstElementChild) {
         return null;
       }
       const clone = template.content.firstElementChild.cloneNode(true);
@@ -380,11 +380,12 @@
     const openButtons = document.querySelectorAll('[data-action="open-signature"]');
 
     function getPreviewElements(targetId) {
-      const previewRoot =
-        document.querySelector(`[data-signature-preview][data-signature-for="${targetId}"]`);
+      var previewRoot = document.querySelector(
+        `[data-signature-preview][data-signature-for="${targetId}"]`,
+      );
       return {
-        previewText: previewRoot?.querySelector('[data-signature-preview-text]') ?? null,
-        previewImage: previewRoot?.querySelector('[data-signature-preview-img]') ?? null,
+        previewText: previewRoot ? previewRoot.querySelector('[data-signature-preview-text]') : null,
+        previewImage: previewRoot ? previewRoot.querySelector('[data-signature-preview-img]') : null,
       };
     }
 
@@ -449,21 +450,36 @@
       }
     }
 
+    function getTouchValue(event, property) {
+      if (event.touches && event.touches[0] && typeof event.touches[0][property] !== 'undefined') {
+        return event.touches[0][property];
+      }
+      if (
+        event.changedTouches &&
+        event.changedTouches[0] &&
+        typeof event.changedTouches[0][property] !== 'undefined'
+      ) {
+        return event.changedTouches[0][property];
+      }
+      if (typeof event[property] !== 'undefined') {
+        return event[property];
+      }
+      return 0;
+    }
+
     function getCoords(event) {
       const rect = canvas.getBoundingClientRect();
-      const clientX =
-        event.touches?.[0]?.clientX ?? event.changedTouches?.[0]?.clientX ?? event.clientX;
-      const clientY =
-        event.touches?.[0]?.clientY ?? event.changedTouches?.[0]?.clientY ?? event.clientY;
-      const x = (clientX ?? 0) - rect.left;
-      const y = (clientY ?? 0) - rect.top;
+      const clientX = getTouchValue(event, 'clientX');
+      const clientY = getTouchValue(event, 'clientY');
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
       return { x, y };
     }
 
     function start(event) {
       event.preventDefault();
       drawing = true;
-      activePointerId = event.pointerId ?? null;
+      activePointerId = event.pointerId != null ? event.pointerId : null;
       const { x, y } = getCoords(event);
       ctx.beginPath();
       ctx.moveTo(x, y);

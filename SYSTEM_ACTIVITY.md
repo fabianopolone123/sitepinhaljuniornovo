@@ -503,3 +503,9 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 - **Actions**: Simplifiquei a visibilidade das `step-section` para usar a classe `.is-visible` e atualizei `setStep` para aplicar esse estado e rolar para o bloco selecionado, apagando a dependência do atributo `data-active-step` e garantindo que as abas 02 e 03 mostrem seus formulários.
 - **Technical**: static/css/register.css, static/js/register.js; `python manage.py test`.
 - **Notes**: Testes (`python manage.py test`).
+
+## 2026-02-01T16:22:35+00:00Z — Compatibiliza o JS das abas e uploads
+- **Request**: no mudou nada
+- **Actions**: Eliminei o optional chaining e o nullish coalescing do `static/js/register.js`, substituindo por verificações explícitas para não travar em navegadores mais antigos; o script agora executa normalmente, permitindo que as abas alternem visibilidade, o botão “+ Adicionar outro aventureiro” funcione e o pré-visualizador de foto reapareça.
+- **Technical**: static/js/register.js; `python manage.py test`.
+- **Notes**: Testes (`python manage.py test`).
