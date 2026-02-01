@@ -1,0 +1,448 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cadastro de Aventureiros | Clube de Aventureiros Pinhal Junior</title>
+    <link rel="stylesheet" href="{% static 'css/register-adventurer.css' %}" />
+  </head>
+  <body class="adventurer-page new-flow">
+    <main class="adventurer-wrapper">
+      <header class="hero">
+        <div>
+          <p class="tag">Fluxo guiado</p>
+          <h1>Cadastro simplificado</h1>
+          <p>
+            Estruturei o cadastro em quatro passos mantendo o estilo do site: responsável/pais →
+            aventureiros → ficha médica → termo de autorização. O botão “Adicionar aventureiro”
+            cria novos slots para cada criança.
+          </p>
+        </div>
+        <img
+          src="{% static 'images/logo-removebg-preview.png' %}"
+          alt="Logo Clube de Aventureiros"
+        />
+      </header>
+
+      <div class="adventurer-stepper new-stepper" role="tablist">
+        <button type="button" class="step-btn is-active" data-flow-step="1">01 • Responsável e pais</button>
+        <button type="button" class="step-btn" data-flow-step="2">02 • Aventureiros</button>
+        <button type="button" class="step-btn" data-flow-step="3">03 • Ficha médica</button>
+        <button type="button" class="step-btn" data-flow-step="4">04 • Termo</button>
+      </div>
+
+      <form method="post" class="adventurer-form new-flow-form">
+        {% csrf_token %}
+        <input type="hidden" name="flow_step" value="1" id="flow-step" />
+
+        <section class="flow-step flow-step--active" data-flow-step-content="1">
+          <div class="flow-card">
+            <h2>Responsável legal</h2>
+            <div class="grid two-columns">
+              <label class="field-group">
+                Nome completo
+                <input type="text" name="responsavel_nome" required />
+              </label>
+              <label class="field-group">
+                Sobrenome
+                <input type="text" name="responsavel_sobrenome" required />
+              </label>
+            </div>
+            <div class="grid two-columns">
+              <label class="field-group">
+                CPF
+                <input type="text" name="responsavel_cpf" required />
+              </label>
+              <label class="field-group">
+                Grau de parentesco
+                <input type="text" name="responsavel_relationship_degree" required />
+              </label>
+            </div>
+            <div class="grid two-columns">
+              <label class="field-group">
+                WhatsApp
+                <input type="text" name="responsavel_whatsapp" required />
+              </label>
+              <label class="field-group">
+                Telefone fixo (opcional)
+                <input type="text" name="responsavel_telefone" />
+              </label>
+            </div>
+            <div class="grid two-columns">
+              <label class="field-group">
+                Av / Rua
+                <input type="text" name="responsavel_street" required />
+              </label>
+              <label class="field-group">
+                Número
+                <input type="text" name="responsavel_house_number" required />
+              </label>
+            </div>
+            <div class="grid two-columns">
+              <label class="field-group">
+                Bairro
+                <input type="text" name="responsavel_neighborhood" required />
+              </label>
+              <label class="field-group">
+                CEP
+                <input type="text" name="responsavel_postal_code" required />
+              </label>
+            </div>
+            <div class="grid two-columns">
+              <label class="field-group">
+                Cidade
+                <input type="text" name="responsavel_city" required />
+              </label>
+              <label class="field-group">
+                Estado
+                <input type="text" name="responsavel_state" required />
+              </label>
+            </div>
+          </div>
+          <div class="flow-card">
+            <h2>Pais ou responsáveis adicionais</h2>
+            <div class="grid two-columns">
+              <label class="field-group">
+                Nome completo do pai
+                <input type="text" name="pai_nome" />
+              </label>
+              <label class="field-group">
+                Nome completo da mãe
+                <input type="text" name="mae_nome" />
+              </label>
+            </div>
+            <p class="hint">Os contatos dos pais podem ser copiados automaticamente do responsável.</p>
+          </div>
+          <div class="signatures-grid">
+            <button
+              type="button"
+              class="ghost-btn signature-trigger"
+              data-trigger="responsavel"
+              data-target-input="#responsavel-signature-input"
+              data-target-preview="#responsavel-signature-preview"
+            >
+              Assinar dados do responsável
+            </button>
+            <button
+              type="button"
+              class="ghost-btn signature-trigger"
+              data-trigger="parent"
+              data-target-input="#parent-signature-input"
+              data-target-preview="#parent-signature-preview"
+            >
+              Assinar dados dos pais
+            </button>
+          </div>
+          <input type="hidden" name="responsavel_signature" id="responsavel-signature-input" />
+          <div class="signature-preview" id="responsavel-signature-preview">
+            <span>Nenhum registro ainda</span>
+          </div>
+          <input type="hidden" name="parent_signature" id="parent-signature-input" />
+          <div class="signature-preview" id="parent-signature-preview">
+            <span>Nenhum registro ainda</span>
+          </div>
+        </section>
+
+        <section class="flow-step" data-flow-step-content="2">
+          <div class="flow-card">
+            <div class="flow-card__header">
+              <h2>Aventureiros</h2>
+              <button type="button" class="ghost-btn" data-add-slot>Adicionar aventureiro</button>
+            </div>
+            <div class="slot-status">
+              <p>Slots habilitados: <span data-slot-count>1</span>/5</p>
+            </div>
+
+            {% for slot in adventurer_slots %}
+            <div class="adventure-slot-panel" data-slot-panel data-slot="{{ slot }}" {% if not forloop.first %}hidden{% endif %}>
+              <div class="slot-heading">
+                <p class="slot-heading__title" data-slot-heading="adventure" data-slot="{{ slot }}">
+                  Aventura {{ slot }} • <span data-slot-name-label="{{ slot }}"></span>
+                </p>
+                <p class="slot-heading__sub">Passo 2 • dados básicos</p>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Nome completo
+                  <input type="text" name="adventure_full_name_{{ slot }}" required data-slot-name-input="{{ slot }}" />
+                </label>
+                <label class="field-group">
+                  Data de nascimento
+                  <input type="date" name="adventure_birth_date_{{ slot }}" required />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  WhatsApp do responsável
+                  <input
+                    type="text"
+                    name="adventure_whatsapp_{{ slot }}"
+                    data-auto-from="responsavel_whatsapp"
+                  />
+                </label>
+                <label class="field-group">
+                  Av / Rua
+                  <input
+                    type="text"
+                    name="adventure_street_{{ slot }}"
+                    data-auto-from="responsavel_street"
+                  />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Bairro
+                  <input
+                    type="text"
+                    name="adventure_neighborhood_{{ slot }}"
+                    data-auto-from="responsavel_neighborhood"
+                  />
+                </label>
+                <label class="field-group">
+                  Cidade
+                  <input
+                    type="text"
+                    name="adventure_city_{{ slot }}"
+                    data-auto-from="responsavel_city"
+                  />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Escola
+                  <input type="text" name="adventure_school_{{ slot }}" required />
+                </label>
+                <label class="field-group">
+                  Série / ano
+                  <input type="text" name="adventure_grade_{{ slot }}" required />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  RG
+                  <input type="text" name="adventure_rg_{{ slot }}" />
+                </label>
+                <label class="field-group">
+                  Órgão expedidor
+                  <input type="text" name="adventure_rg_issuer_{{ slot }}" />
+                </label>
+              </div>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  CPF
+                  <input type="text" name="adventure_cpf_{{ slot }}" />
+                </label>
+                <label class="field-group">
+                  Certidão (opcional)
+                  <input type="text" name="adventure_certidao_{{ slot }}" />
+                </label>
+              </div>
+              <div class="signatures-grid">
+                <button
+                  type="button"
+                  class="ghost-btn signature-trigger"
+                  data-trigger="adventure-data"
+                  data-target-input="#adventure-data-signature-input-{{ slot }}"
+                  data-target-preview="#adventure-data-signature-preview-{{ slot }}"
+                  data-slot="{{ slot }}"
+                >
+                  Assinar dados do aventureiro
+                </button>
+              </div>
+              <input
+                type="hidden"
+                name="adventure_data_signature_{{ slot }}"
+                id="adventure-data-signature-input-{{ slot }}"
+              />
+              <div class="signature-preview" id="adventure-data-signature-preview-{{ slot }}">
+                <span>Nenhum registro ainda</span>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </section>
+
+        <section class="flow-step" data-flow-step-content="3">
+          <div class="flow-card">
+            <h2>Ficha médica (um bloco por aventureiro)</h2>
+            {% for slot in adventurer_slots %}
+            <div class="medical-slot-panel" data-medical-slot="{{ slot }}" {% if not forloop.first %}hidden{% endif %}>
+              <h3>Aventureiro {{ slot }}</h3>
+              <div class="grid two-columns">
+                <label class="field-group">
+                  Possui plano de saúde?
+                  <select name="medical_plan_{{ slot }}">
+                    <option value="">Selecione</option>
+                    <option value="sim">Sim</option>
+                    <option value="nao">Não</option>
+                  </select>
+                </label>
+                <label class="field-group">
+                  Número do plano
+                  <input type="text" name="medical_plan_number_{{ slot }}" />
+                </label>
+              </div>
+              <label class="field-group">
+                Tipo sanguíneo
+                <input type="text" name="medical_blood_type_{{ slot }}" />
+              </label>
+              <label class="checkbox-field">
+                <input type="checkbox" name="medical_confirmation_{{ slot }}" value="on" required />
+                Declaro que os dados médicos fornecidos são verdadeiros.
+              </label>
+              <div class="signatures-grid">
+                <button
+                  type="button"
+                  class="ghost-btn signature-trigger"
+                  data-trigger="medical"
+                  data-target-input="#medical-signature-input-{{ slot }}"
+                  data-target-preview="#medical-signature-preview-{{ slot }}"
+                  data-slot="{{ slot }}"
+                >
+                  Assinar ficha médica
+                </button>
+              </div>
+              <input
+                type="hidden"
+                name="medical_signature_{{ slot }}"
+                id="medical-signature-input-{{ slot }}"
+              />
+              <div class="signature-preview" id="medical-signature-preview-{{ slot }}">
+                <span>Nenhum registro ainda</span>
+              </div>
+              <hr />
+            </div>
+            {% endfor %}
+          </div>
+        </section>
+
+        <section class="flow-step" data-flow-step-content="4">
+          <div class="flow-card">
+            <h2>Termo de autorização</h2>
+            {% for slot in adventurer_slots %}
+            <div class="term-slot-panel" data-term-slot="{{ slot }}" {% if not forloop.first %}hidden{% endif %}>
+              <h3>{{ slot }} • Termo do aventureiro</h3>
+              <p>Aventureiro: <span data-term-child-name="{{ slot }}">Nome do aventureiro</span></p>
+              <label class="checkbox-field">
+                <input type="checkbox" name="term_confirmation_{{ slot }}" value="on" required />
+                Declaro que os dados acima estão corretos e autorizo a utilização da imagem do menor.
+              </label>
+              <div class="signatures-grid">
+                <button
+                  type="button"
+                  class="ghost-btn signature-trigger"
+                  data-trigger="adventurer"
+                  data-target-input="#term-signature-input-{{ slot }}"
+                  data-target-preview="#term-signature-preview-{{ slot }}"
+                  data-slot="{{ slot }}"
+                >
+                  Assinar o termo
+                </button>
+              </div>
+              <input
+                type="hidden"
+                name="term_signature_{{ slot }}"
+                id="term-signature-input-{{ slot }}"
+              />
+              <div class="signature-preview" id="term-signature-preview-{{ slot }}">
+                <span>Nenhum registro ainda</span>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </section>
+
+        <div class="form-navigation">
+          <button type="button" class="ghost-btn" data-step-prev>Voltar</button>
+          <button type="button" class="ghost-btn" data-step-next>Próximo</button>
+          <button type="submit" class="primary-btn hidden" data-step-submit>Concluir cadastro</button>
+        </div>
+      </form>
+      <div class="signature-modal" id="responsavel-signature-modal" aria-hidden="true">
+        <div class="signature-modal__content" role="dialog" aria-modal="true" aria-label="Assinar dados do responsável">
+          <div class="signature-modal__header">
+            <strong>Assine os dados do responsável</strong>
+            <button type="button" class="signature-modal__close" data-close-signature aria-label="Fechar janela">×</button>
+          </div>
+          <p class="signature-modal__hint">Use o dedo ou o mouse para desenhar.</p>
+          <canvas tabindex="0"></canvas>
+          <div class="signature-modal__actions">
+            <button type="button" class="ghost-btn" data-clear-signature>Limpar</button>
+            <button type="button" class="primary-btn" data-save-signature>Salvar assinatura</button>
+          </div>
+        </div>
+      </div>
+      <div class="signature-modal" id="parent-signature-modal" aria-hidden="true">
+        <div class="signature-modal__content" role="dialog" aria-modal="true" aria-label="Assinar dados dos pais">
+          <div class="signature-modal__header">
+            <strong>Assine os dados dos pais</strong>
+            <button type="button" class="signature-modal__close" data-close-signature aria-label="Fechar janela">×</button>
+          </div>
+          <p class="signature-modal__hint">Use o dedo ou o mouse para desenhar.</p>
+          <canvas tabindex="0"></canvas>
+          <div class="signature-modal__actions">
+            <button type="button" class="ghost-btn" data-clear-signature>Limpar</button>
+            <button type="button" class="primary-btn" data-save-signature>Salvar assinatura</button>
+          </div>
+        </div>
+      </div>
+      <div class="signature-modal" id="medical-signature-modal" aria-hidden="true">
+        <div class="signature-modal__content" role="dialog" aria-modal="true" aria-label="Assinar ficha médica">
+          <div class="signature-modal__header">
+            <strong>Assine a ficha médica</strong>
+            <button type="button" class="signature-modal__close" data-close-signature aria-label="Fechar janela">×</button>
+          </div>
+          <p class="signature-modal__hint">Use o dedo ou o mouse para desenhar.</p>
+          <canvas tabindex="0"></canvas>
+          <div class="signature-modal__actions">
+            <button type="button" class="ghost-btn" data-clear-signature>Limpar</button>
+            <button type="button" class="primary-btn" data-save-signature>Salvar assinatura</button>
+          </div>
+        </div>
+      </div>
+      <div class="signature-modal" id="adventure-data-signature-modal" aria-hidden="true">
+        <div class="signature-modal__content" role="dialog" aria-modal="true" aria-label="Assinar dados do aventureiro">
+          <div class="signature-modal__header">
+            <strong>Assine os dados do aventureiro</strong>
+            <button type="button" class="signature-modal__close" data-close-signature aria-label="Fechar janela">×</button>
+          </div>
+          <p class="signature-modal__hint">Use o dedo ou o mouse para desenhar.</p>
+          <canvas tabindex="0"></canvas>
+          <div class="signature-modal__actions">
+            <button type="button" class="ghost-btn" data-clear-signature>Limpar</button>
+            <button type="button" class="primary-btn" data-save-signature>Salvar assinatura</button>
+          </div>
+        </div>
+      </div>
+      <div class="signature-modal" id="adventurer-signature-modal" aria-hidden="true">
+        <div class="signature-modal__content" role="dialog" aria-modal="true" aria-label="Assinar o termo">
+          <div class="signature-modal__header">
+            <strong>Assine o termo</strong>
+            <button type="button" class="signature-modal__close" data-close-signature aria-label="Fechar janela">×</button>
+          </div>
+          <p class="signature-modal__hint">Use o dedo ou o mouse para desenhar.</p>
+          <canvas tabindex="0"></canvas>
+          <div class="signature-modal__actions">
+            <button type="button" class="ghost-btn" data-clear-signature>Limpar</button>
+            <button type="button" class="primary-btn" data-save-signature>Salvar assinatura</button>
+          </div>
+        </div>
+      </div>
+      <div class="form-error-modal" id="form-error-modal" aria-hidden="true">
+        <div class="form-error-modal__content" role="alertdialog" aria-modal="true">
+          <h3>Campos pendentes</h3>
+          <p>
+            Veja onde estão os campos pendentes e clique em “Arrumar” para ir direto até eles.
+          </p>
+          <ul data-error-list></ul>
+          <button type="button" class="primary-btn" data-error-modal-close>Fechar</button>
+        </div>
+      </div>
+      {{ server_field_errors|json_script:"serverFieldErrors" }}
+      {% include "core/_diagnostics_scripts.html" %}
+      <script src="{% static 'js/signature-modal.js' %}" defer></script>
+      <script src="{% static 'js/register-adventurer-new.js' %}" defer></script>
+    </main>
+  </body>
+</html>

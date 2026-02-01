@@ -819,7 +819,7 @@ def mp_webhook(request):
         return JsonResponse({"status": "paid"})
 
     return JsonResponse({"status": "pending"})
-def register_adventurer(request):
+def register_adventurer(request, template_name="core/register.html"):
     """Render workflow to register responsible and one or more adventurers."""
 
     field_errors = {}
@@ -1409,7 +1409,10 @@ def register_adventurer(request):
         "active_adventurer_slot": active_adventurer_slot,
         **context_defaults,
     }
-    return render(request, "core/register.html", context)
+    return render(request, template_name, context)
+
+def register_adventurer_new(request):
+    return register_adventurer(request, template_name="core/register_adventurer_new.html")
 
 def registration_choice(request):
     """Tela intermediÃ¡ria para escolher o tipo de cadastro desejado."""

@@ -641,3 +641,9 @@ tira o quadrado do funcoi
 - **Actions**: eliminei collectSignatureIssues, o modal de assinaturas pendentes e os logs front-end relacionados; agora o submit só cria o modal de erro genérico para campos obrigatórios e permite que o backend bloqueie assinaturas, sem duplicar o alerta no front.
 - **Technical**: static/js/register-adventurer.js.
 - **Notes**: python manage.py check.
+
+## 2026-02-01T03:05:00+00:00Z — Manual update
+- **Request**: reconstruir o /cadastro/aventureiro/ em um novo fluxo guiado com quatro passos seguindo os PDFs e mantendo o estilo atual.
+- **Actions**: criei o template register_adventurer_new.html, o JS register-adventurer-new.js e a view register_adventurer_new com a rota registrada; atualizei o botão "Quero inscrever um aventureiro" para apontar para a nova página, e o fluxo agora suporta múltiplos slots, assinaturas por canvas e auto-preenchimento dos dados repetidos.
+- **Technical**: core/views.py, core/urls.py, templates/core/register_choice.html, templates/core/register_adventurer_new.html, static/js/register-adventurer-new.js.
+- **Notes**: python manage.py check e revisão visual local antes de ativar em produção.
