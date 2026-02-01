@@ -182,6 +182,11 @@ body {
   background: #f7f9ff;
   gap: 0.6rem;
 }
+.form-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
 .adventurer-manager {
   border: 1px solid rgba(6, 24, 69, 0.12);
   border-radius: 20px;

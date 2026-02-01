@@ -491,3 +491,9 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 - **Actions**: Reestruturei o `section` do formulário para que os blocos das etapas fiquem como `step-section` irmãos, reposicionei o painel do responsável/termo dentro deles e mantive o botão de envio visível, garantindo que trocar de aba mostre o conteúdo apropriado.
 - **Technical**: templates/core/register.html; `python manage.py test`.
 - **Notes**: Testes (`python manage.py test`).
+
+## 2026-02-01T19:09:51+00:00Z — Divide etapas em step-sections
+- **Request**: ainda ta aparecendo em branco essas 2 abas
+- **Actions**: Separei os conteúdos das abas em três `step-section` autonômos (responsável, fichas/aventureiros e termo), movi o bloco de aventureiros para a aba 02, coloquei o botão “Enviar” fora das seções e adicionei a classe `.form-actions` para mantê-lo visível independentemente da etapa.
+- **Technical**: templates/core/register.html, static/css/register.css, static/js/register.js; `python manage.py test`.
+- **Notes**: Testes (`python manage.py test`).

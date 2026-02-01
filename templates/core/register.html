@@ -64,20 +64,6 @@
 
         <section class="tab-pane is-active" data-step="initial">
           <div class="step-section step-section--initial" data-step-section="initial">
-            <div class="adventurer-manager" data-adventurer-manager>
-              <div class="adventurer-tabs" data-adventurer-tabs></div>
-              <div class="adventurer-blocks" data-adventurer-blocks>
-                {% for adventurer in adventurers_data %}
-                {% include 'core/_adventurer_block.html' with block=adventurer index=forloop.counter0 active=forloop.first is_template=False classes=classes %}
-                {% endfor %}
-              </div>
-              <button type="button" class="ghost-btn add-adventurer-btn" data-action="add-adventurer">
-                + Adicionar outro aventureiro
-              </button>
-            </div>
-            <template id="adventurer-template">
-              {% include 'core/_adventurer_block.html' with block=empty_adventurer index='__INDEX__' active=False is_template=True classes=classes %}
-            </template>
             <div class="panel">
               <h2>Dados do responsável principal</h2>
               <div class="form-grid">
@@ -256,7 +242,6 @@
                       value='{{ form_values.mae_whatsapp|default:"" }}'
                     />
                   </label>
-                </div>
               </div>
             </div>
             <div class="declaration-panel">
@@ -310,8 +295,23 @@
                   value='{{ form_values.assinatura_data|default:"" }}'
                 />
               </div>
-              <button type="submit" class="primary-btn">Enviar cadastro</button>
             </div>
+          </div>
+          <div class="step-section step-section--medical" data-step-section="medical">
+            <div class="adventurer-manager" data-adventurer-manager>
+              <div class="adventurer-tabs" data-adventurer-tabs></div>
+              <div class="adventurer-blocks" data-adventurer-blocks>
+                {% for adventurer in adventurers_data %}
+                {% include 'core/_adventurer_block.html' with block=adventurer index=forloop.counter0 active=forloop.first is_template=False classes=classes %}
+                {% endfor %}
+              </div>
+              <button type="button" class="ghost-btn add-adventurer-btn" data-action="add-adventurer">
+                + Adicionar outro aventureiro
+              </button>
+            </div>
+            <template id="adventurer-template">
+              {% include 'core/_adventurer_block.html' with block=empty_adventurer index='__INDEX__' active=False is_template=True classes=classes %}
+            </template>
           </div>
           <div class="step-section step-section--termo" data-step-section="termo">
             <div class="panel term-panel">
@@ -463,6 +463,9 @@
             </div>
           </div>
         </section>
+        <div class="form-actions">
+          <button type="submit" class="primary-btn">Enviar cadastro</button>
+        </div>
       </form>
   </main>
   <div class="signature-modal" id="signature-modal" aria-hidden="true">
