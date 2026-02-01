@@ -557,12 +557,25 @@ document.addEventListener("DOMContentLoaded", () => {
     return input?.value.trim() || "";
   };
 
-    const describeField = (field) => {
-      const deriveSlotFromName = (name) => {
-        const match = name?.match(/_(\d{2})(?:_|$)/);
-        return match ? match[1] : null;
-      };
-      const label =
+  const getFieldValueForLog = (field) => {
+    if (!field) {
+      return null;
+    }
+    if (field.type === "checkbox") {
+      return field.checked;
+    }
+    if (field.type === "radio") {
+      return field.checked ? field.value : null;
+    }
+    return field.value;
+  };
+
+  const describeField = (field) => {
+    const deriveSlotFromName = (name) => {
+      const match = name?.match(/_(\d{2})(?:_|$)/);
+      return match ? match[1] : null;
+    };
+    const label =
         field.closest("label")?.textContent?.trim().replace(/\s+/g, " ") ||
         field.dataset.placeholder ||
         field.name;
@@ -580,6 +593,7 @@ document.addEventListener("DOMContentLoaded", () => {
       step: guidance?.step || stepNumber,
       slot,
       guidance,
+      value: getFieldValueForLog(field),
     };
   };
   const describeForLog = (error) => {
@@ -591,6 +605,7 @@ document.addEventListener("DOMContentLoaded", () => {
       step: error.step,
       slot: error.slot,
       field: error.field?.name || null,
+      value: error.field ? getFieldValueForLog(error.field) : null,
     };
   };
 
@@ -687,6 +702,8 @@ document.addEventListener("DOMContentLoaded", () => {
     signatureWarningModal.setAttribute("aria-hidden", "false");
     logProgramEvent?.("front-signature-warning", {
       issues: issues.map(describeForLog).filter(Boolean),
+      activeSlot: currentAdventurerSlot,
+      slotCount: getNormalizedSlotCount(),
     });
   };
 
@@ -995,10 +1012,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const signatureIssues = collectSignatureIssues();
     if (signatureIssues.length) {
       event.preventDefault();
-      openSignatureWarning(signatureIssues);
-      logProgramEvent?.("frontend-signature-block", {
-        issues: signatureIssues.map(describeForLog).filter(Boolean),
-      });
+        const signaturePayload = signatureIssues.map(describeForLog).filter(Boolean);
+        openSignatureWarning(signatureIssues);
+        logProgramEvent?.("frontend-signature-block", {
+          issues: signaturePayload,
+          activeSlot: currentAdventurerSlot,
+          slotCount: getNormalizedSlotCount(),
+        });
       return;
     }
     const allowedSlots = new Set(getAllowedSlots());
@@ -1027,6 +1047,8 @@ document.addEventListener("DOMContentLoaded", () => {
         fields: highlightedFields.map((field) => field?.name || field?.id || field?.type),
         slot,
         errors: errors.map(describeForLog).filter(Boolean),
+        activeSlot: currentAdventurerSlot,
+        slotCount: getNormalizedSlotCount(),
       });
     }
   });
