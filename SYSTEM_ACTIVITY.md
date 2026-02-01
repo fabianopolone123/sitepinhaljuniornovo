@@ -497,3 +497,9 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 - **Actions**: Separei os conteúdos das abas em três `step-section` autonômos (responsável, fichas/aventureiros e termo), movi o bloco de aventureiros para a aba 02, coloquei o botão “Enviar” fora das seções e adicionei a classe `.form-actions` para mantê-lo visível independentemente da etapa.
 - **Technical**: templates/core/register.html, static/css/register.css, static/js/register.js; `python manage.py test`.
 - **Notes**: Testes (`python manage.py test`).
+
+## 2026-02-01T16:12:52+00:00Z — Mostra seção correta ao trocar de aba
+- **Request**: ainda ta em branco meu deus cade ficha medica e termo de imagem quando clica nas abas?
+- **Actions**: Simplifiquei a visibilidade das `step-section` para usar a classe `.is-visible` e atualizei `setStep` para aplicar esse estado e rolar para o bloco selecionado, apagando a dependência do atributo `data-active-step` e garantindo que as abas 02 e 03 mostrem seus formulários.
+- **Technical**: static/css/register.css, static/js/register.js; `python manage.py test`.
+- **Notes**: Testes (`python manage.py test`).

@@ -220,13 +220,7 @@ body {
 .step-section {
   display: none;
 }
-.registration-form[data-active-step="initial"] .step-section--initial {
-  display: block;
-}
-.registration-form[data-active-step="medical"] .step-section--medical {
-  display: block;
-}
-.registration-form[data-active-step="termo"] .step-section--termo {
+.step-section.is-visible {
   display: block;
 }
 .adventurer-tab.is-new {

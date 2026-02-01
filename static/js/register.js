@@ -322,6 +322,7 @@
   function initStepNavigator() {
     const form = document.getElementById('registration-form');
     const stepButtons = document.querySelectorAll('[data-step-target]');
+    const stepSections = document.querySelectorAll('[data-step-section]');
     if (!form || !stepButtons.length) {
       return;
     }
@@ -334,16 +335,12 @@
       stepButtons.forEach((button) => {
         button.classList.toggle('is-active', button.dataset.stepTarget === step);
       });
-      if (step === 'medical') {
-        const firstMedical = document.querySelector('[data-step-section="medical"]');
-        if (firstMedical) {
-          firstMedical.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      } else if (step === 'termo') {
-        const termSection = document.querySelector('[data-step-section="termo"]');
-        if (termSection) {
-          termSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+      stepSections.forEach((section) => {
+        section.classList.toggle('is-visible', section.dataset.stepSection === step);
+      });
+      const targetSection = document.querySelector(`[data-step-section="${step}"]`);
+      if (targetSection) {
+        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } else {
         form.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
