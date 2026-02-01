@@ -24,15 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const errorModal = document.getElementById("form-error-modal");
   const errorList = errorModal?.querySelector("[data-error-list]");
   const closeErrorModalBtn = errorModal?.querySelector("[data-error-modal-close]");
-  const signatureWarningModal = document.getElementById("signature-warning-modal");
-  const signatureWarningList = signatureWarningModal?.querySelector("[data-signature-warning-list]");
-  const signatureWarningCancel = signatureWarningModal?.querySelector("[data-signature-warning-cancel]");
   const serverFieldErrorsScript = document.getElementById("serverFieldErrors");
   const serverFieldErrors = serverFieldErrorsScript
     ? JSON.parse(serverFieldErrorsScript.textContent || "{}")
     : {};
-  const serverSignatureWarning = window.SERVER_SIGNATURE_WARNING === true;
-  const serverSignatureOnly = window.SERVER_SIGNATURE_ONLY === true;
   let currentStep = 1;
   const responsavelNomeInput = document.getElementById("responsavel_nome");
   const responsavelSobrenomeInput = document.getElementById("responsavel_sobrenome");
@@ -187,111 +182,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (trigger) {
       trigger.click();
     }
-  };
-
-  const signatureWarningItems = [];
-
-  const collectSignatureIssues = () => {
-    const issues = [];
-    const allowedSlots = getAllowedSlots();
-    const parentField = form?.querySelector("[name='parent_signature']");
-    const parentValue = parentField?.value.trim();
-    const parentGuidance = signatureGuidance.find((entry) => entry.pattern.test("parent_signature"));
-    if (!parentValue && parentGuidance) {
-      issues.push({
-        label: parentGuidance.label,
-        step: parentGuidance.step,
-        slot: null,
-        guidance: parentGuidance,
-        element: parentField,
-      });
-    }
-    allowedSlots.forEach((slot) => {
-      const adventureSignature = form?.querySelector(`[name="adventure_data_signature_${slot}"]`);
-      const medicalSignature = form?.querySelector(`[name="medical_signature_${slot}"]`);
-      const termSignature = form?.querySelector(`[name="term_signature_${slot}"]`);
-      const medicalConfirmation = form?.querySelector(`[name="medical_confirmation_${slot}"]`);
-      const medicalPlanSelect = form?.querySelector(`[name="medical_plan_${slot}"]`);
-      const medicalPlanNumber = form?.querySelector(`[name="medical_plan_number_${slot}"]`);
-      const guidanceEntries = signatureGuidance.filter(
-        (entry) => entry.needsSlot && entry.pattern.test(`${entry.pattern.source}${slot}`)
-      );
-      const checkGuidance = (fieldElement, patternKey) => {
-        if (!fieldElement) {
-          return null;
-        }
-        if (!fieldElement.value) {
-          const guidance = signatureGuidance.find((entry) => entry.pattern.test(patternKey));
-          if (guidance) {
-            return {
-              label: guidance.label,
-              step: guidance.step,
-              slot,
-              guidance,
-              element: fieldElement,
-            };
-          }
-        }
-        return null;
-      };
-      const addIfMissing = (issue) => {
-        if (issue) {
-          issues.push(issue);
-        }
-      };
-      addIfMissing(
-        adventureSignature && !adventureSignature.value
-          ? {
-              label: "Assinatura dos dados do aventureiro",
-              step: 3,
-              slot,
-              guidance: signatureGuidance.find((entry) => entry.pattern.test("adventure_data_signature_")),
-              element: adventureSignature,
-            }
-          : null
-      );
-      addIfMissing(
-        medicalSignature && !medicalSignature.value
-          ? {
-              label: "Assinatura da ficha médica",
-              step: 4,
-              slot,
-              guidance: signatureGuidance.find((entry) => entry.pattern.test("medical_signature_")),
-              element: medicalSignature,
-            }
-          : null
-      );
-      addIfMissing(
-        termSignature && !termSignature.value
-          ? {
-              label: "Assinatura do termo",
-              step: 5,
-              slot,
-              guidance: signatureGuidance.find((entry) => entry.pattern.test("term_signature_")),
-              element: termSignature,
-            }
-          : null
-      );
-      if (medicalConfirmation && !medicalConfirmation.checked) {
-        issues.push({
-          label: "Confirmação da ficha médica",
-          step: 4,
-          slot,
-          guidance: signatureGuidance.find((entry) => entry.pattern.test("medical")),
-          element: medicalConfirmation,
-        });
-      }
-      if (medicalPlanSelect && medicalPlanSelect.value === "sim" && medicalPlanNumber && !medicalPlanNumber.value.trim()) {
-        issues.push({
-          label: "Número do plano de saúde",
-          step: 4,
-          slot,
-          guidance: signatureGuidance.find((entry) => entry.pattern.test("medical_plan")),
-          element: medicalPlanNumber,
-        });
-      }
-    });
-    return issues;
   };
 
   const resetSignatureFields = () => {
@@ -661,52 +551,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     errorModal.classList.remove("is-open");
   };
-  signatureWarningCancel?.addEventListener("click", (event) => {
-    event.preventDefault();
-    closeSignatureWarning();
-  });
-
-  const closeSignatureWarning = () => {
-    if (!signatureWarningModal) {
-      return;
-    }
-    signatureWarningModal.classList.remove("is-open");
-    signatureWarningModal.setAttribute("aria-hidden", "true");
-  };
-
-  const openSignatureWarning = (issues) => {
-    if (!signatureWarningModal || !signatureWarningList) {
-      return;
-    }
-    signatureWarningList.innerHTML = "";
-    issues.forEach((issue) => {
-      const li = document.createElement("li");
-      const text = document.createElement("span");
-      text.textContent = `${issue.label} — passo ${issue.step}`;
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "ghost-btn";
-      button.textContent = "Corrigir";
-      button.addEventListener("click", () => {
-        const targetSlot = issue.slot || currentAdventurerSlot;
-        setActiveAdventurerSlot(targetSlot);
-        goToStep(issue.step);
-        issue.field?.focus();
-        closeSignatureWarning();
-      });
-      li.appendChild(text);
-      li.appendChild(button);
-      signatureWarningList.appendChild(li);
-    });
-    signatureWarningModal.classList.add("is-open");
-    signatureWarningModal.setAttribute("aria-hidden", "false");
-    logProgramEvent?.("front-signature-warning", {
-      issues: issues.map(describeForLog).filter(Boolean),
-      activeSlot: currentAdventurerSlot,
-      slotCount: getNormalizedSlotCount(),
-    });
-  };
-
   const applyServerFieldErrors = () => {
     if (!form) {
       return;
@@ -761,12 +605,6 @@ document.addEventListener("DOMContentLoaded", () => {
       errors: errors.map(describeForLog).filter(Boolean),
       keys,
     });
-    if (serverSignatureWarning) {
-      const signatureIssues = collectSignatureIssues();
-      if (signatureIssues.length) {
-        openSignatureWarning(signatureIssues);
-      }
-    }
     openErrorModal(errors);
   };
 
@@ -1009,18 +847,6 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   form?.addEventListener("submit", (event) => {
-    const signatureIssues = collectSignatureIssues();
-    if (signatureIssues.length) {
-      event.preventDefault();
-        const signaturePayload = signatureIssues.map(describeForLog).filter(Boolean);
-        openSignatureWarning(signatureIssues);
-        logProgramEvent?.("frontend-signature-block", {
-          issues: signaturePayload,
-          activeSlot: currentAdventurerSlot,
-          slotCount: getNormalizedSlotCount(),
-        });
-      return;
-    }
     const allowedSlots = new Set(getAllowedSlots());
     const invalidFields = Array.from(form.querySelectorAll(":invalid")).filter((field) =>
       isSlotFieldAllowed(field, allowedSlots)

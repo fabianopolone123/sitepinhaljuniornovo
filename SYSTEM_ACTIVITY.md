@@ -635,3 +635,9 @@ tira o quadrado do funcoi
 - **Actions**: removi o snapshot collectSignatureState() e os campos signatureState dos eventos front-signature-warning, frontend-signature-block e frontend-validation-block, mantendo apenas a validação normal dos campos não preenchidos (sem enviar os estados das assinaturas ao journal).
 - **Technical**: static/js/register-adventurer.js.
 - **Notes**: python manage.py check.
+
+## 2026-02-01T02:25:00+00:00Z — Manual update
+- **Request**: remove a verificação das assinaturas e deixa só a checagem dos campos não preenchidos antes de enviar.
+- **Actions**: eliminei collectSignatureIssues, o modal de assinaturas pendentes e os logs front-end relacionados; agora o submit só cria o modal de erro genérico para campos obrigatórios e permite que o backend bloqueie assinaturas, sem duplicar o alerta no front.
+- **Technical**: static/js/register-adventurer.js.
+- **Notes**: python manage.py check.
