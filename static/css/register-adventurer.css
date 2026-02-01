@@ -91,12 +91,12 @@ body {
   gap: 2rem;
 }
 
-.adventurer-step {
+.flow-step {
   display: none;
   animation: fadeIn 0.3s ease;
 }
 
-.adventurer-step.is-active {
+.flow-step--active {
   display: block;
 }
 

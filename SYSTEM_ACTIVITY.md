@@ -337,20 +337,21 @@ tira o quadrado do funcoi
 - **Notes**: Nenhuma.
  - **Migration**: `python manage.py migrate` (aplicou `core.0006_pixcharge`)
 \n
-## 2026-01-27T01:45:00+00:00Z — Corrige webhook e docs de deploy
-- **Request**: no financeiro o PIX gera mas não marca pago; webhook configurado em https://pinhaljunior.com.br/mp/webhook/.
-- **Actions**: o webhook agora aceita payloads via query string e POST para garantir que o Mercado Pago antigo (feed 2.0) atualize PixCharge/MonthlyFee; também registrei o ambiente do VPS em VPS_ENVIRONMENT.md e o fluxo oficial de deploy em DEPLOY_FLOW.md.
-- **Technical**: core/views.py (tratamento flexível de payload, payment_id de query params), VPS_ENVIRONMENT.md, DEPLOY_FLOW.md; também reiniciei o Gunicorn para aplicar a mudança.
-- **Notes**: confirme manualmente que a requisição POST do Mercado Pago chega ao webhook e retorna 200/{ status: paid}.
-\n## 2026-01-27T02:15:00+00:00Z — Randomiza valor do PIX\n- **Request**: para testar no Mercado Pago, gere um valor diferente a cada clique em pagar (1 a 3 reais).\n- **Actions**: inance_pix agora calcula um valor randomizado entre R,00 e R,00 antes de criar o PIX e atualiza o PixCharge; o QR exibido e o copy_text seguem o novo valor enquanto as mensalidades listadas mantêm R,00.\n- **Technical**: core/views.py (inance_pix usa andom.randint(100, 300) para definir o valor cobrado e recalcula o PixCharge pendente).\n- **Notes**: remova essa lógica quando voltar a cobrar o valor fixo.\n
-\n## 2026-01-27T02:25:00+00:00Z — Documenta script de deploy\n- **Request**: adiciona no guia de deploy que existe ./deploy_pinhaljunior.sh no VPS e precisa executá-lo após o git pull.\n- **Actions**: incluí a seção  SCRIPT DE DEPLOY PERSONALIZADO em DEPLOY_FLOW.md, descrevendo o comando ./deploy_pinhaljunior.sh que foi criado no VPS, e registrei a alteração no log.\n- **Technical**: DEPLOY_FLOW.md.\n- **Notes**: mantenha o script atualizado sempre que o fluxo de deploy mudar.\n
-\n## 2026-01-27T02:40:00+00:00Z — Modal de confirmação de PIX\n- **Request**: desaparece a mensagem  PIX pendente e mostra uma janela ao receber a confirmação de pagamento, permitindo fechar ou clicar fora para voltar à dashboard.\n- **Actions**: removi o alerta de pendência, adicionei o modal com overlay no template inance_pix.html, acrescentei estilos em static/css/finance.css e static/js/finance.js para controlar a janela e o redirecionamento, mantendo o retorno ao dashboard ao fechar.\n- **Technical**: 	emplates/core/finance_pix.html (modal + scripts), static/css/finance.css (estrutura da modal), static/js/finance.js (ativa o overlay e encaminha de volta).\n- **Notes**: essa interface aparece apenas quando PixCharge estiver pago e o webhook confirmar o pagamento.\n
-\n## 2026-01-27T02:55:00+00:00Z — Atualiza doc do script blindado\n- **Request**: atualiza a seção do deploy para descrever a nova versão de deploy_pinhaljunior.sh que faz backup do SQLite, travamento de lockfile e docker check.\n- **Actions**: reescrevi a seção 11 em DEPLOY_FLOW.md para listar passo a passo do script blindado (lockfile, checagem de comandos, backup do SQLite, pip install, check/migrate/collectstatic, restart + health-check).\n- **Technical**: DEPLOY_FLOW.md.\n- **Notes**: mantenha a instrução em sincronia com o script no VPS.\n
-\n## 2026-01-27T03:20:00+00:00Z — Esconde last_notification para não-staff\n- **Request**: mostrar o log de webhook apenas para perfil administrativo.\n- **Actions**: adicionei is_staff ao contexto de inance_pix e envolvi o bloco last_notification no template com if is_staff, assim apenas staff vê o JSON do webhook; demais usuários ficam só com o modal bonito.\n- **Technical**: core/views.py, 	emplates/core/finance_pix.html.\n- **Notes**: mantém o campo no modelo para auditoria interna.\n
-\n## 2026-01-27T03:25:00+00:00Z — Atualiza doc para novo path do script\n- **Request**: o deploy script agora vive em /usr/local/bin; atualize o passo 11 com essa informação.\n- **Actions**: inclui nota em DEPLOY_FLOW.md mencionando o local /usr/local/bin/deploy_pinhaljunior.sh e que ele deve ser invocado após o git pull para executar o deploy completo.\n- **Technical**: DEPLOY_FLOW.md.\n- **Notes**: mantenha o script sincronizado com a documentação.\n
-\n## 2026-01-27T03:35:00+00:00Z — Notificação de webhook para todos\n- **Request**: mostrar conteúdo de qualquer webhook na tela para testar.\n- **Actions**: removi o guard is_staff e agora o bloco last_notification aparece sempre que há payload salvo, para que qualquer usuário veja a notificação JSON enquanto ainda mostramos o modal de aprovação.\n- **Technical**: 	emplates/core/finance_pix.html.\n- **Notes**: considere reverter se quiser esconder o log de clientes em produção.\n
-\n## 2026-01-27T03:55:00+00:00Z — Simplifica mensagem do PIX\n- **Request**: deixa o cartão do PIX só mostrar status pendente e o modal quando o webhook marcar como pago, sem exibir o JSON do webhook.\n- **Actions**: retirei o bloco last_notification do template e passei a exibir apenas um texto de status pendente até que charge.status == PAID, mantendo o modal para quando a confirmação chegar.\n- **Technical**: 	emplates/core/finance_pix.html.\n- **Notes**: essa mensagem substitui a visualização do payload para os pais e mantém a notificação imediata após pproved.\n
-\n## 2026-01-27T04:05:00+00:00Z — Polling por status do PIX\n- **Request**: quando o pagamento for aprovado queremos mostrar a notificação mesmo que a confirmação demore; polling pode ajudar.\n- **Actions**: a view inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js faz polling a cada 5 segundos e abre o modal assim que detecta status=PAID.\n- **Technical**: core/views.py, static/js/finance.js, 	emplates/core/finance_pix.html.\n- **Notes**: polling roda só enquanto o pedido ainda estiver pendente; depois pára automaticamente.\n
+## 2026-01-27T01:45:00+00:00Z ï¿½ Corrige webhook e docs de deploy
+- **Request**: no financeiro o PIX gera mas nï¿½o marca pago; webhook configurado em https://pinhaljunior.com.br/mp/webhook/.
+- **Actions**: o webhook agora aceita payloads via query string e POST para garantir que o Mercado Pago antigo (feed 2.0) atualize PixCharge/MonthlyFee; tambï¿½m registrei o ambiente do VPS em VPS_ENVIRONMENT.md e o fluxo oficial de deploy em DEPLOY_FLOW.md.
+- **Technical**: core/views.py (tratamento flexï¿½vel de payload, payment_id de query params), VPS_ENVIRONMENT.md, DEPLOY_FLOW.md; tambï¿½m reiniciei o Gunicorn para aplicar a mudanï¿½a.
+- **Notes**: confirme manualmente que a requisiï¿½ï¿½o POST do Mercado Pago chega ao webhook e retorna 200/{ status: paid}.
+\n## 2026-01-27T02:15:00+00:00Z ï¿½ Randomiza valor do PIX\n- **Request**: para testar no Mercado Pago, gere um valor diferente a cada clique em pagar (1 a 3 reais).\n- **Actions**: inance_pix agora calcula um valor randomizado entre R,00 e R,00 antes de criar o PIX e atualiza o PixCharge; o QR exibido e o copy_text seguem o novo valor enquanto as mensalidades listadas mantï¿½m R,00.\n- **Technical**: core/views.py (inance_pix usa 
+andom.randint(100, 300) para definir o valor cobrado e recalcula o PixCharge pendente).\n- **Notes**: remova essa lï¿½gica quando voltar a cobrar o valor fixo.\n
+\n## 2026-01-27T02:25:00+00:00Z ï¿½ Documenta script de deploy\n- **Request**: adiciona no guia de deploy que existe ./deploy_pinhaljunior.sh no VPS e precisa executï¿½-lo apï¿½s o git pull.\n- **Actions**: incluï¿½ a seï¿½ï¿½o  SCRIPT DE DEPLOY PERSONALIZADO em DEPLOY_FLOW.md, descrevendo o comando ./deploy_pinhaljunior.sh que foi criado no VPS, e registrei a alteraï¿½ï¿½o no log.\n- **Technical**: DEPLOY_FLOW.md.\n- **Notes**: mantenha o script atualizado sempre que o fluxo de deploy mudar.\n
+\n## 2026-01-27T02:40:00+00:00Z ï¿½ Modal de confirmaï¿½ï¿½o de PIX\n- **Request**: desaparece a mensagem  PIX pendente e mostra uma janela ao receber a confirmaï¿½ï¿½o de pagamento, permitindo fechar ou clicar fora para voltar ï¿½ dashboard.\n- **Actions**: removi o alerta de pendï¿½ncia, adicionei o modal com overlay no template inance_pix.html, acrescentei estilos em static/css/finance.css e static/js/finance.js para controlar a janela e o redirecionamento, mantendo o retorno ao dashboard ao fechar.\n- **Technical**: 	emplates/core/finance_pix.html (modal + scripts), static/css/finance.css (estrutura da modal), static/js/finance.js (ativa o overlay e encaminha de volta).\n- **Notes**: essa interface aparece apenas quando PixCharge estiver pago e o webhook confirmar o pagamento.\n
+\n## 2026-01-27T02:55:00+00:00Z ï¿½ Atualiza doc do script blindado\n- **Request**: atualiza a seï¿½ï¿½o do deploy para descrever a nova versï¿½o de deploy_pinhaljunior.sh que faz backup do SQLite, travamento de lockfile e docker check.\n- **Actions**: reescrevi a seï¿½ï¿½o 11 em DEPLOY_FLOW.md para listar passo a passo do script blindado (lockfile, checagem de comandos, backup do SQLite, pip install, check/migrate/collectstatic, restart + health-check).\n- **Technical**: DEPLOY_FLOW.md.\n- **Notes**: mantenha a instruï¿½ï¿½o em sincronia com o script no VPS.\n
+\n## 2026-01-27T03:20:00+00:00Z ï¿½ Esconde last_notification para nï¿½o-staff\n- **Request**: mostrar o log de webhook apenas para perfil administrativo.\n- **Actions**: adicionei is_staff ao contexto de inance_pix e envolvi o bloco last_notification no template com if is_staff, assim apenas staff vï¿½ o JSON do webhook; demais usuï¿½rios ficam sï¿½ com o modal bonito.\n- **Technical**: core/views.py, 	emplates/core/finance_pix.html.\n- **Notes**: mantï¿½m o campo no modelo para auditoria interna.\n
+\n## 2026-01-27T03:25:00+00:00Z ï¿½ Atualiza doc para novo path do script\n- **Request**: o deploy script agora vive em /usr/local/bin; atualize o passo 11 com essa informaï¿½ï¿½o.\n- **Actions**: inclui nota em DEPLOY_FLOW.md mencionando o local /usr/local/bin/deploy_pinhaljunior.sh e que ele deve ser invocado apï¿½s o git pull para executar o deploy completo.\n- **Technical**: DEPLOY_FLOW.md.\n- **Notes**: mantenha o script sincronizado com a documentaï¿½ï¿½o.\n
+\n## 2026-01-27T03:35:00+00:00Z ï¿½ Notificaï¿½ï¿½o de webhook para todos\n- **Request**: mostrar conteï¿½do de qualquer webhook na tela para testar.\n- **Actions**: removi o guard is_staff e agora o bloco last_notification aparece sempre que hï¿½ payload salvo, para que qualquer usuï¿½rio veja a notificaï¿½ï¿½o JSON enquanto ainda mostramos o modal de aprovaï¿½ï¿½o.\n- **Technical**: 	emplates/core/finance_pix.html.\n- **Notes**: considere reverter se quiser esconder o log de clientes em produï¿½ï¿½o.\n
+\n## 2026-01-27T03:55:00+00:00Z ï¿½ Simplifica mensagem do PIX\n- **Request**: deixa o cartï¿½o do PIX sï¿½ mostrar status pendente e o modal quando o webhook marcar como pago, sem exibir o JSON do webhook.\n- **Actions**: retirei o bloco last_notification do template e passei a exibir apenas um texto de status pendente atï¿½ que charge.status == PAID, mantendo o modal para quando a confirmaï¿½ï¿½o chegar.\n- **Technical**: 	emplates/core/finance_pix.html.\n- **Notes**: essa mensagem substitui a visualizaï¿½ï¿½o do payload para os pais e mantï¿½m a notificaï¿½ï¿½o imediata apï¿½s pproved.\n
+\n## 2026-01-27T04:05:00+00:00Z ï¿½ Polling por status do PIX\n- **Request**: quando o pagamento for aprovado queremos mostrar a notificaï¿½ï¿½o mesmo que a confirmaï¿½ï¿½o demore; polling pode ajudar.\n- **Actions**: a view inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js faz polling a cada 5 segundos e abre o modal assim que detecta status=PAID.\n- **Technical**: core/views.py, static/js/finance.js, 	emplates/core/finance_pix.html.\n- **Notes**: polling roda sï¿½ enquanto o pedido ainda estiver pendente; depois pï¿½ra automaticamente.\n
 
 ## 2026-01-28T00:43:19+00:00Z â€” Corrige botoes de 'Ver detalhes' nos cadastros
 - **Request**: em cadastros no nao esta funcionando os botoes de ver detalhes
@@ -389,52 +390,59 @@ tira o quadrado do funcoi
 - **Actions**: reescrevi `static/js/register-director.js` para manter o preview da foto, atualizar a declaraÃ§Ã£o â€œEu, [nome completo], autorizoâ€¦â€ e copiar todos os campos do endereÃ§o (Av/Rua, nÃºmero, bairro, CEP, cidade e estado), CPF, RG e telefone entre os passos; mantive `core/views.py` validando o `volunteer_acceptance` e a view persiste o endereÃ§o formatado completo, enquanto `templates/core/register_director.html` exibe os novos inputs e o checkbox adicional. `python manage.py check` foi executado.
 - **Technical**: `core/views.py`, `templates/core/register_director.html`, `static/css/register-director.css`, `static/js/register-director.js`.
 - **Notes**: nenhuma.
-## 2026-01-28T02:26:01Z — Corrige sincronização parcial no cadastro de diretoria
-- **Request**: mesmo com os campos aparecendo no formulário, os dados replicados estavam sendo cortados (endereço, CEP, telefone, CPF/RG só apareciam com o primeiro caractere) e o preview da foto 3x4 não carregava depois do último deploy; precisa garantir que a sincronização automática só ceda quando o usuário editar manualmente.
-- **Actions**: atualizei static/js/register-director.js para que o helper setupSync marque um campo como “manual” apenas quando o evento de input for confiável (verificando event.isTrusted), permitindo que os dados continuem sendo copiados enquanto o usuário digita e mantendo o preview da foto intacto.
-- **Technical**: static/js/register-director.js (ajuste em setupSync para ignorar eventos programáticos ao definir data-manual).
+## 2026-01-28T02:26:01Z ï¿½ Corrige sincronizaï¿½ï¿½o parcial no cadastro de diretoria
+- **Request**: mesmo com os campos aparecendo no formulï¿½rio, os dados replicados estavam sendo cortados (endereï¿½o, CEP, telefone, CPF/RG sï¿½ apareciam com o primeiro caractere) e o preview da foto 3x4 nï¿½o carregava depois do ï¿½ltimo deploy; precisa garantir que a sincronizaï¿½ï¿½o automï¿½tica sï¿½ ceda quando o usuï¿½rio editar manualmente.
+- **Actions**: atualizei static/js/register-director.js para que o helper setupSync marque um campo como ï¿½manualï¿½ apenas quando o evento de input for confiï¿½vel (verificando event.isTrusted), permitindo que os dados continuem sendo copiados enquanto o usuï¿½rio digita e mantendo o preview da foto intacto.
+- **Technical**: static/js/register-director.js (ajuste em setupSync para ignorar eventos programï¿½ticos ao definir data-manual).
 - **Notes**: validar manualmente no navegador que o preview aparece e que os campos replicados continuam mostrando todo o texto digitado.
-## 2026-01-28T02:39:00Z — Corrige ReferenceError em register-director.js
-- **Request**: o console do navegador aponta Uncaught ReferenceError: Cannot access 'handlePhotoPreview' before initialization em egister-director.js:83, impedindo a pré-visualização da foto.
-- **Actions**: Transformei handlePhotoPreview em declaração de função para que seja “hoisted” e possa ser chamada antes da definição; o resto do fluxo continua intacto.
-- **Technical**: static/js/register-director.js (função handlePhotoPreview).
+## 2026-01-28T02:39:00Z ï¿½ Corrige ReferenceError em register-director.js
+- **Request**: o console do navegador aponta Uncaught ReferenceError: Cannot access 'handlePhotoPreview' before initialization em 
+egister-director.js:83, impedindo a prï¿½-visualizaï¿½ï¿½o da foto.
+- **Actions**: Transformei handlePhotoPreview em declaraï¿½ï¿½o de funï¿½ï¿½o para que seja ï¿½hoistedï¿½ e possa ser chamada antes da definiï¿½ï¿½o; o resto do fluxo continua intacto.
+- **Technical**: static/js/register-director.js (funï¿½ï¿½o handlePhotoPreview).
 - **Notes**: teste manual simples no navegador confirmando que o preview 3x4 abre sem erros.
-## 2026-01-28T02:44:26Z — Garante IDs para replicar os campos da diretoria
-- **Request**: os campos número, bairro, CEP, celular e RG dentro do Compromisso para Voluntários não estavam sendo atualizados com o que já foi digitado nas etapas anteriores porque a sincronização não encontrava os inputs alvo.
-- **Actions**: adicionei IDs (#director_house_number, #director_neighborhood, #director_postal_code, #director_cellphone) nos inputs correspondentes do template 	emplates/core/register_director.html, garantindo que o script de sincronização consiga preencher automaticamente os dados oriundos da seção inicial/termo.
-- **Technical**: 	emplates/core/register_director.html (atributos id nos campos do Compromisso para Voluntários para permitir a cópia via static/js/register-director.js).
-- **Notes**: revalide manualmente que, após digitar os dados iniciais, o passo 3 mostra os mesmos valores completos.
-## 2026-01-28T22:27:41Z — Reescreve cadastro de aventureiro em fluxo guiado
-- **Request**: criar um passo a passo igual ao cadastro de diretoria para o fluxo de aventureiros, começando pelo responsável, depois pai/mãe, dados do aventureiro, ficha médica e termo, incluindo todos os campos listados e mantendo o formulário existente sem tocar no fluxo de diretoria.
-- **Actions**: inseri um stepper com cinco etapas (esponsável, pais, ventureiro, icha médica, 	ermo), reforcei a divisão com seções egistration-step/egistration-steps, adicionei os blocos de pais, ficha médica e termo com os campos solicitados e mantive os campos originais do aventureiro dentro da etapa 3, além de atualizar o CSS (static/css/register.css) e o JS (static/js/register.js) para controlar a navegação entre etapas e manter as validações/preview existentes (o botão “Próximo” muda para o botão de envio na última etapa).
+## 2026-01-28T02:44:26Z ï¿½ Garante IDs para replicar os campos da diretoria
+- **Request**: os campos nï¿½mero, bairro, CEP, celular e RG dentro do Compromisso para Voluntï¿½rios nï¿½o estavam sendo atualizados com o que jï¿½ foi digitado nas etapas anteriores porque a sincronizaï¿½ï¿½o nï¿½o encontrava os inputs alvo.
+- **Actions**: adicionei IDs (#director_house_number, #director_neighborhood, #director_postal_code, #director_cellphone) nos inputs correspondentes do template 	emplates/core/register_director.html, garantindo que o script de sincronizaï¿½ï¿½o consiga preencher automaticamente os dados oriundos da seï¿½ï¿½o inicial/termo.
+- **Technical**: 	emplates/core/register_director.html (atributos id nos campos do Compromisso para Voluntï¿½rios para permitir a cï¿½pia via static/js/register-director.js).
+- **Notes**: revalide manualmente que, apï¿½s digitar os dados iniciais, o passo 3 mostra os mesmos valores completos.
+## 2026-01-28T22:27:41Z ï¿½ Reescreve cadastro de aventureiro em fluxo guiado
+- **Request**: criar um passo a passo igual ao cadastro de diretoria para o fluxo de aventureiros, comeï¿½ando pelo responsï¿½vel, depois pai/mï¿½e, dados do aventureiro, ficha mï¿½dica e termo, incluindo todos os campos listados e mantendo o formulï¿½rio existente sem tocar no fluxo de diretoria.
+- **Actions**: inseri um stepper com cinco etapas (
+esponsï¿½vel, pais, ventureiro, icha mï¿½dica, 	ermo), reforcei a divisï¿½o com seï¿½ï¿½es 
+egistration-step/
+egistration-steps, adicionei os blocos de pais, ficha mï¿½dica e termo com os campos solicitados e mantive os campos originais do aventureiro dentro da etapa 3, alï¿½m de atualizar o CSS (static/css/register.css) e o JS (static/js/register.js) para controlar a navegaï¿½ï¿½o entre etapas e manter as validaï¿½ï¿½es/preview existentes (o botï¿½o ï¿½Prï¿½ximoï¿½ muda para o botï¿½o de envio na ï¿½ltima etapa).
 - **Technical**: 	emplates/core/register.html, static/css/register.css, static/js/register.js.
-- **Notes**: os novos campos são mantidos no front-end e reaparecem após validação por causa de orm_values, mas o backend não persiste todos eles por enquanto; a navegabilidade garante que não será possível ir adiante sem preencher a etapa feita.
-## 2026-01-29T05:00:00+00:00Z — Verifica assinaturas em cada etapa
+- **Notes**: os novos campos sï¿½o mantidos no front-end e reaparecem apï¿½s validaï¿½ï¿½o por causa de orm_values, mas o backend nï¿½o persiste todos eles por enquanto; a navegabilidade garante que nï¿½o serï¿½ possï¿½vel ir adiante sem preencher a etapa feita.
+## 2026-01-29T05:00:00+00:00Z ï¿½ Verifica assinaturas em cada etapa
 - **Request**: implementa a assinatura em cada etapa
-- **Actions**: Confirmei que o template guiado de cadastro (	emplates/core/register.html) já expõe um bloco de assinatura e uma checkbox obrigatória para cada etapa (responsável, pais, aventureiro, ficha médica e termo), os modais (static/js/signature-modal.js) e o init no static/js/register-adventurer.js cuidam da captura/preview e os campos ocultos necessários, e o backend (core/views.py) já valida/armazenar os dados de assinatura e as declarações correspondentes.
+- **Actions**: Confirmei que o template guiado de cadastro (	emplates/core/register.html) jï¿½ expï¿½e um bloco de assinatura e uma checkbox obrigatï¿½ria para cada etapa (responsï¿½vel, pais, aventureiro, ficha mï¿½dica e termo), os modais (static/js/signature-modal.js) e o init no static/js/register-adventurer.js cuidam da captura/preview e os campos ocultos necessï¿½rios, e o backend (core/views.py) jï¿½ valida/armazenar os dados de assinatura e as declaraï¿½ï¿½es correspondentes.
 - **Technical**: 	emplates/core/register.html, static/js/signature-modal.js, static/js/register-adventurer.js, core/views.py.
-- **Notes**: não houve alteração de código porque a funcionalidade já estava presente; aconselho testar no navegador para garantir que os modais aparecem em cada etapa.
+- **Notes**: nï¿½o houve alteraï¿½ï¿½o de cï¿½digo porque a funcionalidade jï¿½ estava presente; aconselho testar no navegador para garantir que os modais aparecem em cada etapa.
 
-## 2026-01-29T05:30:00+00:00Z — Atualiza textos da escolha de cadastro
+## 2026-01-29T05:30:00+00:00Z ï¿½ Atualiza textos da escolha de cadastro
 - **Request**: atualiza os textos da tela de escolha para colocar as frases solicitadas
-- **Actions**: reescrevi os parágrafos da página egister_choice.html para as novas mensagens (introdução geral, card de aventureiros e card de diretoria) preservando o layout e os links.
+- **Actions**: reescrevi os parï¿½grafos da pï¿½gina 
+egister_choice.html para as novas mensagens (introduï¿½ï¿½o geral, card de aventureiros e card de diretoria) preservando o layout e os links.
 - **Technical**: 	emplates/core/register_choice.html.
-- **Notes**: nenhuma alteração funcional a testar.
+- **Notes**: nenhuma alteraï¿½ï¿½o funcional a testar.
 
-## 2026-01-29T06:15:00+00:00Z — Adiciona seletor de quantidade e abas para aventureiros
-- **Request**: no cadastro de aventureiro coloca no topo na parte dos dados do aventureiro para selecionar quantos aventureiros vai cadastrar de 01 a 05, 01 ja vem como padrao, se selecionar mais de 01 vai aparecer uma sub guia com aventureiro 01 e outra guia aventureiro02 etc, onde a pessoa vai ser responsável por esses 2 aventureiros, onde o cadastro dos dados do aventureiro vai ser um pra cada, com tudo ate assinatura para cada individual
-- **Actions**: inseri no passo 3 uma seleção de quantidade e botões que representam cada guia de aventureiro, adicionei classes e scripts para manter o estado ativo e ocultar guias extras conforme o número escolhido, e mantive o label que indica qual aventureiro está sendo editado naquele momento; o backend segue recebendo os mesmos campos (no momento apenas o slot ativo) e a seleção é enviada via campo oculto ctive_adventurer_slot para futuros avanços.
+## 2026-01-29T06:15:00+00:00Z ï¿½ Adiciona seletor de quantidade e abas para aventureiros
+- **Request**: no cadastro de aventureiro coloca no topo na parte dos dados do aventureiro para selecionar quantos aventureiros vai cadastrar de 01 a 05, 01 ja vem como padrao, se selecionar mais de 01 vai aparecer uma sub guia com aventureiro 01 e outra guia aventureiro02 etc, onde a pessoa vai ser responsï¿½vel por esses 2 aventureiros, onde o cadastro dos dados do aventureiro vai ser um pra cada, com tudo ate assinatura para cada individual
+- **Actions**: inseri no passo 3 uma seleï¿½ï¿½o de quantidade e botï¿½es que representam cada guia de aventureiro, adicionei classes e scripts para manter o estado ativo e ocultar guias extras conforme o nï¿½mero escolhido, e mantive o label que indica qual aventureiro estï¿½ sendo editado naquele momento; o backend segue recebendo os mesmos campos (no momento apenas o slot ativo) e a seleï¿½ï¿½o ï¿½ enviada via campo oculto ctive_adventurer_slot para futuros avanï¿½os.
 - **Technical**: 	emplates/core/register.html, static/css/register-adventurer.css, static/js/register-adventurer.js, core/views.py
-- **Notes**: etapa 2 entregue; próximo passo será replicar os campos para cada slot e persistir os dados em múltiplos registros.
+- **Notes**: etapa 2 entregue; prï¿½ximo passo serï¿½ replicar os campos para cada slot e persistir os dados em mï¿½ltiplos registros.
 
 ## 2026-01-30T02:23:11+00:00Z â€” Cadastro com mÃºltiplos slots
 - **Request**: Ajustar o cadastro de aventureiros para que a seleÃ§Ã£o da quantidade gere mÃºltiplos cadastros vinculados ao mesmo responsÃ¡vel.
-- **Actions**: Reescrevi egister_adventurer para iterar por cada slot habilitado, validar os campos/assinaturas/fotos individuais e criar um Adventurer por slot, mantendo o formulÃ¡rio na tela com os valores preenchidos.
+- **Actions**: Reescrevi 
+egister_adventurer para iterar por cada slot habilitado, validar os campos/assinaturas/fotos individuais e criar um Adventurer por slot, mantendo o formulÃ¡rio na tela com os valores preenchidos.
 - **Notes**: Revisar em navegador o fluxo com 2+ aventureiros para garantir que cada guia salva um registro distinto.
 
 ## 2026-01-30T02:30:44+00:00Z â€” Importa tags em partials
 - **Request**: O template de cadastro guiado em /cadastro/aventureiro/ usa slot_value_for em partials sem carregar as tags.
-- **Actions**: Adicionei {% load form_extras %} a cada partial (egister_slot_adventurer, _medical, _term) para garantir que as tags customizadas estejam disponÃ­veis.
+- **Actions**: Adicionei {% load form_extras %} a cada partial (
+egister_slot_adventurer, _medical, _term) para garantir que as tags customizadas estejam disponÃ­veis.
 - **Notes**: Executar python manage.py test nÃ£o foi necessÃ¡rio; a alteraÃ§Ã£o Ã© apenas de template.
 
 ## 2026-01-30T02:32:42+00:00Z â€” Corrige with nos partials
@@ -464,17 +472,23 @@ tira o quadrado do funcoi
 
 ## 2026-01-30T03:02:37+00:00Z â€” Passo 3: preencher campos
 - **Request**: Automatizar o preenchimento de campos do aventureiro (endereÃ§o, WhatsApp dos pais) a partir dos dados jÃ¡ digitados no responsÃ¡vel.
-- **Actions**: Adicionei atributos data-auto-from aos inputs de endereÃ§o e WhatsApp dos pais nos partials e escrevi lÃ³gica em egister-adventurer.js que replica o valor dos campos esponsavel_whatsapp e esponsavel_endereco para todos os slots enquanto o usuÃ¡rio digita, respeitando ediÃ§Ãµes manuais.
+- **Actions**: Adicionei atributos data-auto-from aos inputs de endereÃ§o e WhatsApp dos pais nos partials e escrevi lÃ³gica em 
+egister-adventurer.js que replica o valor dos campos 
+esponsavel_whatsapp e 
+esponsavel_endereco para todos os slots enquanto o usuÃ¡rio digita, respeitando ediÃ§Ãµes manuais.
 - **Notes**: Executado python manage.py check.
 
 ## 2026-01-30T03:05:35+00:00Z â€” Passo 4: termo com dados
 - **Request**: Duplicar os dados do responsÃ¡vel (nome completo e telefone) para os campos do termo e garantir que o endereÃ§o do responsÃ¡vel se propaga para as fichas
-- **Actions**: Adicionei ids aos inputs do responsÃ¡vel para facilitar a captura via JS, marquei os campos 	erm_responsible e 	erm_contact_phone com novos data-attributers e estendi o mapeamento data-auto-from para as informaÃ§Ãµes de nome, telefone e endereÃ§o; o script agora escuta esponsavel_nome e esponsavel_sobrenome para preencher automaticamente o nome completo no termo e continua replicando telefone/WhatsApp/endereÃ§os nos outros slots.
+- **Actions**: Adicionei ids aos inputs do responsÃ¡vel para facilitar a captura via JS, marquei os campos 	erm_responsible e 	erm_contact_phone com novos data-attributers e estendi o mapeamento data-auto-from para as informaÃ§Ãµes de nome, telefone e endereÃ§o; o script agora escuta 
+esponsavel_nome e 
+esponsavel_sobrenome para preencher automaticamente o nome completo no termo e continua replicando telefone/WhatsApp/endereÃ§os nos outros slots.
 - **Notes**: java??
 
 ## 2026-01-30T03:06:27+00:00Z â€” Passo 5: revisÃ£o final
 - **Request**: Confirmar que o backend jÃ¡ grava os dados por slot (ficha mÃ©dica, termo e assinaturas individuais) e que os campos adicionados no frontend estÃ£o no fluxo de registro.
-- **Actions**: Revisitei egister_adventurer e a estrutura de slots para garantir que todas as informaÃ§Ãµes novas (ficha, termo, assinaturas) continuam sendo persistidas por slot e que o preenchimento automÃ¡tico nÃ£o modifica os nomes dos inputs esperados.
+- **Actions**: Revisitei 
+egister_adventurer e a estrutura de slots para garantir que todas as informaÃ§Ãµes novas (ficha, termo, assinaturas) continuam sendo persistidas por slot e que o preenchimento automÃ¡tico nÃ£o modifica os nomes dos inputs esperados.
 - **Notes**: Testado com python manage.py check.
 
 ## 2026-01-30T03:19:09+00:00Z â€” BalÃµes e orientaÃ§Ã£o
@@ -617,15 +631,15 @@ tira o quadrado do funcoi
 - **Actions**: criei o endpoint diagnostics/log-event/, a view log_program_event e exportei window.EVENT_LOG_URL para o JS; inclui static/js/diagnostic-logger.js, o snippet templates/core/_diagnostics_scripts.html e instrui os templates principais a disparar eventos, mantendo os warnings e as assinaturas do backend logados.
 - **Technical**: core/urls.py, core/views.py, templates/core/_diagnostics_scripts.html, static/js/diagnostic-logger.js, static/js/register-adventurer.js, templates/core/register.html, templates/core/login.html, templates/core/register_choice.html, templates/core/register_director.html, templates/core/dashboard.html, templates/core/finance_pix.html, templates/core/forgot_password.html, templates/core/verify_code.html.
 - **Notes**: confirme via journalctl -u pinhaljunior -f e redirecione a saida para um arquivo se quiser historico permanente.
-## 2026-02-01T01:15:00+00:00Z — Manual update
-- **Request**: modifica o que preciso pra tentar pegar o porque fica travado na assinatura 01 da ficha médica, capturando mais contexto quando o modal de assinatura/validação aparece.
-- **Actions**: ampliei o payload enviado ao logProgramEvent para incluir o valor atual do campo identificado, o slot ativo, o total de slots habilitados e o valor dos campos de assinatura que disparam os modais front-signature-warning e frontend-signature-block, facilitando a triagem. Também loguei o contexto nos eventos de validação e no modal de erros de servidor para que o journalctl reflita exatamente qual campo/slot está travando a ficha médica.
+## 2026-02-01T01:15:00+00:00Z ï¿½ Manual update
+- **Request**: modifica o que preciso pra tentar pegar o porque fica travado na assinatura 01 da ficha mï¿½dica, capturando mais contexto quando o modal de assinatura/validaï¿½ï¿½o aparece.
+- **Actions**: ampliei o payload enviado ao logProgramEvent para incluir o valor atual do campo identificado, o slot ativo, o total de slots habilitados e o valor dos campos de assinatura que disparam os modais front-signature-warning e frontend-signature-block, facilitando a triagem. Tambï¿½m loguei o contexto nos eventos de validaï¿½ï¿½o e no modal de erros de servidor para que o journalctl reflita exatamente qual campo/slot estï¿½ travando a ficha mï¿½dica.
 - **Technical**: static/js/register-adventurer.js.
 - **Notes**: python manage.py check.
 
-## 2026-02-01T01:30:00+00:00Z — Manual update
-- **Request**: registrar mais contexto sobre qual campo/slot trava a Ficha médica 01 para que o journal mostre os valores e ajude a desenrolar o bloqueio.
-- **Actions**: criei collectSignatureState() para montar um snapshot das assinaturas, confirmações e dados do plano para cada slot ativo e anexei esse snapshot aos eventos front-signature-warning, frontend-signature-block e frontend-validation-block, garantindo que o journal reflita os valores atuais antes de bloquear o envio.
+## 2026-02-01T01:30:00+00:00Z ï¿½ Manual update
+- **Request**: registrar mais contexto sobre qual campo/slot trava a Ficha mï¿½dica 01 para que o journal mostre os valores e ajude a desenrolar o bloqueio.
+- **Actions**: criei collectSignatureState() para montar um snapshot das assinaturas, confirmaï¿½ï¿½es e dados do plano para cada slot ativo e anexei esse snapshot aos eventos front-signature-warning, frontend-signature-block e frontend-validation-block, garantindo que o journal reflita os valores atuais antes de bloquear o envio.
 - **Technical**: static/js/register-adventurer.js.
 - **Notes**: python manage.py check.
 
@@ -647,6 +661,7 @@ tira o quadrado do funcoi
 - **Actions**: criei o template register_adventurer_new.html, o JS register-adventurer-new.js e a view register_adventurer_new com a rota registrada; atualizei o botÃ£o "Quero inscrever um aventureiro" para apontar para a nova pÃ¡gina, e o fluxo agora suporta mÃºltiplos slots, assinaturas por canvas e auto-preenchimento dos dados repetidos.
 - **Technical**: core/views.py, core/urls.py, templates/core/register_choice.html, templates/core/register_adventurer_new.html, static/js/register-adventurer-new.js.
 - **Notes**: python manage.py check e revisÃ£o visual local antes de ativar em produÃ§Ã£o.
+
 ## 2026-02-01T03:20:00+00:00Z â€” Manual update
 - **Request**: registrar um usuÃ¡rio e senha no cadastro de responsÃ¡vel/pais dentro do novo fluxo.
 - **Actions**: incluÃ­ os campos `responsavel_username`, `responsavel_password1` e `responsavel_password2` no topo da etapa 1 para que o responsÃ¡vel receba login imediatamente (senha de 4 dÃ­gitos repetida).
