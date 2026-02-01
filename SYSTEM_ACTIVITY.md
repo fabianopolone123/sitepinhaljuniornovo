@@ -389,3 +389,7 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 ## 2026-02-01T14:27:36+00:00Z — Ajusta classes
 - **Request**: TemplateSyntaxError ao mapear a lista de classes investidas
 - **Actions**: Passei classes via contexto e removi o split direto do template para respeitar o template engine
+
+## 2026-02-01T14:31:07+00:00Z — Ajusta preview e assinatura
+- **Request**: Preview da foto e desenho da assinatura não aconteciam no registro
+- **Actions**: Atualizei static/js/register.js para apontar pro input correto e garantir que a inicialização rode mesmo se o DOM já estiver pronto, mantendo preview 3x4 e a captura da assinatura via canvas
