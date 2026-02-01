@@ -449,3 +449,9 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 - **Actions**: Ajustei os filtros |default:'' para |default:"" no template de cadastro para não quebrar o parsing.
 - **Technical**: templates/core/register.html
 - **Notes**: Nenhuma.
+
+## 2026-02-02T00:15:00+00:00Z — Agrada default syntax do bloco
+- **Request**: TemplateSyntaxError default requires 2 arguments 1 provided
+- **Actions**: Troquei todos os atributos `value` e `data-initial-value` do bloco reutilizável para usarem aspas simples e `default:""` (em vez de colocar `default:""` dentro de atributos com aspas duplas), garantindo que o parser reconheça o segundo argumento e a sintaxe HTML permaneça válida.
+- **Technical**: templates/core/_adventurer_block.html
+- **Notes**: Nenhuma.

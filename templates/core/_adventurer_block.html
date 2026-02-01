@@ -36,7 +36,7 @@
             name="aventureiro_nome[]"
             placeholder="Nome"
             required
-            value="{{ adventurer.nome|default:"" }}"
+            value='{{ adventurer.nome|default:"" }}'
           />
         </label>
         <label>
@@ -46,7 +46,7 @@
             name="aventureiro_sobrenome[]"
             placeholder="Sobrenome"
             required
-            value="{{ adventurer.sobrenome|default:"" }}"
+            value='{{ adventurer.sobrenome|default:"" }}'
           />
         </label>
         <label>
@@ -64,7 +64,7 @@
             <select
               name="aventureiro_dia[]"
               data-date-field="day"
-              data-initial-value="{{ adventurer.dia|default:"" }}"
+              data-initial-value='{{ adventurer.dia|default:"" }}'
               required
             ></select>
           </label>
@@ -73,7 +73,7 @@
             <select
               name="aventureiro_mes[]"
               data-date-field="month"
-              data-initial-value="{{ adventurer.mes|default:"" }}"
+              data-initial-value='{{ adventurer.mes|default:"" }}'
               required
             ></select>
           </label>
@@ -82,7 +82,7 @@
             <select
               name="aventureiro_ano[]"
               data-date-field="year"
-              data-initial-value="{{ adventurer.ano|default:"" }}"
+              data-initial-value='{{ adventurer.ano|default:"" }}'
               required
             ></select>
           </label>
@@ -94,7 +94,7 @@
             name="aventureiro_documento[]"
             placeholder="RG ou outro documento"
             required
-            value="{{ adventurer.documento|default:"" }}"
+            value='{{ adventurer.documento|default:"" }}'
           />
         </label>
         <label>
@@ -104,7 +104,7 @@
             name="aventureiro_colegio[]"
             placeholder="Colégio frequentado"
             required
-            value="{{ adventurer.colegio|default:"" }}"
+            value='{{ adventurer.colegio|default:"" }}'
           />
         </label>
         <label>
@@ -114,12 +114,12 @@
             name="aventureiro_serie[]"
             placeholder="Ex: 6ª série"
             required
-            value="{{ adventurer.serie|default:"" }}"
+            value='{{ adventurer.serie|default:"" }}'
           />
         </label>
         <div class="field-group" style="width: 100%;">
           <p class="field-group-heading">Beneficiário(a) Bolsa Família?</p>
-          <input type="hidden" name="aventureiro_bolsa[]" data-bolsa-hidden value="{{ adventurer.bolsa|default:"" }}" />
+          <input type="hidden" name="aventureiro_bolsa[]" data-bolsa-hidden value='{{ adventurer.bolsa|default:"" }}' />
           <div class="radio-group" data-bolsa-group>
             <label>
               <input
@@ -151,7 +151,7 @@
             <div class="chip-group">
             {% for classe in classes %}
               <label class="chip">
-                <input type="checkbox" name="aventureiro_classes[]" value="{{ classe }}" />
+                <input type="checkbox" name="aventureiro_classes[]" value='{{ classe }}' />
                 {{ classe }}
               </label>
             {% endfor %}
@@ -164,7 +164,7 @@
             name="aventureiro_rua[]"
             placeholder="Rua"
             required
-            value="{{ adventurer.rua|default:"" }}"
+            value='{{ adventurer.rua|default:"" }}'
           />
         </label>
         <label>
@@ -174,7 +174,7 @@
             name="aventureiro_bairro[]"
             placeholder="Bairro"
             required
-            value="{{ adventurer.bairro|default:"" }}"
+            value='{{ adventurer.bairro|default:"" }}'
           />
         </label>
         <label>
@@ -184,7 +184,7 @@
             name="aventureiro_cidade[]"
             placeholder="Cidade"
             required
-            value="{{ adventurer.cidade|default:"São Carlos" }}"
+            value='{{ adventurer.cidade|default:"São Carlos" }}'
           />
         </label>
         <label>
@@ -194,7 +194,7 @@
             name="aventureiro_cep[]"
             placeholder="00000-000"
             required
-            value="{{ adventurer.cep|default:"" }}"
+            value='{{ adventurer.cep|default:"" }}'
           />
         </label>
         <label>
@@ -204,7 +204,7 @@
             name="aventureiro_estado[]"
             placeholder="Estado"
             required
-            value="{{ adventurer.estado|default:"SP" }}"
+            value='{{ adventurer.estado|default:"SP" }}'
           />
         </label>
         <label>
@@ -214,7 +214,7 @@
             name="aventureiro_certidao[]"
             placeholder="Número da certidão"
             required
-            value="{{ adventurer.certidao|default:"" }}"
+            value='{{ adventurer.certidao|default:"" }}'
           />
         </label>
         <label>
@@ -224,7 +224,7 @@
             name="aventureiro_religiao[]"
             placeholder="Religião"
             required
-            value="{{ adventurer.religiao|default:"" }}"
+            value='{{ adventurer.religiao|default:"" }}'
           />
         </label>
         <label>
@@ -234,7 +234,7 @@
             name="aventureiro_rg[]"
             placeholder="RG"
             required
-            value="{{ adventurer.rg|default:"" }}"
+            value='{{ adventurer.rg|default:"" }}'
           />
         </label>
         <label>
@@ -244,7 +244,7 @@
             name="aventureiro_orgao[]"
             placeholder="Órgão expedidor"
             required
-            value="{{ adventurer.orgao|default:"" }}"
+            value='{{ adventurer.orgao|default:"" }}'
           />
         </label>
         <label>
@@ -254,7 +254,7 @@
             name="aventureiro_cpf[]"
             placeholder="CPF"
             required
-            value="{{ adventurer.cpf|default:"" }}"
+            value='{{ adventurer.cpf|default:"" }}'
           />
         </label>
         <label>
@@ -264,7 +264,7 @@
             name="camiseta_tamanho[]"
             placeholder="P / M / G"
             required
-            value="{{ adventurer.camiseta_tamanho|default:"" }}"
+            value='{{ adventurer.camiseta_tamanho|default:"" }}'
           />
         </label>
         <label>
@@ -303,7 +303,7 @@
               name="emergencia_nome[]"
               placeholder="Nome"
               required
-              value="{{ adventurer.contato_nome|default:"" }}"
+              value='{{ adventurer.contato_nome|default:"" }}'
             />
           </label>
           <label>
@@ -313,7 +313,7 @@
               name="emergencia_telefone[]"
               placeholder="(99) 99999-9999"
               required
-              value="{{ adventurer.contato_telefone|default:"" }}"
+              value='{{ adventurer.contato_telefone|default:"" }}'
             />
           </label>
           <label>
@@ -323,7 +323,7 @@
               name="emergencia_whatsapp[]"
               placeholder="(99) 99999-9999"
               required
-              value="{{ adventurer.contato_whatsapp|default:"" }}"
+              value='{{ adventurer.contato_whatsapp|default:"" }}'
             />
           </label>
         </div>
