@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Logs administrativos — Clube Pinhal Junior</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/finance.css' %}" />
+    {% include 'core/client_logger_head.html' %}
+  </head>
+  <body class="dashboard-page">
+    <header class="dashboard-hero">
+      <div>
+        <p class="tag">Logs</p>
+        <h1>Auditoria do sistema</h1>
+        <p class="hero-text">
+          Você está vendo as últimas entradas gravadas nos arquivos de log principais.
+        </p>
+        <div class="status-actions">
+          <a class="ghost-btn" href="{% url 'dashboard' %}">Voltar ao painel</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="dashboard-container">
+      {% for log in log_files %}
+      <section class="panel">
+        <div class="panel-header">
+          <h2>{{ log.label }} ({{ log.path }})</h2>
+          <span class="tag">{{ log.lines|length }} linhas</span>
+        </div>
+        {% if log.lines %}
+        <pre class="radius-box" style="max-height: 400px; overflow: auto;">{{ log.lines|join:"\n" }}</pre>
+        {% else %}
+        <p class="helper-text">Nenhum registro foi encontrado para este arquivo.</p>
+        {% endif %}
+      </section>
+      {% endfor %}
+    </main>
+  </body>
+</html>

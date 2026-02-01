@@ -1,4 +1,5 @@
 from calendar import month_name, monthrange
+from collections import deque
 from datetime import date, timedelta
 from decimal import Decimal, ROUND_HALF_UP
 import json
@@ -11,7 +12,7 @@ import requests
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.db import IntegrityError, transaction
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseNotAllowed
@@ -34,6 +35,11 @@ from pagamento import criar_pix, consultar_pagamento, extrair_copia_cola, is_apr
 MONTHLY_FEE_DUE_DAY = 10
 
 CLASS_OPTIONS = ["Abelinhas", "Luminárias", "Edificadores", "Mãos Ajudadoras"]
+
+LOG_FILES = [
+    ("Django", settings.LOG_DIR / "django.log.jsonl"),
+    ("Client", settings.LOG_DIR / "client.log.jsonl"),
+]
 
 WAPI_INSTANCE = os.getenv("WAPI_INSTANCE", "LITE-F75JN4-FWW3NA")
 WAPI_TOKEN = os.getenv("WAPI_TOKEN", "o8bWQDnlomrsOaBF2CqnlHguBKIbX87By")
@@ -140,6 +146,19 @@ def _build_adventurers_data(post):
             }
         )
     return data
+
+
+def _tail_log_lines(path, max_lines=60):
+    lines = deque(maxlen=max_lines)
+    if not path.exists():
+        return []
+    try:
+        with path.open("r", encoding="utf-8", errors="replace") as fh:
+            for line in fh:
+                lines.append(line.rstrip())
+    except (FileNotFoundError, PermissionError):
+        return []
+    return list(lines)
 
 
 def _create_monthly_fees(responsible, adventurer, start_date=None):
@@ -845,6 +864,72 @@ def register(request):
         "classes": CLASS_OPTIONS,
     }
     return render(request, "core/register.html", context)
+
+
+def admin_register(request):
+    if request.user.is_authenticated and request.user.is_staff:
+        return redirect("admin_logs")
+
+    data = {
+        "username": "",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+    }
+    errors = {}
+
+    if request.method == "POST":
+        data["username"] = request.POST.get("username", "").strip()
+        password1 = request.POST.get("password1", "")
+        password2 = request.POST.get("password2", "")
+        data["first_name"] = request.POST.get("first_name", "").strip()
+        data["last_name"] = request.POST.get("last_name", "").strip()
+        data["email"] = request.POST.get("email", "").strip()
+
+        if not data["username"]:
+            errors["username"] = "Informe o nome de usuário."
+        elif User.objects.filter(username=data["username"]).exists():
+            errors["username"] = "Esse nome de usuário já existe."
+
+        if not password1 or not password2:
+            errors["password"] = "Informe e confirme a senha."
+        elif password1 != password2:
+            errors["password"] = "As senhas não conferem."
+
+        if not errors:
+            user = User.objects.create_user(
+                username=data["username"],
+                password=password1,
+                first_name=data["first_name"],
+                last_name=data["last_name"],
+                email=data["email"],
+            )
+            user.is_staff = True
+            user.is_superuser = True
+            user.save()
+            messages.success(request, "Perfil administrativo criado! Faça login.")
+            return redirect("login")
+
+    return render(
+        request,
+        "core/admin_register.html",
+        {"form_values": data, "field_errors": errors},
+    )
+
+
+@login_required
+@user_passes_test(lambda user: user.is_staff)
+def admin_logs(request):
+    log_files = []
+    for label, path in LOG_FILES:
+        log_files.append(
+            {
+                "label": label,
+                "path": path.name,
+                "lines": _tail_log_lines(path, max_lines=80),
+            }
+        )
+    return render(request, "core/admin_logs.html", {"log_files": log_files})
 
 
 @login_required

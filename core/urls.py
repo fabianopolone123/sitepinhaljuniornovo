@@ -5,6 +5,8 @@ from . import views
 urlpatterns = [
     path("", views.login_screen, name="login"),
     path("cadastro/", views.register, name="register"),
+    path("admin/cadastro/", views.admin_register, name="admin_register"),
+    path("admin/logs/", views.admin_logs, name="admin_logs"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("logout/", views.logout_view, name="logout"),
     path("cadastros/responsavel/", views.update_responsible, name="update_responsible"),

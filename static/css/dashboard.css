@@ -36,6 +36,12 @@ body {
   box-shadow: 0 35px 60px rgba(17, 67, 124, 0.15);
 }
 
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .dashboard-hero img {
   width: 120px;
   height: 120px;

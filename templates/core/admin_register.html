@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cadastro Administrativo — Clube Pinhal Junior</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+    {% include 'core/client_logger_head.html' %}
+  </head>
+  <body class="login-page">
+    <main class="login-card recovery-card">
+      <div class="logo-wrap">
+        <img
+          src="{% static 'images/logo-removebg-preview.png' %}"
+          alt="Logo Clube de Aventureiros"
+        />
+      </div>
+      <h1>Cadastro administrativo</h1>
+      <p class="helper-text">
+        Crie um perfil com privilégios para consultar logs e rotas restritas.
+      </p>
+      {% if messages %}
+      <div class="form-feedback-wrapper">
+        {% for message in messages %}
+        <div class="form-feedback form-feedback--{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <form class="login-form" method="post">
+        {% csrf_token %}
+        <div class="form-grid">
+          <label>
+            Nome de usuário
+            <input
+              type="text"
+              name="username"
+              value="{{ form_values.username }}"
+              placeholder="admin"
+              required
+            />
+            <small class="error-message">{{ field_errors.username }}</small>
+          </label>
+          <label>
+            Senha
+            <input type="password" name="password1" placeholder="Senha" required />
+          </label>
+          <label>
+            Confirme a senha
+            <input type="password" name="password2" placeholder="Confirme" required />
+            <small class="error-message">{{ field_errors.password }}</small>
+          </label>
+          <label>
+            Nome
+            <input type="text" name="first_name" value="{{ form_values.first_name }}" />
+          </label>
+          <label>
+            Sobrenome
+            <input type="text" name="last_name" value="{{ form_values.last_name }}" />
+          </label>
+          <label>
+            E-mail
+            <input type="email" name="email" value="{{ form_values.email }}" />
+          </label>
+        </div>
+        <button type="submit" class="primary-btn">Criar perfil administrativo</button>
+      </form>
+      <p class="signup-hint">
+        Já tem acesso?
+        <a class="ghost-btn" href="{% url 'login' %}">Entrar</a>
+      </p>
+    </main>
+  </body>
+</html>

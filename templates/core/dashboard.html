@@ -29,6 +29,11 @@
           {% endif %}
         </p>
       </div>
+      {% if request.user.is_staff %}
+      <div class="hero-actions">
+        <a class="ghost-btn" href="{% url 'admin_logs' %}">Logs</a>
+      </div>
+      {% endif %}
       <img src="{% static 'images/logo-removebg-preview.png' %}" alt="Logo Clube" />
     </header>
 

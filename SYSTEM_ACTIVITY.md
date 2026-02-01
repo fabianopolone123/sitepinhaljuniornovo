@@ -393,3 +393,7 @@ inance_pix agora aceita ?poll=1 retornando status JSON, e static/js/finance.js f
 ## 2026-02-01T14:31:07+00:00Z — Ajusta preview e assinatura
 - **Request**: Preview da foto e desenho da assinatura não aconteciam no registro
 - **Actions**: Atualizei static/js/register.js para apontar pro input correto e garantir que a inicialização rode mesmo se o DOM já estiver pronto, mantendo preview 3x4 e a captura da assinatura via canvas
+
+## 2026-02-01T14:37:40+00:00Z — Admin logs
+- **Request**: Preciso testar e ver os logs e queria um perfil adm para acessar eles
+- **Actions**: Adicionei a rota /admin/logs/ com view que lê os arquivos django.log.jsonl/client.log.jsonl, criei tela/admin_register para criar perfis staff e coloquei botão 'Logs' no dashboard restrito a staff; o login agora dá acesso fácil ao cadastro administrativo
