@@ -647,3 +647,8 @@ tira o quadrado do funcoi
 - **Actions**: criei o template register_adventurer_new.html, o JS register-adventurer-new.js e a view register_adventurer_new com a rota registrada; atualizei o botão "Quero inscrever um aventureiro" para apontar para a nova página, e o fluxo agora suporta múltiplos slots, assinaturas por canvas e auto-preenchimento dos dados repetidos.
 - **Technical**: core/views.py, core/urls.py, templates/core/register_choice.html, templates/core/register_adventurer_new.html, static/js/register-adventurer-new.js.
 - **Notes**: python manage.py check e revisão visual local antes de ativar em produção.
+## 2026-02-01T03:20:00+00:00Z — Manual update
+- **Request**: registrar um usuário e senha no cadastro de responsável/pais dentro do novo fluxo.
+- **Actions**: incluí os campos `responsavel_username`, `responsavel_password1` e `responsavel_password2` no topo da etapa 1 para que o responsável receba login imediatamente (senha de 4 dígitos repetida).
+- **Technical**: templates/core/register_adventurer_new.html.
+- **Notes**: python manage.py check e garantir que a view original continue processando esses campos.
